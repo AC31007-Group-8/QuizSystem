@@ -19,6 +19,9 @@ public class QuizSparkApp {
     private QuizSparkApp() {} // Static only
 
     public static void init() {
+        // Setup (do not remove this!)
+        Configuration.load();
+
         // Debugging paths:
         LOGGER.debug("Registering debug routes");
         RouteOverview.enableRouteOverview("/debug/routes");

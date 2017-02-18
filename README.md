@@ -22,3 +22,6 @@ the seperate source sets option)
 - Eclipse: Generate the project files as detailed above, then open that as a project.
 - Netbeans: See Erik for help on the Netbeans Gradle plugin.
 - Anything else: Edit project files, then use the above Gradle commands manually.
+
+## Developer Notes
+Extra documentation can be found in `docs`, including how to use the Database layer.
