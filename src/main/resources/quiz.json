@@ -1,0 +1,19 @@
+{
+"quiz":{
+	"timeLimit":"50",
+	"moduleCode":"AC01337",
+	"title":"Quiz 1",
+	"questions":[
+		{
+			"questionText":"What is life?",
+			"explanation":"Self-explanatory",
+			"options":[{"option":"Baby don't hurt me", "correct":true}, {"option":"69?","correct":false}]
+		},
+		{
+			"questionText":"What is the meaning of life, the universe, and everything?",
+			"explanation":"Hint: You need to go to Magrathea.",
+			"options":[{"option":"Love", "correct":false}, {"option":"42","correct":true},{"option":"Life","correct":false}]
+		}
+	]
+    }
+}

@@ -30,6 +30,9 @@ public class QuizSparkApp {
         // Add more routes below here.
         // ---------------------------
 
+        RouteOverview.enableRouteOverview("/create");
+        get("/create", (req, res) -> "[INSERT PAGE HERE]!");
+        
         // Example module
         MustacheDemo.init();
     }
