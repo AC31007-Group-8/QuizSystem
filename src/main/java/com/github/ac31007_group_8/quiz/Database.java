@@ -63,5 +63,9 @@ public class Database {
      * @param tableName - Name of table to return entry count from
      * @return # of entries
      */
+    public static int getJooqTableCount(String tableName) {
+        DSL.using(getConnection(), SQLDialect.MYSQL);
+        return DSL.count(table(tableName));
+    }
 
 }
