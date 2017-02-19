@@ -58,5 +58,10 @@ public class Database {
     public static DSLContext getJooq() {
         return DSL.using(getConnection(), SQLDialect.MYSQL);
     }
+    /**
+     * 
+     * @param tableName - Name of table to return entry count from
+     * @return # of entries
+     */
 
 }

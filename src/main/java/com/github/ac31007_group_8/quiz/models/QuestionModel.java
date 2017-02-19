@@ -40,6 +40,8 @@ public class QuestionModel {
     
     public QuestionModel getQuestion(int quiz_id){
         
+        DSLContext create = Database.getJooq();
+        
         String sql = create.select(field("question.question_id"), field("question.quiz_id"), field("question.question"), field("question.explanation"))
                             .from(table("question"))
                             .where(field("question.quiz_id").equal(quiz_id))
@@ -68,6 +70,7 @@ public class QuestionModel {
     public Vector<QuestionModel> getAnswerAll()
     {      
         Vector<QuestionModel> questions = new Vector();
+        DSLContext create = Database.getJooq();
         
         String sql = create.select(field("question.question_id"), field("question.quiz_id"), field("question.question"), field("question.explanation"))
                             .from(table("question"))
@@ -75,7 +78,6 @@ public class QuestionModel {
         
         try{
         
-            DSLContext create = Database.getJooq();
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results 
@@ -92,6 +94,23 @@ public class QuestionModel {
             return null;
         }
         return questions;
+    }
+    
+    public boolean addQuestion(int question_id, int quiz_id, String question, String explanation) 
+    {   
+        DSLContext create = Database.getJooq();
+        
+        try{
+            create.insertInto(question, question.question_id, question.quiz_id, question.question, question.explanation)
+                                .values(question_id, quiz_id, question, explanation)
+                                .execute();
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+        
+        return true;  
     }
     
     

@@ -49,6 +49,8 @@ public class QuizModel {
     
     public QuizModel getQuiz(int quiz_id){
         
+        DSLContext create = Database.getJooq(); //Connects to the database
+        
         String sql = create.select()
                             .from(table("quiz"))
                             .where(field("quiz.quiz_id").equal(quiz_id))
@@ -56,7 +58,6 @@ public class QuizModel {
         
         try{
         
-            DSLContext create = Database.getJooq();
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results
@@ -80,6 +81,7 @@ public class QuizModel {
     public Vector<QuizModel> getQuizAll()
     {      
         Vector<QuizModel> quizzes = new Vector();
+        DSLContext create = Database.getJooq(); //Connects to the database
         
         /**Creates SQL Statement**/
         String sql = create.select()
@@ -88,7 +90,6 @@ public class QuizModel {
         
         try{
         
-            DSLContext create = Database.getJooq(); //Connects to the database
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results 
@@ -113,6 +114,7 @@ public class QuizModel {
     public Vector<QuizModel> getQuizAllPerStaff(int staff_id)
     {      
         Vector<QuizModel> quizzes = new Vector();
+        DSLContext create = Database.getJooq(); //Connects to the database
         
         /**Creates SQL Statement**/
         String sql = create.select()
@@ -122,7 +124,6 @@ public class QuizModel {
         
         try{
         
-            DSLContext create = Database.getJooq(); //Connects to the database
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results 
@@ -144,27 +145,26 @@ public class QuizModel {
         return quizzes;
     }
     
-    public Vector<QuizModel> getQuizAllPerModule(String module_id)
+    public Vector<QuizModel> getQuizAllPerModule(String module_code)
     {      
         Vector<QuizModel> quizzes = new Vector();
+        DSLContext create = Database.getJooq(); //Connects to the database
         
         /**Creates SQL Statement**/
         String sql = create.select()
                         .from(table("quiz"))
-                        .where(field("quiz.module_id").equal(module_id))
+                        .where(field("quiz.module_code").equal(module_code))
                         .getSQL();
         
         try{
-        
-            DSLContext create = Database.getJooq(); //Connects to the database
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results 
                 quiz_id = r.getValue(quiz.quiz_id);
                 staff_id = r.getValue(quiz.staff_id);
                 time_limit = r.getValue(quiz.time_limit);
-                this.module_id = r.getValue(quiz.module_id);
-                module_code = r.getValue(quiz.module_code);
+                module_id = r.getValue(quiz.module_id);
+                this.module_code = r.getValue(quiz.module_code);
                 title = r.getValue(quiz.title);
                 publish_status = r.getValue(quiz.publish_status);
 
@@ -176,6 +176,25 @@ public class QuizModel {
             return null;
         }
         return quizzes;
+    }
+    
+    public boolean addQuiz(int quiz_id, int staff_id, int time_limit, String module_id, String module_code, String title, boolean publish_status) 
+    {   
+        DSLContext create = Database.getJooq();
+        
+        int sql = 5; //Get number of entries for table from Db to index properly                    
+        
+        try{
+            create.insertInto(quiz, quiz.quiz_id, quiz.staff_id, quiz.time_limit, quiz.module_id, quiz.module_code, quiz.title, quiz.publish_status)
+                                .values(sql++, staff_id, time_limit,module_id, module_code, title, publish_status)
+                                .execute();
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+        
+        return true;  
     }
     
 }

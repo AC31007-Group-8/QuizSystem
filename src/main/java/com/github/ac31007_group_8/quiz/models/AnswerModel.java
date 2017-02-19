@@ -39,6 +39,8 @@ public class AnswerModel {
     
     public AnswerModel getAnswer(int question_id)
     {       
+        DSLContext create = Database.getJooq();
+        
         String sql = create.select(field("answer.answer_id"), field("answer.question_id"), field("answer.answer"), field("answer.is_correct"))
                             .from(table("answer"))
                             .where(field("answer.question_id").equal(question_id))
@@ -46,7 +48,6 @@ public class AnswerModel {
         
         try{
         
-            DSLContext create = Database.getJooq();
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results
@@ -67,6 +68,7 @@ public class AnswerModel {
     public Vector<AnswerModel> getAnswerAll()
     {      
         Vector<AnswerModel> answers = new Vector();
+        DSLContext create = Database.getJooq();
         
         String sql = create.select(field("answer.answer_id"), field("answer.question_id"), field("answer.answer"), field("answer.is_correct"))
                             .from(table("answer"))
@@ -74,7 +76,6 @@ public class AnswerModel {
         
         try{
         
-            DSLContext create = Database.getJooq();
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results 
@@ -91,5 +92,22 @@ public class AnswerModel {
             return null;
         }
         return answers;
+    }
+    
+    public boolean addAnswer(int answer_id, int question_id, String answer, boolean correct) 
+    {   
+        DSLContext create = Database.getJooq();
+        
+        try{
+            create.insertInto(answer, answer.answer_id, answer.question_id, answer.answer, answer.is_correct)
+                                .values(answer_id, question_id, answer, correct)
+                                .execute();
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+        
+        return true;  
     }
 }
