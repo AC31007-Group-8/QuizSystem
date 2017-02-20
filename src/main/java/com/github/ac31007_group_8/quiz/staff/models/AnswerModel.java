@@ -3,11 +3,12 @@
 // * To change this template file, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package com.github.ac31007_group_8.quiz.models;
+//package com.github.ac31007_group_8.quiz.staff.models;
 //
 //import static org.jooq.impl.DSL.*;
 //
 //import com.github.ac31007_group_8.quiz.Database;
+//import com.github.ac31007_group_8.quiz.staff.store.Answer;
 //import java.util.Vector;
 //
 //import org.jooq.DSLContext;
@@ -18,26 +19,10 @@
 // */
 //public class AnswerModel {
 //    
-//    int answer_id;
-//    int question_id;
-//    String answer;
-//    boolean correct;
-//    
 //    public AnswerModel(){
-//        answer_id = 0;
-//        question_id = 0;
-//        answer = "";
-//        correct = true;
 //    }  
 //    
-//    public AnswerModel(int answer_id, int question_id, String answer, boolean correct){
-//        this.answer_id = answer_id;
-//        this.question_id = question_id;
-//        this.answer = answer;
-//        this.correct = correct;
-//    } 
-//    
-//    public AnswerModel getAnswer(int question_id)
+//    public Answer getAnswer(int question_id)
 //    {       
 //        DSLContext create = Database.getJooq();
 //        
@@ -51,12 +36,10 @@
 //            Result<Record> result = create.fetch(sql);
 //
 //            for(Record r : result){ //Iterates through the returned results
-//                answer_id = r.getValue(answer.answer_id);
-//                this.question_id = r.getValue(answer.question_id);
-//                answer = r.getValue(answer.answer);
-//                correct = r.getValue(answer.is_correct);
+//                
+//                Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
 //
-//                return this; //Returns current version of the model
+//                return answer; //Returns current version of the model
 //            }
 //        }
 //        catch(Exception e)
@@ -65,9 +48,9 @@
 //        return null;
 //    }
 //    
-//    public Vector<AnswerModel> getAnswerAll()
+//    public Vector<Answer> getAnswerAll()
 //    {      
-//        Vector<AnswerModel> answers = new Vector();
+//        Vector<Answer> answers = new Vector();
 //        DSLContext create = Database.getJooq();
 //        
 //        String sql = create.select(field("answer.answer_id"), field("answer.question_id"), field("answer.answer"), field("answer.is_correct"))
@@ -79,19 +62,17 @@
 //            Result<Record> result = create.fetch(sql);
 //
 //            for(Record r : result){ //Iterates through the returned results 
-//                answer_id = r.getValue(answer.answer_id);
-//                question_id = r.getValue(answer.question_id);
-//                answer = r.getValue(answer.answer);
-//                correct = r.getValue(answer.is_correct);
+//                
+//                Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
 //
-//                answers.add(this); //Adds current state of the model to the vector array
+//                answers.add(answer); //Adds current state of the model to the vector array
 //            }
 //        }
 //        catch(Exception e)
 //        {
 //            return null;
 //        }
-//        return answers;
+//        return answer;
 //    }
 //    
 //    public boolean addAnswer(int answer_id, int question_id, String answer, boolean correct) 

@@ -22,8 +22,15 @@ Computing internal server, use `gradle appRun`, as Tomcat is the server used by 
 settings shown [here](https://github.com/AC31007-Group-8/QuizSystem/blob/master/docs/idea_import.png) (namely, turn off
 the seperate source sets option)
 - Eclipse: Generate the project files as detailed above, then open that as a project.
-- Netbeans: See Erik for help on the Netbeans Gradle plugin.
+- Netbeans: See below.
 - Anything else: Edit project files, then use the above Gradle commands manually.
+
+### Netbeans: The Special Snowflake
+Netbeans does not set working directory for the Gradle build. A workaround is detailed below:
+
+- **Copy** `gradle.properties.example` to `gradle.properties`
+- Edit `gradle.properties` to the full path of your `config.properties`
+- Rerun `gradle setup`
 
 ## Developer Notes
 Extra documentation can be found in `docs`, including how to use the Database layer.

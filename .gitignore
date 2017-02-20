@@ -27,11 +27,19 @@
 /.nb-gradle/
 /.nb-gradle-properties
 /customs.json
+/QuizSystemApp/nbproject/private/
 
 # General test run stuff
 /run/
 /out/
 /config.properties
+/gradle.properties
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+
+
+
+
+
+
+
+
