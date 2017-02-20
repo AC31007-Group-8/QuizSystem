@@ -4,6 +4,8 @@ AC31007 Coursework
 **Note: This project requires Java 8!**
 
 ## Building and Running
+**If using Netbeans or IDEA, run the `gradle setup` target to generate key files!**
+
 If you don't have a local Gradle 3.x install, please replace `gradle` with `./gradlew` on Linux/macOS or `.\gradlew.bat`
 on Windows to use the wrapper.
 
