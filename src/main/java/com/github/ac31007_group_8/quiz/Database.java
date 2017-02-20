@@ -1,8 +1,8 @@
 package com.github.ac31007_group_8.quiz;
 
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.impl.DSL;
+import static org.jooq.impl.DSL.*;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.Connection;
@@ -63,9 +63,12 @@ public class Database {
      * @param tableName - Name of table to return entry count from
      * @return # of entries
      */
+    @SuppressWarnings("unchecked")
     public static int getJooqTableCount(String tableName) {
-        DSL.using(getConnection(), SQLDialect.MYSQL);
-        return DSL.count(table(tableName));
+        DSLContext db = getJooq();
+        Result res = db.select(count()).from(tableName).fetch();
+        Field<Integer> f = res.field(0);
+        return f.get((Record) res.get(0));
     }
 
 }
