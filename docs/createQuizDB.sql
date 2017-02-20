@@ -36,7 +36,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `quizsystem`.`Quiz` ;
 
 CREATE TABLE IF NOT EXISTS `quizsystem`.`Quiz` (
-  `publish_status` TINYINT(1) NULL,
+  `publish_status` BOOLEAN NULL,
   `staff_id` INT NOT NULL,
   `quiz_id` INT NOT NULL AUTO_INCREMENT,
   `time_limit` INT NULL,
@@ -94,7 +94,7 @@ DROP TABLE IF EXISTS `quizsystem`.`Answer` ;
 CREATE TABLE IF NOT EXISTS `quizsystem`.`Answer` (
   `answer` VARCHAR(100) NULL,
   `question_id` INT NULL,
-  `is_correct` TINYINT(1) NULL,
+  `is_correct` BOOLEAN NULL,
   `answer_id` INT NOT NULL AUTO_INCREMENT,
   INDEX `answer_to_question_idx` (`question_id` ASC),
   PRIMARY KEY (`answer_id`),
