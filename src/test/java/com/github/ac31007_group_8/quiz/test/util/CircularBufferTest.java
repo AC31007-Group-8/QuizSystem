@@ -34,9 +34,7 @@ public class CircularBufferTest {
     @Test
     public void testEviction() {
         evictionTestObj = null;
-        CircularBuffer<Object> buffer = new CircularBuffer<>(1, (obj) -> {
-            CircularBufferTest.evictionTestObj = obj;
-        });
+        CircularBuffer<Object> buffer = new CircularBuffer<>(1, (obj) -> CircularBufferTest.evictionTestObj = obj);
 
         Object expected = new Object();
         buffer.add(expected);
