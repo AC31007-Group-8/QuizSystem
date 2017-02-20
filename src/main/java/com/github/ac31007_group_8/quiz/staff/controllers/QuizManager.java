@@ -12,6 +12,8 @@ import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
 import spark.template.mustache.MustacheTemplateEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -19,6 +21,7 @@ import spark.template.mustache.MustacheTemplateEngine;
  */
 public class QuizManager {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuizManager.class);
     
     
     public QuizManager(){
@@ -29,9 +32,10 @@ public class QuizManager {
     
     public static Object sendQuizForm(Request req, Response res){
         
+        //here can take e.g. module list from DB or staff username
         HashMap<String, Object> map = new HashMap<>();
-        //TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
-        TemplateEngine eng = new MustacheTemplateEngine();
+        
+        TemplateEngine eng = new MustacheTemplateEngine();//TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
          
         return eng.render(eng.modelAndView(map, "createQuiz.mustache"));
         
@@ -43,11 +47,30 @@ public class QuizManager {
     
      public static Object saveQuiz(Request req, Response res){
         
+//        data:{
+//            timeLimit:"",
+//            moduleCode:"",
+//            title:"",
+//            questions:[
+//                    {
+//                            questionText:"",
+//                            explanation:"",
+//                            options:[{option:"", correct:true}, {option:"",correct:false},...]
+//                    },
+//                    {...}
+//            ]
+//        } 
+
+        //convert this (and tell me how you did it) into properly formatted json string (as shown above) and then use GSON to parse into java beans
+        System.out.println(req.body());
+        
        
-         res.status(200);
+       
+       
+        res.status(200);
       
-        //res.type("application/json");
-        return "{\"message\":\"saved successfully\"}";
+       
+        return "{\"message\":\"saved successfully by ERiiic\"}";
         
         
     }
