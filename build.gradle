@@ -23,8 +23,10 @@ mainClassName = 'com.github.ac31007_group_8.quiz.init.Main'
 
 jooq {
     Properties props = new Properties()
-    if (file("config.properties").exists()) {
-        props.load(new FileInputStream("config.properties"))
+    def filePath = "config.properties"
+    if (project.hasProperty("CONFIG_PATH")) filePath = CONFIG_PATH
+    if (file(filePath).exists()) {
+        props.load(new FileInputStream(filePath))
     }
 
     def DB_HOST = props.getProperty("DATABASE_HOST", "localhost")
@@ -34,7 +36,7 @@ jooq {
     def DB_PASSWORD = props.getProperty("DATABASE_PASSWORD")
 
     if (DB_USER == null || DB_PASSWORD == null) {
-        throw new RuntimeException("No database user or password in config.properties - fix that and re-run.")
+        throw new RuntimeException("No database user or password in $filePath - fix that and re-run.")
     }
 
     database(sourceSets.main) {
