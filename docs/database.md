@@ -15,15 +15,14 @@ Environment Variable has priority over a config file. This can be handy if you n
 
 ## Accessing The Database (JDBC/SQL)
 If you like raw SQL, you can get a plain-old JDBC connection to use. This is documented in the official Java Platform
-documentation, or many articles on the internet. To get a connection, call `Database.getConnection()` - but remember to
-**close** the connection when you're done with it! Try-with-resources is worth looking up to aid in closing your
-connections.
+documentation, or many articles on the internet. To get a connection, call `Database.getConnection()` - connections will
+eventually be killed by the connections ring buffer, so don't worry about closing connections.
 
 ## Accessing the Database In Style (jOOQ)
 If like me you really can't stand SQL in its textual glory, you can try out the jOOQ framework included in the project.
 This provides a more friendly, Java-based way to generate and execute SQL queries. Documentation is available on the
 jOOQ website, and is linked from the Javadocs in Database. To get a jOOQ DSL object (usually called `create` in the
-docs), call `Database.getJooq()`. As far as I know, you do _not_ need to close jOOQ connections.
+docs), call `Database.getJooq()`.
 
 ## HELP! I need a MySQL Server to connect to! (MySQL on Docker)
 Keep calm and install Docker for your platform. On Linux, get it from your package manager. On Windows 10 Pro, use the
