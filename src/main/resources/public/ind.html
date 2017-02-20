@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Create quiz</title>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="createQuiz.css">
+        <script src="createQuiz.js"></script>
+    </head>
+    <body>
+        
+
+        <div class="panel panel-default panel-custom">
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">  
+
+                        <label for="quiz-title" class="mandatory" >Quiz title</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="quiz-title" >
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label for="quiz-module" class="mandatory">Module</label>
+                        <select id="quiz-module" class="input-group">
+                            <option>--select--</option>
+                            <option>AC12345</option>
+                            <option>AC12234</option>
+                            <option>AC22222</option>
+                        </select>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label for="quiz-timeLimit">Time limit (min)</label>
+                        <div class="input-group" >
+                            <input type="text" id="quiz-timeLimit" class="form-control">
+                            <span class="input-group-addon">
+                                <input type="checkbox" >
+                            </span>
+
+                        </div><!-- /input-group -->
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <!--====================question0 (template)=====================-->
+        
+        
+        <div class="panel panel-default panel-question" hidden id="question0">
+            <div class="panel-body">
+                
+                
+                <label class="question-lable">question 0</label>
+                <button onclick="removeQuestion(this)" class="btn btn-mini btn-primary question-remove" >Remove</button>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
+                        <label for="quiz-question-text" class="mandatory">Question text</label>
+                        <div class="input-group" >
+                            <textarea id="quiz-question-text" class="form-control" ></textarea>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
+                        <label for="quiz-question-explanation">Explanation text</label>
+                        <div class="input-group" >
+                            <textarea id="quiz-question-explanation" class="form-control" ></textarea>
+                        </div><!-- /input-group -->
+
+                    </div>
+                </div>
+                <div class="row margin-top-20">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <button class="addOptionButton" onclick="addOption(this)"><span class="glyphicon glyphicon-plus glyph-large pull-left " ></span>Add option</button>
+                    </div>
+                    
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 allOptions">
+                        <div class="row option-row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="input-group" >
+                                    <span class="mandatory-option"></span>
+                                    <input type="text" class="form-control" placeholder="option 1">
+                                    <span class="input-group-addon shrinkable"> 
+                                        <input type="checkbox" >
+                                    </span>
+                                    <span class="input-group-addon shrinkable" >Correct?</span>
+                                    <span class="input-group-btn ">
+                                        <button title="Remove option" class="shrinkable btn btn-default btn-custom disabled" type="button"> <span class="glyphicon glyphicon-remove" ></span></button>
+                                    </span>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+         <!--================== end of question 0=======================-->
+         
+         
+         <div class="panel panel-default panel-custom" >
+             <div class="panel-body">
+                 <div class="row">
+                     <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                         <button onclick="addQuestion()">Add question</button>
+
+                     </div>
+                     
+                     <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                         <button onclick="submit()" >Submit</button>
+
+                     </div>
+                 </div>
+
+             </div>
+         </div>
+
+         
+         
+        
+        
+        
+
+       
+    </body>
+</html>

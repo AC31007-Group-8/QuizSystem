@@ -23,6 +23,11 @@
 /.idea/
 !/libs/*
 
+# Netbeans
+/.nb-gradle/
+/.nb-gradle-properties
+/customs.json
+
 # General test run stuff
 /run/
 /out/
