@@ -37,7 +37,7 @@ public class QuizManager {
         
         TemplateEngine eng = new MustacheTemplateEngine();//TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
          
-        return eng.render(eng.modelAndView(map, "createQuiz.mustache"));
+        return eng.render(eng.modelAndView(map, "staff/createQuiz.mustache"));
         
         
         

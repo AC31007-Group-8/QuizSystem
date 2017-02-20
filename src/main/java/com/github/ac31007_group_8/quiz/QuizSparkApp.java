@@ -23,8 +23,13 @@ public class QuizSparkApp {
         // Setup (do not remove this!)
         Configuration.load();
 
-        //staticFiles.location("/public"); // resources/public, localhost:4567/file.html
-        staticFiles.externalLocation(System.getProperty("user.dir") + "/src/main/resources/public");
+        staticFiles.location("/public"); // resources/public, localhost:4567/file.html 
+        //staticFiles.externalLocation(System.getProperty("user.dir") + "/src/main/resources/public");//if you want a new version of a static file after F5 when developing (better way?)
+        
+        
+       
+        
+        
         
         // Debugging paths:
         LOGGER.debug("Registering debug routes");
@@ -41,6 +46,9 @@ public class QuizSparkApp {
         // Add more routes below here.
         // ---------------------------
 
+        RouteOverview.enableRouteOverview("/create");
+        get("/create", (req, res) -> "[INSERT PAGE HERE]!");
+        
         // Example module
         MustacheDemo.init();
     }
