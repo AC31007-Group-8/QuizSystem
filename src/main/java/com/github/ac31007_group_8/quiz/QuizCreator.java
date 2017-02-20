@@ -8,6 +8,9 @@ package com.github.ac31007_group_8.quiz;
 import com.github.ac31007_group_8.quiz.staff.models.AnswerModel;
 import com.github.ac31007_group_8.quiz.staff.models.QuestionModel;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
+import com.github.ac31007_group_8.quiz.staff.store.Answer;
+import com.github.ac31007_group_8.quiz.staff.store.Question;
+import com.github.ac31007_group_8.quiz.staff.store.Quiz;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
@@ -37,9 +40,9 @@ public class QuizCreator {
         String answerText = "";
         boolean answerIsCorrect = false;
         
-        QuizModel quiz = null;
-        Vector<QuestionModel> questions = null;
-        Vector<AnswerModel> answers = null;
+        Quiz quiz = null;
+        Vector<Question> questions = null;
+        Vector<Answer> answers = null;
         
         try{
             
