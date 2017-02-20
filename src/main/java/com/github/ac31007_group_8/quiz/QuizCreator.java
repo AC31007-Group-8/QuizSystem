@@ -5,9 +5,9 @@
  */
 package com.github.ac31007_group_8.quiz;
 
-import com.github.ac31007_group_8.quiz.models.AnswerModel;
-import com.github.ac31007_group_8.quiz.models.QuestionModel;
-import com.github.ac31007_group_8.quiz.models.QuizModel;
+import com.github.ac31007_group_8.quiz.staff.models.AnswerModel;
+import com.github.ac31007_group_8.quiz.staff.models.QuestionModel;
+import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.ac31007_group_8.quiz.models;
+package com.github.ac31007_group_8.quiz.staff.models;
 
 import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.staff.store.Question;
 import java.util.Vector;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -18,29 +19,13 @@ import static org.jooq.impl.DSL.table;
  * @author Erik Jeny
  */
 public class QuestionModel {
-    
-    int question_id;
-    int quiz_id;
-    String question;
-    String explanation;
-    
-    public QuestionModel(){
-        question_id = 0;
-        quiz_id = 0;
-        question = "";
-        explanation = "";
+
+    public QuestionModel(){   
     }
     
-    public QuestionModel(int question_id, int quiz_id, String question, String explanation){
-        this.question_id = question_id;
-        this.quiz_id = quiz_id;
-        this.question = question;
-        this.explanation = explanation;
-    }
-    
-    public QuestionModel getQuestion(int quiz_id){
+    public Question getQuestion(int quiz_id){
         
-        DSLContext create = Database.getJooq();
+        DSLContext create = Database.getJooq(); //Connects to the database
         
         String sql = create.select(field("question.question_id"), field("question.quiz_id"), field("question.question"), field("question.explanation"))
                             .from(table("question"))
@@ -48,17 +33,12 @@ public class QuestionModel {
                             .getSQL();
         
         try{
-        
-            DSLContext create = Database.getJooq();
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results
-                question_id = r.getValue(question.question_id);
-                this.quiz_id = r.getValue(question.quiz_id);
-                question = r.getValue(question.question);
-                explanation = r.getValue(question.explanation);
+                Question question = new Question(r.getValue(question.question_id), r.getValue(question.quiz_id), r.getValue(question.question), r.getValue(question.explanation));
 
-                return this; //Returns current version of the model
+                return question; //Returns current version of the model
             }
         }
         catch(Exception e)
@@ -67,9 +47,9 @@ public class QuestionModel {
         return null;
     }
     
-    public Vector<QuestionModel> getAnswerAll()
+    public Vector<Question> getAnswerAll()
     {      
-        Vector<QuestionModel> questions = new Vector();
+        Vector<Question> questions = new Vector();
         DSLContext create = Database.getJooq();
         
         String sql = create.select(field("question.question_id"), field("question.quiz_id"), field("question.question"), field("question.explanation"))
@@ -81,12 +61,9 @@ public class QuestionModel {
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results 
-                question_id = r.getValue(question.question_id);
-                this.quiz_id = r.getValue(question.quiz_id);
-                question = r.getValue(question.question);
-                explanation = r.getValue(question.explanation);
+                Question question = new Question(r.getValue(question.question_id), r.getValue(question.quiz_id), r.getValue(question.question), r.getValue(question.explanation));
 
-                questions.add(this); //Adds current state of the model to the vector array
+                questions.add(question); //Adds current state of the model to the vector array
             }
         }
         catch(Exception e)
