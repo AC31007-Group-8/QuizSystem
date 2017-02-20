@@ -1,5 +1,7 @@
 package com.github.ac31007_group_8.quiz.example;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import java.io.File;
 import static spark.Spark.*;
 import spark.Request;
 import spark.Response;
@@ -25,7 +27,11 @@ public class MustacheDemo {
         HashMap<String, Object> map = new HashMap<>();
         map.put("val", "example");
         map.put("list", new Object[]{"test", "more test"});
-        TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "example.mustache"));
+        //TemplateEngine eng = new MustacheTemplateEngine();
+        
+        TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
+        
+         
+        return eng.render(eng.modelAndView(map, "createQuiz.html"));
     }
 }

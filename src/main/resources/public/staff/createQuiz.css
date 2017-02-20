@@ -1,0 +1,141 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 19-Feb-2017, 12:18:17
+    Author     : Vlad
+*/
+
+body{
+    min-width:330px;
+}
+
+.panel-question {
+    margin:50px;
+    background-color:papayawhip;
+    position:relative;
+}
+
+.panel-custom{
+    margin:50px;
+    background-color: #ae4444;
+}
+
+.panel-custom label{
+    color:white;
+}
+
+.panel-custom button{
+    width:100%;
+}
+
+
+
+#quiz-module, input[type=text], button{
+    
+    height:34px;
+    
+    
+}
+
+.input-group{
+    width:100%;
+}
+
+.btn-custom{
+    background-image:none;
+}
+
+textarea{
+     resize: none;
+}
+
+.margin-top-20{
+    margin-top:20px;
+}
+
+.option-row{
+    margin-bottom: 2px;
+}
+
+.addOptionButton{
+    width:120px;
+    margin-bottom:5px;
+}
+
+.glyph-large{
+    font-size:18px;
+}
+
+.question-lable{
+   
+    background-color: #fcf8e3;
+    height: 30px;
+    padding: 7px;
+    border: solid 1px #dddddd;
+    font-size: small;
+    position: absolute;
+    z-index: 100;
+    top: -30px;
+    width: 85px;
+
+}
+
+
+.question-remove{
+   
+    background-color: #fcf8e3;
+    height: 30px;
+    padding: 7px;
+    border: solid 1px #dddddd;
+    font-size: small;
+    position: absolute;
+    z-index: 100;
+    top: -30px;
+    left: 100px;
+
+}
+
+
+@media screen and (max-width: 580px) {
+    .shrinkable {
+        padding-left:3px;
+        padding-right:3px;
+    }
+}
+
+
+.mandatory:before{
+    content: "*";
+    color: red;
+    font-size: large;
+    float: left;
+    width: 9px;
+    line-height:20px;
+}
+
+.mandatory-option:before{
+    content: "*";
+    color: red;
+    font-size: large;
+    position: absolute;
+    z-index: 1000;
+    left: -10px;
+}
+
+
+
+#noQuestionMessage{
+    text-align: center;
+    font-size: large;
+    color: #827f7f;
+    margin: 50px;
+    border: solid #827f7f 1px;
+    display:none;
+}
+
+.error-highlight, #noQuestionMessage.error-highlight{
+    border: solid #118af5 2px;
+}

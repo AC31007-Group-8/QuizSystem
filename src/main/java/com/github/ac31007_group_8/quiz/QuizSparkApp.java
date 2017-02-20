@@ -1,6 +1,7 @@
 package com.github.ac31007_group_8.quiz;
 
 import com.github.ac31007_group_8.quiz.example.MustacheDemo;
+import com.github.ac31007_group_8.quiz.staff.controllers.QuizManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.route.RouteOverview;
@@ -22,11 +23,26 @@ public class QuizSparkApp {
         // Setup (do not remove this!)
         Configuration.load();
 
+        staticFiles.location("/public"); // resources/public, localhost:4567/file.html 
+        //staticFiles.externalLocation(System.getProperty("user.dir") + "/src/main/resources/public");//if you want a new version of a static file after F5 when developing (better way?)
+        
+        
+       
+        
+        
+        
         // Debugging paths:
         LOGGER.debug("Registering debug routes");
         RouteOverview.enableRouteOverview("/debug/routes");
+        
+       
+        
         get("/debug/ping", (req, res) -> "Pong!");
 
+        get("/staff/createQuiz", QuizManager::sendQuizForm);
+        post("/staff/createQuiz","application/json", QuizManager::saveQuiz);
+        
+        
         // Add more routes below here.
         // ---------------------------
 
