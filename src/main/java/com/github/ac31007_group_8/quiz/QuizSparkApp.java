@@ -2,6 +2,7 @@ package com.github.ac31007_group_8.quiz;
 
 import com.github.ac31007_group_8.quiz.example.MustacheDemo;
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizManager;
+import com.github.ac31007_group_8.quiz.student.controllers.StudentQuizManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.route.RouteOverview;
@@ -41,7 +42,9 @@ public class QuizSparkApp {
 
         get("/staff/createQuiz", QuizManager::sendQuizForm);
         post("/staff/createQuiz","application/json", QuizManager::saveQuiz);
-        
+
+        get("/student/takeQuiz", StudentQuizManager::serveTakeQuiz);
+        post("/student/takeQuiz", "application/json", StudentQuizManager::receiveTakeQuiz);
         
         // Add more routes below here.
         // ---------------------------
