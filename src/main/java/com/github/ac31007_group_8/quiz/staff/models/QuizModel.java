@@ -3,26 +3,25 @@
 // * To change this template file, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package com.github.ac31007_group_8.quiz.staff.models;
-//
-//import com.github.ac31007_group_8.quiz.Database;
-//import com.github.ac31007_group_8.quiz.staff.store.Quiz;
-//import java.util.Vector;
-//import org.jooq.DSLContext;
-//import org.jooq.Record;
-//import org.jooq.Result;
-//import static org.jooq.impl.DSL.field;
-//import static org.jooq.impl.DSL.table;
-//
-///**
-// *
-// * @author Erik Jeny
-// */
-//public class QuizModel {
-//    
-//    public QuizModel(){
-//    }
-//    
+package com.github.ac31007_group_8.quiz.staff.models;
+
+import com.github.ac31007_group_8.quiz.staff.store.Quiz;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Result;
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.table;
+/**
+ *
+ * @author Erik Jeny
+ */
+public class QuizModel {
+    
+    public QuizModel(){
+    }
+    
 //    public Quiz getQuiz(int quiz_id){
 //        
 //        DSLContext create = Database.getJooq(); //Connects to the database
@@ -150,3 +149,24 @@
 //    }
 //    
 //}
+
+
+    public ArrayList<String> getModuleList(DSLContext dslCont) throws SQLException{
+        String sql = dslCont.select(field("module_id"))
+                        .from(table("Module"))
+                        .getSQL();
+        
+        Result<Record> result = dslCont.fetch(sql);
+        ArrayList<String> allModules = new ArrayList<>();
+        for(Record r : result){
+                
+                allModules.add((String)r.getValue(field("module_id")));
+                
+        }
+        return allModules;
+    }
+    
+    
+    
+}
+

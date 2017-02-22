@@ -37,8 +37,11 @@
 //
 //            for(Record r : result){ //Iterates through the returned results
 //                
-//                Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
+//               // Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
 //
+//                
+//                Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
+//                
 //                return answer; //Returns current version of the model
 //            }
 //        }
@@ -74,6 +77,10 @@
 //        }
 //        return answer;
 //    }
+//    
+//    
+//    
+//    
 //    
 //    public boolean addAnswer(int answer_id, int question_id, String answer, boolean correct) 
 //    {   

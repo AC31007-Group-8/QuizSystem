@@ -5,9 +5,12 @@
  */
 package com.github.ac31007_group_8.quiz.staff.controllers;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import java.io.File;
+import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import org.jooq.DSLContext;
 import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
@@ -31,13 +34,32 @@ public class QuizManager {
     
     
     public static Object sendQuizForm(Request req, Response res){
-        
-        //here can take e.g. module list from DB or staff username
+       
+        QuizModel qm = new QuizModel();
         HashMap<String, Object> map = new HashMap<>();
         
-        TemplateEngine eng = new MustacheTemplateEngine();//TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
-         
-        return eng.render(eng.modelAndView(map, "staff/createQuiz.mustache"));
+        try{
+            DSLContext dslCont = Database.getJooq(); //Connects to the database
+       
+            ArrayList<String> allModules = qm.getModuleList(dslCont);
+        
+        
+            System.out.println(allModules);
+            //here can take e.g. module list from DB or staff username
+            
+            map.put("allModules", allModules);
+            TemplateEngine eng = new MustacheTemplateEngine();//TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
+
+            return eng.render(eng.modelAndView(map, "staff/createQuiz.mustache"));
+            
+        }
+        catch (SQLException sqle){
+            System.out.println("Sqlexception in sendQuizForm :(");
+               return "{\"message\":\"error occured!\"}";
+        }
+        
+        
+        
         
         
         
@@ -47,7 +69,7 @@ public class QuizManager {
     
      public static Object saveQuiz(Request req, Response res){
         
-//        data:{
+//        quiz:{
 //            timeLimit:"",
 //            moduleCode:"",
 //            title:"",
