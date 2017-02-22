@@ -6,8 +6,7 @@
 package com.github.ac31007_group_8.quiz.staff.models;
 
 import com.github.ac31007_group_8.quiz.Database;
-import com.github.ac31007_group_8.quiz.staff.store.Answer;
-import com.github.ac31007_group_8.quiz.staff.store.Question;
+
 import com.github.ac31007_group_8.quiz.staff.store.Quiz;
 import org.jooq.*;
 
@@ -26,16 +25,15 @@ import static com.github.ac31007_group_8.quiz.generated.Tables.*;
 public class QuizListModel {
 
     public QuizListModel(){
-//    }
+    }
 
-    public Vector<Quiz> getQuizAll()
+    public Quiz getQuizAll()
     {
-        Vector<Quiz> quizzes = new Vector();
         DSLContext create = Database.getJooq(); //Connects to the database
 
         /**Creates SQL Statement**/
         String sql = create.select()
-                        .from(table("quiz"))
+                        .from(QUIZ)
                         .getSQL();
 
         try{
@@ -43,15 +41,16 @@ public class QuizListModel {
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results
-                Quiz quiz = new Quiz(r.getValue(r.getValue(quiz.module_id), r.getValue(quiz.title));
-
-                quizzes.add(quiz); //Adds current state of the model to the vector array
+                Quiz quiz = new Quiz(r.get(QUIZ.QUIZ_ID),r.get(QUIZ.STAFF_ID), r.get(QUIZ.TIME_LIMIT),
+                        r.get(QUIZ.MODULE_ID), r.get(QUIZ.TITLE), r.get(QUIZ.PUBLISH_STATUS)!=0);   //!=0 Converts a single bit to boolean
+                return quiz;
             }
         }
         catch(Exception e)
         {
-            return null;
+            Logger.getGlobal().info("Exception: " + e.getMessage());
         }
-        return quizzes;
+        return null;
+
     }
 }

@@ -10,7 +10,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 import java.util.*;
 import java.util.logging.Logger;
 
-import com.github.ac31007_group_8.quiz.student.*;
+import com.github.ac31007_group_8.quiz.staff.*;
 import com.github.ac31007_group_8.quiz.staff.store.*;
 
 import static spark.Spark.*;
@@ -29,7 +29,7 @@ public class QuizList {
 
     @Init
     public static void init() {
-        get("/student/quizList", quizList::getQuizName);
+        get("/student/quizList", QuizList::getQuizName);
     }
 
     public static Object getQuizName(Request req, Response res){
@@ -37,14 +37,14 @@ public class QuizList {
         String quizStr = req.queryParams("quizID");
         Logger.getGlobal().info("got param value: " + quizStr);
 
-        QuizListModel quizModel = new QuizListModel();
-        List<Title> questionTitles = quizModel.getQuizAll();
+        QuizListModel quizListModel = new QuizListModel();
+        Quiz quizTitles = quizListModel.getQuizAll();
 
         Gson gson = new GsonBuilder().create();
         String quizTitlesJson = gson.toJson(quizTitles);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("quizTitle", quizTitlesJson);
+        map.put("title", quizTitlesJson);
 
         TemplateEngine eng = new MustacheTemplateEngine();
         return eng.render(eng.modelAndView(map, "student/quizList.mustache"));
