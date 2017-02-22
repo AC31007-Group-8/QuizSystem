@@ -21,20 +21,17 @@ and open the template in the editor.
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <link rel="stylesheet" href="/staff/createQuiz.css">
-        <script src="/staff/viewList.js"></script>
     </head>
     <body>
 
 <!--====================Quiz Properties (template)=====================-->
-<script id="mustacheTemplate" type="text/template">
     <div class="panel panel-default panel-custom">
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
-            <h1>Module code: {{moduleCode}} Quiz Title:{{quizTitle}}</h1>
+            <h1>Module code: {{MODULE_ID}} Quiz Title:{{TITLE}}</h1>
           </div>
         </div>
       </div>
     </div>
-</script>
 </html>

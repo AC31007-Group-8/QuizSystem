@@ -29,7 +29,7 @@ public class QuizList {
 
     @Init
     public static void init() {
-        get("/student/quizList", QuizList::getQuizName);
+        get("/staff/quizList", QuizList::getQuizName);
     }
 
     public static Object getQuizName(Request req, Response res){
@@ -47,7 +47,7 @@ public class QuizList {
         map.put("title", quizTitlesJson);
 
         TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "student/quizList.mustache"));
+        return eng.render(eng.modelAndView(map, "staff/quizList.mustache"));
 
     }
 
