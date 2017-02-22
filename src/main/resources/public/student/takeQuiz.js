@@ -1,5 +1,5 @@
 /**
- * Created by Can on 21/02/2017.
+ * Created by Can on 21/02/2017 Edited by Allan
  */
 
 var elapsedTime = 0;
@@ -24,7 +24,7 @@ function endQuiz(){
     document.getElementById("questionContainer").style.display = "none";
     document.getElementById("submitButton").style.display = "none";
     //no reason to hide counter, so we're keeping it on-screen.
-    
+
     stopCounter();
     submitResults();
 }
@@ -43,7 +43,9 @@ function addSecond(){
 }
 
 function updateTime(){
-    document.getElementById("counter").innerHTML = elapsedTime.toString();
+    var time = elapsedTime.toString();
+    document.getElementById("counter").innerHTML = time;
+    document.getElementById("FormCounter").innerHTML = time;
 }
 
 function submitResults() {
