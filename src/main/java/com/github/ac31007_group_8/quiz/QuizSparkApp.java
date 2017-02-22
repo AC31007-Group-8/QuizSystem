@@ -33,23 +33,6 @@ public class QuizSparkApp {
 
 
 
-//        get("/staff/createQuiz", QuizManager::sendQuizForm);
-//        post("/staff/createQuiz","application/json", QuizManager::saveQuiz);
-//        
-//        
-//        
-//        //student routes
-//         get("/student/relevantQuizzes", QuizManagerStudent::sendRelevantQuizzes);
-//        
-//        // Add more routes below here.
-//        // ---------------------------
-//
-//        RouteOverview.enableRouteOverview("/create");
-//        get("/create", (req, res) -> "[INSERT PAGE HERE]!");
-//        
-//        // Example module
-//        MustacheDemo.init();
-
 
         // Register all @Init methods.
         ClasspathInitialiser cp = new ClasspathInitialiser(Init.class, "com.github.ac31007_group_8.quiz");

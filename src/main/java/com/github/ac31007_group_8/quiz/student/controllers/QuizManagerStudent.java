@@ -5,8 +5,10 @@
  */
 package com.github.ac31007_group_8.quiz.student.controllers;
 import com.github.ac31007_group_8.quiz.Database;
+
 import com.github.ac31007_group_8.quiz.student.models.QuizModelStudent;
 import com.github.ac31007_group_8.quiz.student.stores.QuizInfo;
+import com.github.ac31007_group_8.quiz.util.Init;
 import com.google.gson.Gson;
 
 import java.sql.Connection;
@@ -16,6 +18,8 @@ import spark.Request;
 import spark.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static spark.Spark.get;
+import static spark.Spark.post;
 
 
 /**
@@ -26,6 +30,11 @@ public class QuizManagerStudent {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(QuizManagerStudent.class);
     
+    
+    @Init
+    public static void init() {
+         get("/student/relevantQuizzes", QuizManagerStudent::sendRelevantQuizzes);
+    }
     
     public static Object sendRelevantQuizzes(Request req, Response res){
         
