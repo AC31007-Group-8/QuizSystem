@@ -34,28 +34,28 @@ public class StudentQuizManager {
 
     public static Object serveTakeQuiz(Request req, Response res){
 
-//        int quizID = 1;
-//        String quizStr = req.queryParams("quizID");
-//        Logger.getGlobal().info("got param value: " + quizStr);
-//
-//        StudentQuizModel quizModel = new StudentQuizModel();
-//        List<Pair<Question, List<Answer>>> questionSets = quizModel.getQuestionSets(quizID);
-//
-//        Gson gson = new GsonBuilder().create();
-//        String questionSetsJson = gson.toJson(questionSets);
-//
+        int quizID = 1;
+        String quizStr = req.queryParams("quizID");
+        Logger.getGlobal().info("got param value: " + quizStr);
+
+        StudentQuizModel quizModel = new StudentQuizModel();
+        List<Pair<Question, List<Answer>>> questionSets = quizModel.getQuestionSets(quizID);
+
+        Gson gson = new GsonBuilder().create();
+        String questionSetsJson = gson.toJson(questionSets);
+
         HashMap<String, Object> map = new HashMap<>();
-//        map.put("quizID", quizStr);
-//        map.put("questionSets", questionSetsJson);
-//        map.put("testKey", "testVal");
-//
-//        //for (Pair<Question, List<Answer>> questionSet : questionSets) {
-//        //
-//        //    for (Answer answer : questionSet.getRight()) {
-//        //
-//        //    }
-//        //}
-//
+        map.put("quizID", quizStr);
+        map.put("questionSets", questionSetsJson);
+        map.put("testKey", "testVal");
+
+        for (Pair<Question, List<Answer>> questionSet : questionSets) {
+        
+            for (Answer answer : questionSet.getRight()) {
+        
+            }
+        }
+
         TemplateEngine eng = new MustacheTemplateEngine();
         return eng.render(eng.modelAndView(map, "student/takeQuiz.mustache"));
 
