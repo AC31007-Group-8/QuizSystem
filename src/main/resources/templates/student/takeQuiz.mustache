@@ -3,6 +3,7 @@
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
+authors: Vlad, Can, Allan
 -->
 <html>
 <head>
@@ -27,127 +28,95 @@ and open the template in the editor.
 </head>
 <body>
 
-Qs:
-{{questionSets}}
-Test:
-{{testKey}}
-QuizID: {{quizID}}
 
-    <div class="panel panel-default panel-custom">
-        <div  class="panel-body">
+<div class="panel panel-default panel-custom">
+    <div  class="panel-body">
 
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
-                    <h1>Quiz - ID:  {{quizID}} </h1>
-                </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                <h1>Quiz - ID:  {{quizID}} </h1>
             </div>
-
         </div>
+
     </div>
+</div>
 
-    <div id="startButton" class="panel panel-default panel-custom">
-        <div  class="panel-body">
+<div id="startButton" class="panel panel-default panel-custom">
+    <div  class="panel-body">
 
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                    <p>Press the "Start Quiz" button to start the test.</p>
-                </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                <p>Press the "Start Quiz" button to start the test.</p>
             </div>
-
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                    <button onclick="startQuiz()">Start Quiz</button>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                </div>
-            </div>
-
         </div>
-    </div>
 
-    <div id="counterContainer" class="panel panel-default panel-custom">
-        <div  class="panel-body">
-
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                    <p> Seconds elapsed: </p>
-                    <p id="counter"> 0 </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
             </div>
-
+            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                <button onclick="startQuiz()">Start Quiz</button>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
+            </div>
         </div>
+
     </div>
+</div>
+
+<div id="counterContainer" class="panel panel-default panel-custom">
+    <div  class="panel-body">
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                <p> Seconds elapsed: </p>
+                <p id="counter"> 0 </p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
+            </div>
+        </div>
+
+    </div>
+</div>
+<form action="" method="POST">
 
     <div id="questionContainer" >
-
+        {{#questionSets}}
         <div class="panel panel-default panel-custom">
             <div  class="panel-body">
-
                 <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <p>
-                            <br>
-                            Questions will go here!
-                            <br>
-                            <br>
-                            Q1: Lorem ipsum dolor sit amet?
-                            <br>
-                            <br>
-                        </p>
+                    {{#left}}
+                        <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0"><p>{{question}}</p></div>
+                    {{/left}}
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                        <div class="row" >
+                            {{#right}}
+                                <div><p><input type="checkbox" name="{{question_id}}" value="{{answer_id}}">{{answer}}</div></p>
+                            {{/right}}
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
+        {{/questionSets}}
+
 
         <div class="panel panel-default panel-custom">
             <div  class="panel-body">
-
                 <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0"></div>
                     <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <p>
-                            <br>
-                            Questions will go here!
-                            <br>
-                            <br>
-                            Q2: True or false: "This sentence is false."
-                            <br>
-                            <br>
-                        </p>
+                        <input type="hidden" name="quizID" value="{{quizID}}">
+                        <input type="hidden" name="duration" value="">
+                        <input type="submit" id="submitButton" onclick="endQuiz()" id="FormCounter"></input>
                     </div>
                 </div>
-
-            </div>
-        </div>
-
-        <div class="panel panel-default panel-custom">
-            <div  class="panel-body">
-
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <button id="submitButton" onclick="endQuiz()">Submit Answers</button>
-                    </div>
-                </div>
-
             </div>
         </div>
 
     </div>
-
-
-
-
+</form>
 </body>
 </html>
+

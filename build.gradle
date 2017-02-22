@@ -66,6 +66,9 @@ jooq {
     }
 }
 
+// Work around broken up-to-date detection (via http://stackoverflow.com/a/16154865 )
+generateDatabaseJooqSchemaSource.outputs.upToDateWhen { false }
+
 task setup(dependsOn: generateDatabaseJooqSchemaSource) {}
 tasks.eclipse.dependsOn setup
 

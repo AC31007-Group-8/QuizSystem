@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
 
 
-/**
- * Created by Can on 21/02/2017.
- */
+///**
+// * Created by Can on 21/02/2017.
+// */
 public class StudentQuizModel {
 
     DSLContext dbConnection = null;

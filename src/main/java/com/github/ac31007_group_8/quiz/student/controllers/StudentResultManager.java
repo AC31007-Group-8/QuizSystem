@@ -49,12 +49,12 @@ public class StudentResultManager {
         map.put("questionSets", questionSetsJson);
         map.put("testKey", "testVal");
 
-        //for (Pair<Question, List<Answer>> questionSet : questionSets) {
-        //
-        //    for (Answer answer : questionSet.getRight()) {
-        //
-        //    }
-        //}
+        for (Pair<Question, List<Answer>> questionSet : questionSets) {
+        
+            for (Answer answer : questionSet.getRight()) {
+        
+            }
+        }
 
         TemplateEngine eng = new MustacheTemplateEngine();
         return eng.render(eng.modelAndView(map, "student/getResult.mustache"));

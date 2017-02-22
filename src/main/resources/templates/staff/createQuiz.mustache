@@ -41,9 +41,10 @@ and open the template in the editor.
                         <label for="quiz-module" class="mandatory">Module</label>
                         <select id="quiz-module" class="input-group">
                             <option value="-1">--select--</option>
-                            <option value="AC12345">AC12345</option>
-                            <option value="AC12234">AC12234</option>
-                            <option value="AC22222">AC22222</option>
+                            {{#allModules}}
+                                <option value="{{.}}">{{.}}</option>
+                            {{/allModules}}
+                            
                         </select>
                     </div>
 

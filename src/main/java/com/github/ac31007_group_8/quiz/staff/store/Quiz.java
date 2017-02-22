@@ -18,6 +18,7 @@ public class Quiz {
     String title;
     boolean publish_status; 
     
+    
     public Quiz(){
         quiz_id = 0;
         staff_id = 0;
@@ -35,5 +36,7 @@ public class Quiz {
         this.title = title;
         this.publish_status = publish_status;
     }
+    
+    
     
 }
