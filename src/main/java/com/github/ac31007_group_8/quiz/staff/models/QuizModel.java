@@ -8,6 +8,7 @@ package com.github.ac31007_group_8.quiz.staff.models;
 import com.github.ac31007_group_8.quiz.Database;
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
 import com.github.ac31007_group_8.quiz.staff.store.Quiz;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -150,4 +151,18 @@ public class QuizModel {
         return true;  
     }
     
+public ArrayList<String> getModuleList(DSLContext dslCont) throws SQLException{
+        String sql = dslCont.select(field("module_id"))
+                        .from(table("Module"))
+                        .getSQL();
+        
+        Result<Record> result = dslCont.fetch(sql);
+        ArrayList<String> allModules = new ArrayList<>();
+        for(Record r : result){
+                
+                allModules.add((String)r.getValue(field("module_id")));
+                
+        }
+        return allModules;
+    }
 }

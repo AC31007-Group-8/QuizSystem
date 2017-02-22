@@ -11,10 +11,10 @@ package com.github.ac31007_group_8.quiz.staff.store;
  */
 public class Answer {
     
-    int answer_id;
-    int question_id;
-    String answer;
-    boolean correct;
+    public int answer_id;
+    public int question_id;
+    public String answer;
+    public boolean correct;
     
     public Answer(){
         answer_id = 0;

@@ -22,6 +22,7 @@ public class Quiz {
     ArrayList<Question> questions;
     boolean publish_status; 
     
+    
     public Quiz(){
         quiz_id = 0;
         staff_id = 0;
@@ -100,6 +101,8 @@ public class Quiz {
     public void setPublish_status(boolean publish_status) {
         this.publish_status = publish_status;
     }
+    
+    
     
     
 }
