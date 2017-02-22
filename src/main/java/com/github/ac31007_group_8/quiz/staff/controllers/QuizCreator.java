@@ -15,7 +15,8 @@
 //
 //import com.google.gson.*;
 //import com.google.gson.stream.*;
-//import java.util.Vector;
+//import java.util.ArrayList;
+//import java.util.HashMap;
 //
 ///**
 // *
@@ -38,64 +39,20 @@
 //        boolean answerIsCorrect = false;
 //        
 //        QuizModel quiz = null;
-//        Vector<QuestionModel> questions = null;
-//        Vector<AnswerModel> answers = null;
+//        ArrayList<QuestionModel> questions = null;
+//        ArrayList<AnswerModel> answers = null;
 //        
 //        try{
 //            
-//            JsonReader reader = new JsonReader(new FileReader("insert.your.url.here")); //Gets JSON from specified url/path
+//           
+//            Gson gson = new GsonBuilder().create();
+//            String quizJson = gson.toJson(quizSets);
+//
+//            HashMap<String, Object> map = new HashMap<>();
+//            map.put("quizID", quizStr);
+//            map.put("questionSets", questionSets);
+//            map.put("testKey", "testVal");
 //            
-//            reader.beginObject();
-//            
-//            while(reader.hasNext()){
-//                String label = reader.nextName();
-//                
-//                if(label.equals("timeLimit"))
-//                {
-//                    timeLimit=reader.nextInt();
-//                }
-//                else if(label.equals("moduleCode"))
-//                {
-//                    moduleCode=reader.nextString();
-//                }
-//                else if(label.equals("title"))
-//                {
-//                    title=reader.nextString();
-//                }
-//                else if(label.equals("questions"))
-//                {
-//                    reader.beginArray();
-//                    
-//                    while(reader.hasNext()){
-//                        
-//                        if(label.equals("questionText"))
-//                        {
-//                            questionText=reader.nextString();
-//                        }
-//                        else if(label.equals("explanation"))
-//                        {
-//                            questionExplanation=reader.nextString();
-//                        }
-//                        else if(label.equals("options"))
-//                        {
-//                            reader.beginArray();
-//                    
-//                            while(reader.hasNext()){
-//                                
-//                                if(label.equals("option"))
-//                                {
-//                                    answerText=reader.nextString();
-//                                }
-//                                else if(label.equals("correct"))
-//                                {
-//                                    answerIsCorrect=reader.nextBoolean();
-//                                }
-//                            }
-//                        }
-//                        
-//                    }
-//                }
-//            }
 //        }
 //        catch(IOException e) {
 //            e.printStackTrace();
