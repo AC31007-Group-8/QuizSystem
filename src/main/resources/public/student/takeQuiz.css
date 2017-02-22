@@ -1,0 +1,10 @@
+
+#counterContainer {display: none;} /* hide by default, enable using JS */
+#questionContainer {display: none;} /* hide by default, enable using JS */
+#submitButton {display: none;} /* hide by default, enable using JS */
+p{
+    color:whitesmoke;
+}
+h1{
+    color:white;
+}

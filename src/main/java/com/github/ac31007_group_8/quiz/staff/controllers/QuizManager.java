@@ -9,6 +9,10 @@ import com.github.ac31007_group_8.quiz.Database;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import com.github.ac31007_group_8.quiz.util.Init;
+import com.github.mustachejava.DefaultMustacheFactory;
+import java.io.File;
+
 import java.util.HashMap;
 import org.jooq.DSLContext;
 import spark.Request;
@@ -17,6 +21,8 @@ import spark.TemplateEngine;
 import spark.template.mustache.MustacheTemplateEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static spark.Spark.*;
 
 /**
  *
@@ -30,6 +36,12 @@ public class QuizManager {
     public QuizManager(){
         
         
+    }
+
+    @Init
+    public static void init() {
+        get("/staff/createQuiz", QuizManager::sendQuizForm);
+        post("/staff/createQuiz","application/json", QuizManager::saveQuiz);
     }
     
     
@@ -84,10 +96,7 @@ public class QuizManager {
 //        } 
 
         //convert this (and tell me how you did it) into properly formatted json string (as shown above) and then use GSON to parse into java beans
-        System.out.println(req.body());
-        
-       
-       
+        System.out.println(req.body());   
        
         res.status(200);
       

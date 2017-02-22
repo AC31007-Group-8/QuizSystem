@@ -1,3 +1,4 @@
+//
 ///*
 // * To change this license header, choose License Headers in Project Properties.
 // * To change this template file, choose Tools | Templates
@@ -5,11 +6,11 @@
 // */
 //package com.github.ac31007_group_8.quiz.staff.models;
 //
-//import static org.jooq.impl.DSL.*;
+//import static com.github.ac31007_group_8.quiz.generated.Tables.*;
 //
 //import com.github.ac31007_group_8.quiz.Database;
 //import com.github.ac31007_group_8.quiz.staff.store.Answer;
-//import java.util.Vector;
+//import java.util.ArrayList;
 //
 //import org.jooq.DSLContext;
 //import org.jooq.*;
@@ -24,24 +25,20 @@
 //    
 //    public Answer getAnswer(int question_id)
 //    {       
-//        DSLContext create = Database.getJooq();
-//        
-//        String sql = create.select(field("answer.answer_id"), field("answer.question_id"), field("answer.answer"), field("answer.is_correct"))
-//                            .from(table("answer"))
-//                            .where(field("answer.question_id").equal(question_id))
+//        DSLContext create = Database.getJooq(); //Connects to the database
+//        String sql = create.select() //Selects all fields if empty
+//                            .from(ANSWER)
+//                            .where(ANSWER.QUESTION_ID.equal(question_id))
 //                            .getSQL();
 //        
 //        try{
 //        
 //            Result<Record> result = create.fetch(sql);
 //
-//            for(Record r : result){ //Iterates through the returned results
+//            for(Record r : result){ //Iterates through the returned results     
 //                
-//               // Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
+//                Answer answer = new Answer(r.get(ANSWER.ANSWER_ID), r.get(ANSWER.QUESTION_ID), r.get(ANSWER.ANSWER_), r.get(ANSWER.IS_CORRECT)!=0); //!=0 Converts a single bit to boolean
 //
-//                
-//                Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
-//                
 //                return answer; //Returns current version of the model
 //            }
 //        }
@@ -51,13 +48,12 @@
 //        return null;
 //    }
 //    
-//    public Vector<Answer> getAnswerAll()
+//    public ArrayList<Answer> getAnswerAll()
 //    {      
-//        Vector<Answer> answers = new Vector();
-//        DSLContext create = Database.getJooq();
-//        
-//        String sql = create.select(field("answer.answer_id"), field("answer.question_id"), field("answer.answer"), field("answer.is_correct"))
-//                            .from(table("answer"))
+//        ArrayList<Answer> answers = new ArrayList();
+//        DSLContext create = Database.getJooq(); //Connects to the database
+//        String sql = create.select(ANSWER.ANSWER_ID, ANSWER.QUESTION_ID, ANSWER.ANSWER_, ANSWER.IS_CORRECT) //Selects field specified (could've been empty)
+//                            .from(ANSWER)
 //                            .getSQL();
 //        
 //        try{
@@ -66,7 +62,7 @@
 //
 //            for(Record r : result){ //Iterates through the returned results 
 //                
-//                Answer answer = new Answer(r.getValue(answer.answer_id), r.getValue(answer.question_id), r.getValue(answer.answer), r.getValue(answer.is_correct));
+//                Answer answer = new Answer(r.get(ANSWER.ANSWER_ID), r.get(ANSWER.QUESTION_ID), r.get(ANSWER.ANSWER_), r.get(ANSWER.IS_CORRECT)!=0); //!=0 Converts a single bit to boolean
 //
 //                answers.add(answer); //Adds current state of the model to the vector array
 //            }
@@ -75,21 +71,17 @@
 //        {
 //            return null;
 //        }
-//        return answer;
+//        return answers; 
 //    }
-//    
-//    
-//    
-//    
 //    
 //    public boolean addAnswer(int answer_id, int question_id, String answer, boolean correct) 
 //    {   
-//        DSLContext create = Database.getJooq();
+//        DSLContext create = Database.getJooq(); //Connects to the database
 //        
 //        try{
-//            create.insertInto(answer, answer.answer_id, answer.question_id, answer.answer, answer.is_correct)
-//                                .values(answer_id, question_id, answer, correct)
-//                                .execute();
+//            create.insertInto(ANSWER, ANSWER.ANSWER_ID, ANSWER.QUESTION_ID, ANSWER.ANSWER_, ANSWER.IS_CORRECT)
+//                    .values(answer_id, question_id, answer, (byte)(correct?1:0)) //(byte)(x?1:0) Converts boolean x to byte
+//                    .execute();
 //        }
 //        catch(Exception e)
 //        {
@@ -99,3 +91,4 @@
 //        return true;  
 //    }
 //}
+//

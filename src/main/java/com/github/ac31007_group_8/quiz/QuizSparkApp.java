@@ -1,8 +1,11 @@
 package com.github.ac31007_group_8.quiz;
 
-import com.github.ac31007_group_8.quiz.example.MustacheDemo;
+
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizManager;
 import com.github.ac31007_group_8.quiz.student.controllers.QuizManagerStudent;
+import com.github.ac31007_group_8.quiz.util.ClasspathInitialiser;
+import com.github.ac31007_group_8.quiz.util.Init;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.route.RouteOverview;
@@ -10,8 +13,9 @@ import spark.route.RouteOverview;
 import static spark.Spark.*;
 
 /**
- * Main entry for all types of launch. Define routes here!
+ * Main entry for all types of launch. Use @link{com.github.ac31007_group_8.quiz.util.Init} for defining routes.
  *
+ * @see com.github.ac31007_group_8.quiz.util.Init
  * @author Robert T.
  */
 public class QuizSparkApp {
@@ -26,38 +30,31 @@ public class QuizSparkApp {
 
         staticFiles.location("/public"); // resources/public, localhost:4567/file.html 
         //staticFiles.externalLocation(System.getProperty("user.dir") + "/src/main/resources/public");//if you want a new version of a static file after F5 when developing (better way?)
-        
-        
-       
-        
-        
-        
-        // Debugging paths:
-        LOGGER.debug("Registering debug routes");
-        RouteOverview.enableRouteOverview("/debug/routes");
-        
-       
-        
-        //staff routes
-        
-        get("/debug/ping", (req, res) -> "Pong!");
 
-        get("/staff/createQuiz", QuizManager::sendQuizForm);
-        post("/staff/createQuiz","application/json", QuizManager::saveQuiz);
-        
-        
-        
-        //student routes
-         get("/student/relevantQuizzes", QuizManagerStudent::sendRelevantQuizzes);
-        
-        // Add more routes below here.
-        // ---------------------------
 
-        RouteOverview.enableRouteOverview("/create");
-        get("/create", (req, res) -> "[INSERT PAGE HERE]!");
-        
-        // Example module
-        MustacheDemo.init();
+
+//        get("/staff/createQuiz", QuizManager::sendQuizForm);
+//        post("/staff/createQuiz","application/json", QuizManager::saveQuiz);
+//        
+//        
+//        
+//        //student routes
+//         get("/student/relevantQuizzes", QuizManagerStudent::sendRelevantQuizzes);
+//        
+//        // Add more routes below here.
+//        // ---------------------------
+//
+//        RouteOverview.enableRouteOverview("/create");
+//        get("/create", (req, res) -> "[INSERT PAGE HERE]!");
+//        
+//        // Example module
+//        MustacheDemo.init();
+
+
+        // Register all @Init methods.
+        ClasspathInitialiser cp = new ClasspathInitialiser(Init.class, "com.github.ac31007_group_8.quiz");
+        cp.callAllMethods();
+
     }
 
 }

@@ -29,5 +29,9 @@ public class Question {
         this.question = question;
         this.explanation = explanation;
     }
+
+    public int getQuestionID(){
+        return question_id;
+    }
     
 }
