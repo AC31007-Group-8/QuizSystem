@@ -46,7 +46,7 @@ public class StudentQuizManager {
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("quizID", quizStr);
-        map.put("questionSets", questionSetsJson);
+        map.put("questionSets", questionSets);
         map.put("testKey", "testVal");
 
         //for (Pair<Question, List<Answer>> questionSet : questionSets) {
