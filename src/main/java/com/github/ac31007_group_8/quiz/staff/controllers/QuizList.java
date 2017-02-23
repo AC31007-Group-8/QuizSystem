@@ -1,7 +1,7 @@
 
 package com.github.ac31007_group_8.quiz.staff.controllers;
 
-import com.github.ac31007_group_8.quiz.staff.models.QuizListModel;
+import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
 import spark.Response;
@@ -38,8 +38,8 @@ public class QuizList {
         String quizStr = req.queryParams("quizID");
         Logger.getGlobal().info("got param value: " + quizStr);
 
-        QuizListModel quizListModel = new QuizListModel();
-        Quiz quizTitles = quizListModel.getQuizAll();
+        QuizModel quizModel = new QuizModel();
+        Quiz quizTitles = quizModel.getQuizAll();
 
         Gson gson = new GsonBuilder().create();
         String quizTitlesJson = gson.toJson(quizTitles);
