@@ -11,10 +11,10 @@ package com.github.ac31007_group_8.quiz.staff.store;
  */
 public class Answer {
     
-    int answer_id;
-    int question_id;
-    String answer;
-    boolean correct;
+    public int answer_id;
+    public int question_id;
+    public String answer;
+    public boolean correct;
     
     public Answer(){
         answer_id = 0;
@@ -29,5 +29,38 @@ public class Answer {
         this.answer = answer;
         this.correct = correct;
     } 
+
+    public int getAnswer_id() {
+        return answer_id;
+    }
+
+    public void setAnswer_id(int answer_id) {
+        this.answer_id = answer_id;
+    }
+
+    public int getQuestion_id() {
+        return question_id;
+    }
+
+    public void setQuestion_id(int question_id) {
+        this.question_id = question_id;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
+    
     
 }

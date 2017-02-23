@@ -66,6 +66,10 @@ jooq {
     }
 }
 
+// Work around broken up-to-date detection (via http://stackoverflow.com/a/16154865 )
+// Revert: Causes constant rebuilds on build/run through Gradle.
+//generateDatabaseJooqSchemaSource.outputs.upToDateWhen { false }
+
 task setup(dependsOn: generateDatabaseJooqSchemaSource) {}
 tasks.eclipse.dependsOn setup
 
@@ -100,4 +104,3 @@ idea {
 gretty {
   servletContainer = 'tomcat8'
 }
-
