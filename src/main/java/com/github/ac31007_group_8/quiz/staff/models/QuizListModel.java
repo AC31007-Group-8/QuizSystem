@@ -44,7 +44,7 @@ public class QuizListModel {
             for(Record r : result){ //Iterates through the returned results
                 Quiz quiz = new Quiz(r.get(QUIZ.QUIZ_ID),r.get(QUIZ.STAFF_ID), r.get(QUIZ.TIME_LIMIT),
                         r.get(QUIZ.MODULE_ID), r.get(QUIZ.TITLE), r.get(QUIZ.PUBLISH_STATUS)!=0);   //!=0 Converts a single bit to boolean
-                quizzes.add(quiz);
+                return quiz;
             }
         }
         return quizzes;
