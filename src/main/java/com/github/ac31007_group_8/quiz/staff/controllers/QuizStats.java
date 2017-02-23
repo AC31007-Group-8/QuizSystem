@@ -52,13 +52,8 @@ public class QuizStats {
         try {
             int id = Integer.parseInt(req.params("id"));
 
+            // TODO: Refactor into model
             DSLContext db = Database.getJooq();
-
-            // This'd be nicer if Java had proper tuples like Scala. Why are we using Java again? Oh wait...
-            Pair<Map<Integer, Question>, Map<Integer, Set<Answer>>> qAndA = getQuestionsAnswersForQuiz(db, id);
-            Map<Integer, Question> questions = qAndA.first;
-            Map<Integer, Set<Answer>> answers = qAndA.second;
-
             Result<Record> dbResults = db.select()//RESULT.fields())
                     .from(QUIZ)
                     .join(RESULT).on(QUIZ.QUIZ_ID.equal(RESULT.QUIZ_ID))
@@ -73,6 +68,11 @@ public class QuizStats {
                 throw halt(404, "{\"error\": \"no such quiz\"}");
             }
             Quiz quiz = quizzes.toArray(new Quiz[]{})[0];
+
+            // This'd be nicer if Java had proper tuples like Scala. Why are we using Java again? Oh wait...
+            //Pair<Map<Integer, Question>, Map<Integer, Set<Answer>>> qAndA = getQuestionsAnswersForQuiz(db, id);
+            //Map<Integer, Question> questions = qAndA.first;
+            //Map<Integer, Set<Answer>> answers = qAndA.second;
 
             // wtb type aliases
             Set<com.github.ac31007_group_8.quiz.generated.tables.pojos.Result> results = dbResults
@@ -106,6 +106,7 @@ public class QuizStats {
     }
 
     // TODO: Refactor out into a model class.
+    // TODO: Also probably make an intermediate type to hold all the rows for mocking.
     private static Pair<Map<Integer, Question>, Map<Integer, Set<Answer>>> getQuestionsAnswersForQuiz(DSLContext db,
                                                                                                       int quizId) {
         Result<Record> questionsAndAnswersResult = db.select()
