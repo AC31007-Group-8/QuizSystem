@@ -25,13 +25,19 @@ public class ResultsManager {
     
     public ResultsManager(){
         
+    
+    }
+    
+    
+    
+        
         @Init
     public static void init() {
         get("/staff/viewResults", ResultsManager::serveViewResults);
         post("/staff/viewResults", "application/json", ResultsManager::receiveViewResults);
     }
     
-    }
+    
     
     
     public static Object serveViewResults(Request req, Response res){
@@ -55,5 +61,12 @@ public class ResultsManager {
     
     public static Object receiveViewResults(Request req, Response res){
     
+    
+    return null; 
+    
+    
     }
+    
+    
+    
 }
