@@ -45,7 +45,7 @@ function addSecond(){
 function updateTime(){
     var time = elapsedTime.toString();
     document.getElementById("counter").innerHTML = time;
-    document.getElementById("FormCounter").innerHTML = time;
+    document.getElementById("FormCounter").value = time;
 }
 
 function submitResults() {
