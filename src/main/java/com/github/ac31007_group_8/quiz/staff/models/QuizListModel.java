@@ -27,10 +27,10 @@ public class QuizListModel {
     public QuizListModel(){
     }
 
-    public List<Quiz> getQuizAll()
+    public Quiz getQuizAll()
     {
         DSLContext create = Database.getJooq(); //Connects to the database
-        List<Quiz> quizzes = new LinkedList<>();
+
 
         /**Creates SQL Statement**/
         String sql = create.select()
@@ -47,7 +47,6 @@ public class QuizListModel {
                 return quiz;
             }
         }
-        return quizzes;
         catch(Exception e)
         {
             Logger.getGlobal().info("Exception: " + e.getMessage());
