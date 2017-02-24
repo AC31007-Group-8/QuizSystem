@@ -34,9 +34,11 @@ public class StudentQuizManager {
 
     public static Object serveTakeQuiz(Request req, Response res){
 
+        //Sat up template engine
         TemplateEngine eng = new MustacheTemplateEngine();
         HashMap<String, Object> map = new HashMap<>();
 
+        //Validate quizID - is valid input provided?
         String quizIDString = req.queryParams("quizID");
         if (quizIDString == (null) || quizIDString == "")
         {
@@ -45,6 +47,7 @@ public class StudentQuizManager {
         }
         int quizID = Integer.parseInt(quizIDString);
 
+        //Validate quizID - does it exist?
         StudentQuizModel quizModel = new StudentQuizModel();
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
         if (quiz == null)
@@ -52,19 +55,17 @@ public class StudentQuizManager {
             return eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache"));
         }
 
+        //Don't show quiz if unpublished
         if (!quiz.isPublish_status())
         {
             return eng.render(eng.modelAndView(map, "student/unpublishedQuiz.mustache"));
         }
 
+        //Pass on quiz sections to be displayed to the mustache view:
+        //(Was Pair<Question, List<Answer>>, refactored into QuizSection)
         List<QuizSection> quizSections = quiz.getQuizSections();
-
-
-
         map.put("quizID", quizID);
         map.put("quizSections", quizSections);
-        map.put("testKey", "testVal");
-
 
         return eng.render(eng.modelAndView(map, "student/takeQuiz.mustache"));
 
@@ -101,6 +102,8 @@ public class StudentQuizManager {
         //calculate score
         int score = quiz.calculateScore(answerIDs);
 
+        //placeholder value until student logins are implemented in sprint 2
+        //TODO: Replace with the actual studentID.
         int studentID = 1;
 
         Date date = new Date();

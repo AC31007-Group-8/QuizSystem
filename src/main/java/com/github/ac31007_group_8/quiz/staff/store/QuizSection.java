@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * This class represents a QuizSection to be displayed, which is a pair with two elements, the first being a question and the second being a list of answers for that question.
+ * (Refactored form of what was previously a Pair<Question, List<Answer>>)
  *
  * Created by Can on 23/02/2017.
  */

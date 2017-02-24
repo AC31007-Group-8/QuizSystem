@@ -30,19 +30,19 @@ public class StudentQuizModel {
 
     public List<Question> getQuestions(int quizID){
 
+        //TODO: Consider using ArrayList if typical usage of the returned result ends up doing a substantial number of element lookups
         List<Question> questions = new LinkedList<Question>();
 
-        //String sql = dbConnection.select() //Selects all fields if empty
-        //        .from(QUESTION)
-        //        .where(QUESTION.QUIZ_ID.equal(quizID))
-        //        .getSQL();
-
-        //TODO: Replace with a prepared statement later.
-        String sql = "SELECT * FROM `question` WHERE `question`.quiz_id = " + quizID + " ORDER BY `question`.question_id asc;";
 
         try{
 
-            Result<Record> result = dbConnection.fetch(sql);
+            //String sql = "SELECT * FROM `question` WHERE `question`.quiz_id = " + quizID + " ORDER BY `question`.question_id asc;";
+            //Replaced with prepared statements through JOOQ:
+            Result<Record> result = dbConnection.select()
+                    .from(QUESTION)
+                    .where(QUESTION.QUIZ_ID.equal(quizID))
+                    .orderBy(QUESTION.QUESTION_ID.asc())
+                    .fetch();
 
             for(Record r : result){ //Iterates through the returned results
                 Question question = new Question(r.get(QUESTION.QUESTION_ID),r.get(QUESTION.QUIZ_ID),
@@ -90,26 +90,11 @@ public class StudentQuizModel {
 
     public List<QuizSection> getQuizSections(int quizID){
 
-        List<Answer> answers = new LinkedList<Answer>();
-
-        //TODO: Replace with a prepared statement later.
-        //String sql = "SELECT * FROM `question`, `answer` WHERE `question`.question_id = `answer`.question_id AND `question`.quiz_id = " + quizID + " ORDER BY `question`.question_id asc;";
-
-                /**/
-
-        /*
-        .from(QUESTION).join(ANSWER).using(QUESTION.QUESTION_ID)
-                .where(QUESTION.QUIZ_ID.eq(1))
-                .orderBy(QUESTION.QUESTION_ID.asc())
-                .getSQL();
-         */
-
-
-
-        Logger.getGlobal().info("Tried to get question set for Quiz ID: " + quizID);
+        Logger.getGlobal().info("Trying to get quizSection for Quiz ID: " + quizID);
 
         try{
 
+            //Refactored to use prepared statements, through JOOQ:
             Result<Record> result = dbConnection.select() //Selects all fields if empty
                     .from(QUESTION)
                     .leftOuterJoin(ANSWER)
@@ -119,7 +104,7 @@ public class StudentQuizModel {
                     .orderBy(QUESTION.QUESTION_ID.asc())
                     .fetch();
 
-            //TODO: Consider changing LinkedList to another type of List.
+            //TODO: Consider changing LinkedList to another type of List if many element lookups are being made.
             List<QuizSection> quizSections = new LinkedList<QuizSection>();
 
             QuizSection pair = new QuizSection();
@@ -181,17 +166,13 @@ public class StudentQuizModel {
 
     public Quiz getQuiz(int quizID){
 
-        //String sql = create.select()
-        //        .from(QUIZ)
-        //        .where(QUIZ.QUIZ_ID.equal(quiz_id))
-        //        .getSQL();
-
-        //TODO: Replace with prepared statement
-        String sql = "SELECT * FROM `quiz` WHERE `quiz`.quiz_id = " + quizID;
-
         try{
 
-            Result<Record> result = dbConnection.fetch(sql);
+            //Refactored to use prepared statements using JOOQ:
+            Result<Record> result = dbConnection.select()
+            .from(QUIZ)
+            .where(QUIZ.QUIZ_ID.equal(quizID))
+            .fetch();
 
             for(Record r : result){ //Iterates through the returned results
                 Quiz quiz = new Quiz(r.get(QUIZ.QUIZ_ID),r.get(QUIZ.STAFF_ID), r.get(QUIZ.TIME_LIMIT),
@@ -208,11 +189,14 @@ public class StudentQuizModel {
 
     public void writeResult(int score, int quizID, int studentID, java.sql.Date date, int duration, List<Integer> answerIDs)
     {
+
+        //Store result
         Record record = dbConnection.insertInto(RESULT, RESULT.SCORE, RESULT.QUIZ_ID, RESULT.STUDENT_ID, RESULT.DATE, RESULT.DURATION)
                 .values(score, quizID, studentID, date, duration)
                 .returning(RESULT.RESULT_ID)
                 .fetchOne();
 
+        //Store answers that are a part of the result created above:
         if (record != (null))
         {
             int resultID = record.get(RESULT.RESULT_ID);
@@ -224,8 +208,6 @@ public class StudentQuizModel {
                 Logger.getGlobal().info("Record answer, ID: " + answerID);
                 dbConnection.insertInto(RESULT_TO_ANSWER, RESULT_TO_ANSWER.RESULT_ID, RESULT_TO_ANSWER.ANSWER_ID)
                         .values(resultID, answerID).execute();
-                //String sql ="INSERT INTO `result_to_answer` (result_id, answer_id) VALUES (" + resultID + ", " + answerID + ");";
-                //dbConnection.query(sql);
             }
 
         }
