@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
 <head>
-    <title>Get your results</title>
+    <title>View student results</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,7 @@ and open the template in the editor.
     <link rel="stylesheet" href="/staff/createQuiz.css">
 
     <link rel="stylesheet" href="/student/takeQuiz.css">
-    <script src="/student/getResult.js"></script>
+    <script src="/staff/viewResult.js"></script>
 </head>
 <body>
 
@@ -38,7 +38,8 @@ QuizID: {{quizID}}
 
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
-                    <h1>Quiz - ID:  {{quizID}} </h1>
+                        <h1>Student results for: </h1>
+                        <h2>Quiz - ID:  {{quizID}} </h2>
                 </div>
             </div>
 
@@ -50,24 +51,7 @@ QuizID: {{quizID}}
         <div class="panel panel-default panel-custom">
             <div  class="panel-body">
 
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <p>
-                            <br>
-                            Question 1 will go here
-                            <br>
-                            <br>
-                            Students answer to 1 goes here
-                            <br>
-                            Correct answer for 1 goes here
-                            <br>
-                            Explanation will go here
-                        </p>
-                    </div>
-                </div>
-
+                
             </div>
         </div>
 
@@ -80,7 +64,26 @@ QuizID: {{quizID}}
                     <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
                         <p>
                             <br>
-                            Table will go here
+                            <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Student ID</th>
+                                    <th>Score</th>
+                                    <th>Date</th>
+                                    <th>Duration</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th scope="row">1</th>
+                                    <td>Student ID e.g. 001</td>
+                                    <td>Score e.g. 100%</td>
+                                    <td>Date e.g. 24/02/2017</td>
+                                    <td>Duration e.g. 40 mins</td>
+                                    </tr>
+                                  </tbody>
+                              </table>
                             <br>
                             
                         </p>
@@ -91,6 +94,16 @@ QuizID: {{quizID}}
         </div>
         <div class="panel panel-default panel-custom">
             <div  class="panel-body">
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                        <button id="backButton" onclick="goBack()">Go Back</button>
+                    </div>
+                </div>
+
+                
 
                 
 
