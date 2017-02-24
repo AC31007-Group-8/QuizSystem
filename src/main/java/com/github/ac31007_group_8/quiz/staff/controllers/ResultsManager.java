@@ -27,9 +27,7 @@ public class ResultsManager {
         
     
     }
-    
-    
-    
+     
         
         @Init
     public static void init() {
@@ -54,7 +52,7 @@ public class ResultsManager {
 
         //render page:
         TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "staff/ViewResults.mustache"));
+        return eng.render(eng.modelAndView(map, "staff/viewResults.mustache"));
 
 
     }

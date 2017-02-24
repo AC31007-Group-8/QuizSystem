@@ -36,6 +36,14 @@ public class Quiz {
         publish_status = false;
     }
     
+    public Quiz(int staff_id, int time_limit, String module_id, String title, boolean publish_status){
+        this.staff_id = staff_id;
+        this.time_limit = time_limit;
+        this.module_id = module_id;
+        this.title = title;
+        this.publish_status = publish_status;
+    }
+    
     public Quiz(int quiz_id, int staff_id, int time_limit, String module_id, String title, boolean publish_status){
         this.quiz_id = quiz_id;
         this.staff_id = staff_id;
