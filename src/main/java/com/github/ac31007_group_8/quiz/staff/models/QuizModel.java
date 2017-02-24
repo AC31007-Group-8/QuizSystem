@@ -132,11 +132,11 @@ public class QuizModel {
         return quizzes;
     }
     
-    public boolean addQuiz(int quiz_id, int staff_id, int time_limit, String module_id, String title, boolean publish_status) 
+    public boolean addQuiz(int staff_id, int time_limit, String module_id, String title, boolean publish_status) 
     {   
         DSLContext create = Database.getJooq();
         
-        int sql = 5; //Get number of entries for table from DB to index properly                    
+        int sql = create.fetchCount(QUIZ);  //Gets table row count for indexing purposes                 
         
         try{
             create.insertInto(QUIZ, QUIZ.QUIZ_ID, QUIZ.STAFF_ID, QUIZ.TIME_LIMIT, QUIZ.MODULE_ID, QUIZ.TITLE, QUIZ.PUBLISH_STATUS)

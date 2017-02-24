@@ -1,7 +1,7 @@
 
 package com.github.ac31007_group_8.quiz.staff.controllers;
 
-import com.github.ac31007_group_8.quiz.staff.models.QuizListModel;
+import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
 import spark.Response;
@@ -30,25 +30,19 @@ public class QuizList {
 
     @Init
     public static void init() {
-        get("/student/quizList", QuizList::getQuizName);
+        get("/staff/quizList", QuizList::getQuizName);
     }
 
     public static Object getQuizName(Request req, Response res){
 
-        String quizStr = req.queryParams("quizID");
-        Logger.getGlobal().info("got param value: " + quizStr);
-
-        QuizListModel quizListModel = new QuizListModel();
-        Quiz quizTitles = quizListModel.getQuizAll();
-
-        Gson gson = new GsonBuilder().create();
-        String quizTitlesJson = gson.toJson(quizTitles);
+        QuizModel quizModel = new QuizModel();
+        ArrayList<Quiz> quizTitles = quizModel.getQuizAll();
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("title", quizTitlesJson);
-
+        map.put("quizList", quizTitles);
+        res.status(200);
         TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "student/quizList.mustache"));
+        return eng.render(eng.modelAndView(map, "staff/quizList.mustache"));
 
     }
 

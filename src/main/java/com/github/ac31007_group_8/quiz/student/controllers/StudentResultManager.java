@@ -39,7 +39,7 @@ public class StudentResultManager {
         Logger.getGlobal().info("got param value: " + quizStr);
 
         StudentQuizModel quizModel = new StudentQuizModel();
-        List<Pair<Question, List<Answer>>> questionSets = quizModel.getQuestionSets(quizID);
+        List<QuizSection> questionSets = quizModel.getQuizSections(quizID);
 
         Gson gson = new GsonBuilder().create();
         String questionSetsJson = gson.toJson(questionSets);
@@ -48,13 +48,6 @@ public class StudentResultManager {
         map.put("quizID", quizStr);
         map.put("questionSets", questionSetsJson);
         map.put("testKey", "testVal");
-
-        for (Pair<Question, List<Answer>> questionSet : questionSets) {
-        
-            for (Answer answer : questionSet.getRight()) {
-        
-            }
-        }
 
         TemplateEngine eng = new MustacheTemplateEngine();
         return eng.render(eng.modelAndView(map, "student/getResult.mustache"));

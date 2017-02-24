@@ -21,20 +21,31 @@ and open the template in the editor.
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <link rel="stylesheet" href="/staff/createQuiz.css">
-        <script src="/staff/viewList.js"></script>
     </head>
     <body>
 
+    <div class="panel panel-default panel-custom">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
+                    <a class="btn btn-default" onclick="/staff/createQuiz">Create new quiz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <!--====================Quiz Properties (template)=====================-->
-<script id="mustacheTemplate" type="text/template">
+{{#quizList}}
     <div class="panel panel-default panel-custom">
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
-            <h1>Module code: {{moduleCode}} Quiz Title:{{quizTitle}}</h1>
+              <h1>Module code: {{module_id}} Quiz Title:{{title}} <a class="btn btn-default" onclick="/staff/createQuiz">View results</a><a class="btn btn-default" onclick="/staff/createQuiz">Edit quiz</a></h1>
           </div>
         </div>
       </div>
     </div>
-</script>
+{{/quizList}}
+<!--====================Quiz Properties (template)=====================-->
+
 </html>

@@ -7,10 +7,15 @@ package com.github.ac31007_group_8.quiz.staff.controllers;
 
 import com.github.ac31007_group_8.quiz.Database;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
+import com.github.ac31007_group_8.quiz.staff.store.Answer;
+import com.github.ac31007_group_8.quiz.staff.store.Question;
+import com.github.ac31007_group_8.quiz.staff.store.Quiz;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import com.github.ac31007_group_8.quiz.util.Init;
 import com.github.mustachejava.DefaultMustacheFactory;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.File;
 
 import java.util.HashMap;
@@ -80,20 +85,26 @@ public class QuizManager {
     
     
      public static Object saveQuiz(Request req, Response res){
+      
+    String json = 
+        "{"
+	+ "'timeLimit':'',"
+	+ "'moduleCode':'',"
+	+ "'title':'',"
+	+ "'questions':["
+	+	"{"
+	+		"'questionText':'',"
+	+		"'explanation':'',"
+	+		"'options':["
+        +                   "{'option':'', 'correct':''}"
+        +                "]"
+	+	"}"
+	+ "]"
+        + "}";
         
-//        quiz:{
-//            timeLimit:"",
-//            moduleCode:"",
-//            title:"",
-//            questions:[
-//                    {
-//                            questionText:"",
-//                            explanation:"",
-//                            options:[{option:"", correct:true}, {option:"",correct:false},...]
-//                    },
-//                    {...}
-//            ]
-//        } 
+        
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        gson.fromJson(json, Quiz.class); //Copied from http://stackoverflow.com/questions/5128442/how-to-convert-a-string-to-jsonobject-using-gson-library 2nd Answer
 
         //convert this (and tell me how you did it) into properly formatted json string (as shown above) and then use GSON to parse into java beans
         System.out.println(req.body());   
@@ -102,7 +113,6 @@ public class QuizManager {
       
        
         return "{\"message\":\"saved successfully by ERiiic\"}";
-        
         
     }
 }
