@@ -27,86 +27,58 @@ and open the template in the editor.
 </head>
 <body>
 
-Qs:
-{{questionSets}}
-Test:
-{{testKey}}
-QuizID: {{quizID}}
+-Qs:
+-{{questionSets}}
+-Test:
+-{{testKey}}
+-QuizID: {{quizID}}
+-
+<div class="panel panel-default panel-custom">
+    <div  class="panel-body">
 
-    <div class="panel panel-default panel-custom">
-        <div  class="panel-body">
-
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
-                    <h1>Quiz - ID:  {{quizID}} </h1>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="resultContainer" >
-
-        <div class="panel panel-default panel-custom">
-            <div  class="panel-body">
-
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <p>
-                            <br>
-                            Question 1 will go here 
-                            <br>
-                            <br>
-                            Students answer to 1 goes here
-                            <br>
-                            Correct answer for 1 goes here
-                            <br>
-                            Explanation will go here
-                        </p>
-                    </div>
-                </div>
-
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                -                    <h1>Quiz - ID:  {{quizID}} </h1>
+                +                    <h1>Quiz - ID:  {{quizID}} </h1> //change to title
             </div>
         </div>
 
-        <div class="panel panel-default panel-custom">
-            <div  class="panel-body">
-
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <p>
-                            <br>
-                            Question 2 will go here
-                            <br>
-                            <br>
-                            Students answer to 2 goes here
-                            <br>
-                            Correct answer for 2 goes here
-                            <br>
-                            Explanation will go here
-                        </p>
-                    </div>
-                </div>
-
+        @@ -56,7 +50,7 @@ QuizID: {{quizID}}
+        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+            <p>
+                <br>
+                -                            Question 1 will go here
+                +                            Question 1 will go here
+                <br>
+                <br>
+                Students answer to 1 goes here
+                @@ -78,29 +72,6 @@ QuizID: {{quizID}}
+            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
             </div>
-        </div>
-        <div class="panel panel-default panel-custom">
-            <div  class="panel-body">
-
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <button id="backButton" onclick="goBack()">Go Back</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                -                        <p>
+                -                            <br>
+                -                            Question 2 will go here
+                -                            <br>
+                -                            <br>
+                -                            Students answer to 2 goes here
+                -                            <br>
+                -                            Correct answer for 2 goes here
+                -                            <br>
+                -                            Explanation will go here
+                -                        </p>
+                -                    </div>
+            -                </div>
+        -
+        -            </div>
+    -        </div>
+-        <div class="panel panel-default panel-custom">
+    -            <div  class="panel-body">
+    -
+    -                <div class="row">
+    -                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
+    -                    </div>
+    -                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+    <button id="backButton" onclick="goBack()">Go Back</button>
+</div>
+</div>

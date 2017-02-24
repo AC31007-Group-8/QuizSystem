@@ -29,7 +29,7 @@ public class StudentResultManager {
     @Init
     public static void init() {
         get("/student/getResult", StudentResultManager::serveGetResult);
-        post("/student/getResult", "application/json", StudentResultManager::receiveGetResult);
+        post("/student/getResult", "application/json", StudentResultManager::receiveGetResult); //Don't think this needs a post
     }
 
     public static Object serveGetResult(Request req, Response res){
@@ -44,7 +44,7 @@ public class StudentResultManager {
         Gson gson = new GsonBuilder().create();
         String questionSetsJson = gson.toJson(questionSets);
 
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>(); // change this shizness to match studentquizmanager.java
         map.put("quizID", quizStr);
         map.put("questionSets", questionSetsJson);
         map.put("testKey", "testVal");
@@ -53,7 +53,7 @@ public class StudentResultManager {
         return eng.render(eng.modelAndView(map, "student/getResult.mustache"));
 
     }
-
+    //Get rid of POST handler?
     public static Object receiveGetResult(Request req, Response res){
 
         //TODO: Implement
