@@ -24,16 +24,28 @@ and open the template in the editor.
     </head>
     <body>
 
+    <div class="panel panel-default panel-custom">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
+                    <a class="btn btn-default" onclick="/staff/createQuiz">Create new quiz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <!--====================Quiz Properties (template)=====================-->
 {{#quizList}}
     <div class="panel panel-default panel-custom">
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
-            <h1>Module code: {{module_id}} Quiz Title:{{title}}</h1>
+              <h1>Module code: {{module_id}} Quiz Title:{{title}} <a class="btn btn-default" onclick="/staff/createQuiz">View results</a><a class="btn btn-default" onclick="/staff/createQuiz">Edit quiz</a></h1>
           </div>
         </div>
       </div>
     </div>
 {{/quizList}}
+<!--====================Quiz Properties (template)=====================-->
+
 </html>
