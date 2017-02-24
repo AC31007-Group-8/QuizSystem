@@ -74,13 +74,15 @@ public class AnswerModel {
         return answers; 
     }
     
-    public boolean addAnswer(int answer_id, int question_id, String answer, boolean correct) 
+    public boolean addAnswer(int question_id, String answer, boolean correct) 
     {   
         DSLContext create = Database.getJooq(); //Connects to the database
         
+        int sql = create.fetchCount(ANSWER);   //Gets table row count for indexing purposes
+        
         try{
             create.insertInto(ANSWER, ANSWER.ANSWER_ID, ANSWER.QUESTION_ID, ANSWER.ANSWER_, ANSWER.IS_CORRECT)
-                    .values(answer_id, question_id, answer, (byte)(correct?1:0)) //(byte)(x?1:0) Converts boolean x to byte
+                    .values(sql++, question_id, answer, (byte)(correct?1:0)) //(byte)(x?1:0) Converts boolean x to byte
                     .execute();
         }
         catch(Exception e)

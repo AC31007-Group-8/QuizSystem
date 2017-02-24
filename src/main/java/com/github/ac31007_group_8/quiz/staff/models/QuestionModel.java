@@ -74,13 +74,15 @@ public class QuestionModel {
         return questions;
     }
     
-    public boolean addQuestion(int question_id, int quiz_id, String question, String explanation) 
+    public boolean addQuestion(int quiz_id, String question, String explanation) 
     {   
         DSLContext create = Database.getJooq();
         
+        int sql = create.fetchCount(QUESTION); //Gets table row count for indexing purposes
+        
         try{
             create.insertInto(QUESTION, QUESTION.QUESTION_ID, QUESTION.QUIZ_ID, QUESTION.QUESTION_, QUESTION.EXPLANATION)
-                                .values(question_id, quiz_id, question, explanation)
+                                .values(sql++, quiz_id, question, explanation)
                                 .execute();
         }
         catch(Exception e)
