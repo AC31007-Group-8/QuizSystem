@@ -7,6 +7,7 @@ package com.github.ac31007_group_8.quiz.staff.models;
 
 import com.github.ac31007_group_8.quiz.Database;
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
+import com.github.ac31007_group_8.quiz.staff.store.Question;
 import com.github.ac31007_group_8.quiz.staff.store.Quiz;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -151,16 +152,59 @@ public class QuizModel {
         return true;  
     }
     
-public ArrayList<String> getModuleList(DSLContext dslCont) throws SQLException{
-        String sql = dslCont.select(field("module_id"))
-                        .from(table("Module"))
-                        .getSQL();
+    public boolean removeQuiz(int quiz_id)
+    {
         
-        Result<Record> result = dslCont.fetch(sql);
+        DSLContext create = Database.getJooq();            
+        
+        try{
+            create.delete(QUIZ)
+                    .where(QUIZ.QUIZ_ID.equals(quiz_id))
+                    .execute();
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+        
+        return true;  
+    }
+    
+    public boolean updateQuiz(int quiz_id, int time_limit, String module_id, String title, boolean publish_status)
+    {
+        
+        DSLContext create = Database.getJooq();            
+        
+        try{
+            create.update(QUIZ)
+                    .set(QUIZ.TIME_LIMIT, time_limit)
+                    .set(QUIZ.MODULE_ID, module_id)
+                    .set(QUIZ.TITLE, title)
+                    .set(QUIZ.PUBLISH_STATUS, (byte)(publish_status?1:0))
+                    .where(QUIZ.QUIZ_ID.equals(quiz_id))
+                    .execute();
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+        
+        return true;  
+    }
+    
+    public ArrayList<String> getModuleList(DSLContext dslCont) throws SQLException{
+        
+        DSLContext create = Database.getJooq();
+    
+        String sql = create.select(MODULE.MODULE_ID)
+                            .from(MODULE)
+                            .getSQL();
+        
+        Result<Record> result = create.fetch(sql);
         ArrayList<String> allModules = new ArrayList<>();
         for(Record r : result){
                 
-                allModules.add((String)r.getValue(field("module_id")));
+                allModules.add((String)r.getValue(MODULE.MODULE_ID));
                 
         }
         return allModules;
