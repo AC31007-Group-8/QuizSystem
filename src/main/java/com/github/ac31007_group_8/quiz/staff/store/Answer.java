@@ -13,6 +13,7 @@ public class Answer {
     
     public int answer_id;
     public int question_id;
+    private boolean isStudentAnswer;
     public String answer;
     public boolean correct;
     
@@ -21,6 +22,7 @@ public class Answer {
         question_id = 0;
         answer = "";
         correct = true;
+        isStudentAnswer = false;    //Assume false by default
     }  
     
     public Answer(int answer_id, int question_id, String answer, boolean correct){
@@ -61,6 +63,18 @@ public class Answer {
     public void setCorrect(boolean correct) {
         this.correct = correct;
     }
-    
-    
+
+    public boolean isStudentAnswer()
+    {
+        return isStudentAnswer;
+    }
+
+    public void setIsStudentAnswer(boolean isStudentAnswer)
+    {
+        this.isStudentAnswer = isStudentAnswer;
+    }
+
+
+
+
 }

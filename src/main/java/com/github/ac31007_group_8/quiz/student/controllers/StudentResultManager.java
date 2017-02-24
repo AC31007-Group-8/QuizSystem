@@ -1,6 +1,7 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
+import com.github.ac31007_group_8.quiz.student.models.StudentResultModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
 import spark.Response;
@@ -18,7 +19,7 @@ import com.google.gson.*;
 import org.apache.commons.lang3.tuple.*;
 
 /**
- * @author Kerr (adapted from Can and Allan)
+ * @author Kerr, Allan (adapted from Can and Allan)
  */
 public class StudentResultManager {
 
@@ -34,22 +35,51 @@ public class StudentResultManager {
 
     public static Object serveGetResult(Request req, Response res){
 
-        int quizID = 1;
-        String quizStr = req.queryParams("quizID");
-        Logger.getGlobal().info("got param value: " + quizStr);
+        TemplateEngine eng = new MustacheTemplateEngine();
+        HashMap<String, Object> map = new HashMap<>();
+
+        String quizIDString = req.queryParams("quizID");
+        int resultID = Integer.parseInt(req.queryParams("resultID"));
+        if (quizIDString == (null) || quizIDString == "")
+        {
+            //display error page
+            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
+        }
+        int quizID = Integer.parseInt(quizIDString);
 
         StudentQuizModel quizModel = new StudentQuizModel();
-        List<QuizSection> questionSets = quizModel.getQuizSections(quizID);
+        Quiz quiz = quizModel.getCompleteQuiz(quizID);
+        if (quiz == null)
+        {
+            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
+        }
 
-        Gson gson = new GsonBuilder().create();
-        String questionSetsJson = gson.toJson(questionSets);
+        if (!quiz.isPublish_status())
+        {
+            return eng.render(eng.modelAndView(map, "student/unpublishedQuiz.mustache"));
+        }
 
-        HashMap<String, Object> map = new HashMap<>(); // change this shizness to match studentquizmanager.java
-        map.put("quizID", quizStr);
-        map.put("questionSets", questionSetsJson);
-        map.put("testKey", "testVal");
+        StudentResultModel studResMod = new StudentResultModel();
+        List<Integer> studAnsIds = studResMod.getResultAnswers(resultID);
 
-        TemplateEngine eng = new MustacheTemplateEngine();
+        for (QuizSection quizSect: quiz.getQuizSections()) {
+            for (Answer answer: quizSect.getAnswers()) {
+                if(studAnsIds.contains(answer.getAnswer_id()))
+                {
+                    answer.setIsStudentAnswer(true);
+                }
+
+            }
+        }
+        int score = quiz.calculateScore(studAnsIds);    //TODO: Do this without re-calc
+
+
+        map.put("quizID", quizID);
+        map.put("quiz", quiz);
+        map.put("score", score);
+
+
+
         return eng.render(eng.modelAndView(map, "student/getResult.mustache"));
 
     }
