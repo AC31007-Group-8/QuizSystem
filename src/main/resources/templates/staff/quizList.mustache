@@ -25,13 +25,15 @@ and open the template in the editor.
     <body>
 
 <!--====================Quiz Properties (template)=====================-->
+{{#quizList}}
     <div class="panel panel-default panel-custom">
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
-            <h1>Module code: {{MODULE_ID}} Quiz Title:{{TITLE}}</h1>
+            <h1>Module code: {{module_id}} Quiz Title:{{title}}</h1>
           </div>
         </div>
       </div>
     </div>
+{{/quizList}}
 </html>

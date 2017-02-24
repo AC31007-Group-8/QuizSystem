@@ -1,9 +1,11 @@
 package com.github.ac31007_group_8.quiz.student.models;
 
 import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.staff.store.Answer;
 import com.github.ac31007_group_8.quiz.staff.store.Question;
 import com.github.ac31007_group_8.quiz.staff.store.Quiz;
+import com.github.ac31007_group_8.quiz.staff.store.QuizSection;
 import org.jooq.*;
 
 import org.apache.commons.lang3.tuple.*;
@@ -26,41 +28,17 @@ public class StudentQuizModel {
         dbConnection = Database.getJooq(); //Connects to the database
     }
 
-    public Quiz getQuiz(int quizID){
-
-        String sql = dbConnection.select() //Selects all fields if empty
-                .from(QUIZ)
-                .where(QUIZ.QUIZ_ID.equal(quizID))
-                .getSQL();
-
-        try{
-
-            Result<Record> result = dbConnection.fetch(sql);
-
-            for(Record r : result){ //Iterates through the returned results
-
-                Quiz quiz = new Quiz(r.get(QUIZ.QUIZ_ID),r.get(QUIZ.STAFF_ID), r.get(QUIZ.TIME_LIMIT),
-                        r.get(QUIZ.MODULE_ID), r.get(QUIZ.TITLE), r.get(QUIZ.PUBLISH_STATUS)!=0);   //!=0 Converts a single bit to boolean
-                return quiz;
-
-            }
-        }
-        catch(Exception e)
-        {
-            Logger.getGlobal().info("Exception: " + e.getMessage());
-        }
-        return null;
-
-    }
-
     public List<Question> getQuestions(int quizID){
 
         List<Question> questions = new LinkedList<Question>();
 
-        String sql = dbConnection.select() //Selects all fields if empty
-                .from(QUESTION)
-                .where(QUESTION.QUIZ_ID.equal(quizID))
-                .getSQL();
+        //String sql = dbConnection.select() //Selects all fields if empty
+        //        .from(QUESTION)
+        //        .where(QUESTION.QUIZ_ID.equal(quizID))
+        //        .getSQL();
+
+        //TODO: Replace with a prepared statement later.
+        String sql = "SELECT * FROM `question` WHERE `question`.quiz_id = " + quizID + " ORDER BY `question`.question_id asc;";
 
         try{
 
@@ -110,23 +88,14 @@ public class StudentQuizModel {
 
     }
 
-    public List<Pair<Question,List<Answer>>> getQuestionSets(int quizID){
-
-        //definition: questionSet, in this case, is a pair made up of a question and its relevant answers.
+    public List<QuizSection> getQuizSections(int quizID){
 
         List<Answer> answers = new LinkedList<Answer>();
 
         //TODO: Replace with a prepared statement later.
-        String sql = "SELECT * FROM `question`, `answer` WHERE `question`.question_id = `answer`.question_id AND `question`.quiz_id = " + quizID + " ORDER BY `question`.question_id asc;";
+        //String sql = "SELECT * FROM `question`, `answer` WHERE `question`.question_id = `answer`.question_id AND `question`.quiz_id = " + quizID + " ORDER BY `question`.question_id asc;";
 
-                /*dbConnection.select() //Selects all fields if empty
-                .from(QUESTION)
-                .leftOuterJoin(ANSWER)
-                .on(QUESTION.QUESTION_ID.equal(ANSWER.QUESTION_ID))
-                //.where("quiz_id = ?", Integer.toString(quizID))
-                //.where(QUESTION.QUIZ_ID.equal(quizID))
-                .orderBy(QUESTION.QUESTION_ID.asc())
-                .getSQL();*/
+                /**/
 
         /*
         .from(QUESTION).join(ANSWER).using(QUESTION.QUESTION_ID)
@@ -141,45 +110,53 @@ public class StudentQuizModel {
 
         try{
 
-            Result<Record> result = dbConnection.fetch(sql);
+            Result<Record> result = dbConnection.select() //Selects all fields if empty
+                    .from(QUESTION)
+                    .leftOuterJoin(ANSWER)
+                    .on(QUESTION.QUESTION_ID.equal(ANSWER.QUESTION_ID))
+                    //.where("quiz_id = ?", Integer.toString(quizID))
+                    .where(QUESTION.QUIZ_ID.equal(quizID))
+                    .orderBy(QUESTION.QUESTION_ID.asc())
+                    .fetch();
 
-            List<Pair<Question,List<Answer>>> questionSets = new LinkedList<Pair<Question,List<Answer>>>();
+            //TODO: Consider changing LinkedList to another type of List.
+            List<QuizSection> quizSections = new LinkedList<QuizSection>();
 
-            MutablePair<Question,List<Answer>> pair = new MutablePair<Question,List<Answer>>();
+            QuizSection pair = new QuizSection();
             for(Record r : result) { //Each row contains a question and an answer for that question
 
                 //check if we are still adding answers for the same question, or if this is the first question.
                 int questionID = r.get(QUESTION.QUESTION_ID);
 
-                if (pair.getLeft() == null || questionID != pair.getLeft().getQuestionID()) //no NPE should occur since left condition gets checked first.
+                if (pair.getQuestion() == null || questionID != pair.getQuestion().getQuestionID()) //no NPE should occur since left condition gets checked first.
                 {
                     //add old pair to list and move on to new pair
-                    if (pair.getLeft() != null)
+                    if (pair.getQuestion() != null)
                     {
-                        questionSets.add(pair);
+                        quizSections.add(pair);
                     }
                     //reset pair
-                    pair = new MutablePair<Question,List<Answer>>();
+                    pair = new QuizSection();
 
                     //set question
                     Question question = new Question(r.get(QUESTION.QUESTION_ID),r.get(QUESTION.QUIZ_ID),
                             r.get(QUESTION.QUESTION_), r.get(QUESTION.EXPLANATION));
-                    pair.setLeft(question);
+                    pair.setQuestion(question);
 
                 }
 
-                //add answer to question set
-                if (pair.getRight() == null) pair.setRight(new LinkedList<Answer>());
+                //add answer to quiz section (pair)
+                if (pair.getAnswers() == null) pair.setAnswers(new LinkedList<Answer>());
 
                 Answer answer = new Answer(r.get(ANSWER.ANSWER_ID),r.get(ANSWER.QUESTION_ID),
                         r.get(ANSWER.ANSWER_), r.get(ANSWER.IS_CORRECT)!=0);
-                pair.getRight().add(answer);
+                pair.getAnswers().add(answer);
             }
             //add last pair
-            if (pair.getLeft() != null) questionSets.add(pair);
+            if (pair.getQuestion() != null) quizSections.add(pair);
 
             //now we have a full list of question sets
-            return questionSets;
+            return quizSections;
 
 
         }
@@ -191,5 +168,69 @@ public class StudentQuizModel {
 
     }
 
+
+    public Quiz getCompleteQuiz(int quizID)
+    {
+        Quiz quiz = getQuiz(quizID);
+        List<QuizSection> quizSections = getQuizSections(quizID);
+        quiz.setQuizSections(quizSections);
+
+        return quiz;
+    }
+
+    public Quiz getQuiz(int quizID){
+
+        //String sql = create.select()
+        //        .from(QUIZ)
+        //        .where(QUIZ.QUIZ_ID.equal(quiz_id))
+        //        .getSQL();
+
+        //TODO: Replace with prepared statement
+        String sql = "SELECT * FROM `quiz` WHERE `quiz`.quiz_id = " + quizID;
+
+        try{
+
+            Result<Record> result = dbConnection.fetch(sql);
+
+            for(Record r : result){ //Iterates through the returned results
+                Quiz quiz = new Quiz(r.get(QUIZ.QUIZ_ID),r.get(QUIZ.STAFF_ID), r.get(QUIZ.TIME_LIMIT),
+                        r.get(QUIZ.MODULE_ID), r.get(QUIZ.TITLE), r.get(QUIZ.PUBLISH_STATUS)!=0);   //!=0 Converts a single bit to boolean
+                return quiz;
+            }
+        }
+        catch(Exception e)
+        {
+            Logger.getGlobal().info("Exception: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void writeResult(int score, int quizID, int studentID, java.sql.Date date, int duration, List<Integer> answerIDs)
+    {
+        Record record = dbConnection.insertInto(RESULT, RESULT.SCORE, RESULT.QUIZ_ID, RESULT.STUDENT_ID, RESULT.DATE, RESULT.DURATION)
+                .values(score, quizID, studentID, date, duration)
+                .returning(RESULT.RESULT_ID)
+                .fetchOne();
+
+        if (!record.equals(null))
+        {
+            int resultID = record.get(RESULT.RESULT_ID);
+
+            Logger.getGlobal().info("Recording answers for result ID: " + resultID);
+
+            //write each submitted answer into DB
+            for (Integer answerID : answerIDs) {
+                Logger.getGlobal().info("Record answer, ID: " + answerID);
+                dbConnection.insertInto(RESULT_TO_ANSWER, RESULT_TO_ANSWER.RESULT_ID, RESULT_TO_ANSWER.ANSWER_ID)
+                        .values(resultID, answerID).execute();
+                //String sql ="INSERT INTO `result_to_answer` (result_id, answer_id) VALUES (" + resultID + ", " + answerID + ");";
+                //dbConnection.query(sql);
+            }
+
+        }
+        else {
+            Logger.getGlobal().info("Error: did not insert result into DB!");
+        }
+    }
 
 }
