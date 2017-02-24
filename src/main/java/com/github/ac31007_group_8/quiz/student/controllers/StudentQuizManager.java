@@ -41,7 +41,7 @@ public class StudentQuizManager {
         if (quizIDString == (null) || quizIDString == "")
         {
             //display error page
-            return eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache"));
+            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
         }
         int quizID = Integer.parseInt(quizIDString);
 
@@ -49,7 +49,7 @@ public class StudentQuizManager {
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
         if (quiz == null)
         {
-            return eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache"));
+            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
         }
 
         if (!quiz.isPublish_status())
