@@ -172,6 +172,7 @@ public class StudentQuizModel {
     public Quiz getCompleteQuiz(int quizID)
     {
         Quiz quiz = getQuiz(quizID);
+        if (quiz == null) return quiz;
         List<QuizSection> quizSections = getQuizSections(quizID);
         quiz.setQuizSections(quizSections);
 
@@ -212,7 +213,7 @@ public class StudentQuizModel {
                 .returning(RESULT.RESULT_ID)
                 .fetchOne();
 
-        if (!record.equals(null))
+        if (record != (null))
         {
             int resultID = record.get(RESULT.RESULT_ID);
 
