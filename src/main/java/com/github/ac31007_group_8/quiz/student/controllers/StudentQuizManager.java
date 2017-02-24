@@ -34,22 +34,38 @@ public class StudentQuizManager {
 
     public static Object serveTakeQuiz(Request req, Response res){
 
+        TemplateEngine eng = new MustacheTemplateEngine();
+        HashMap<String, Object> map = new HashMap<>();
+
         String quizIDString = req.queryParams("quizID");
-        if (quizIDString.equals(null) || quizIDString == "")
+        if (quizIDString == (null) || quizIDString == "")
         {
             //display error page
+            return eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache"));
         }
         int quizID = Integer.parseInt(quizIDString);
 
         StudentQuizModel quizModel = new StudentQuizModel();
-        List<QuizSection> quizSections = quizModel.getQuizSections(quizID);
+        Quiz quiz = quizModel.getCompleteQuiz(quizID);
+        if (quiz == null)
+        {
+            return eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache"));
+        }
 
-        HashMap<String, Object> map = new HashMap<>();
+        if (!quiz.isPublish_status())
+        {
+            return eng.render(eng.modelAndView(map, "student/unpublishedQuiz.mustache"));
+        }
+
+        List<QuizSection> quizSections = quiz.getQuizSections();
+
+
+
         map.put("quizID", quizID);
         map.put("quizSections", quizSections);
         map.put("testKey", "testVal");
 
-        TemplateEngine eng = new MustacheTemplateEngine();
+
         return eng.render(eng.modelAndView(map, "student/takeQuiz.mustache"));
 
     }
