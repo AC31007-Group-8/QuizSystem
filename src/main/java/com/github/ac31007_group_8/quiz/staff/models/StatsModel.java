@@ -32,6 +32,9 @@ public class StatsModel {
                 .join(ANSWER).on(RESULT_TO_ANSWER.ANSWER_ID.equal(ANSWER.ANSWER_ID))
                 .where(QUIZ.QUIZ_ID.equal(quizId))
                 .fetch();
+
+
+
     }
 
     /**
@@ -40,6 +43,8 @@ public class StatsModel {
      * @return The Quiz object, or null if it doesn't exist.
      */
     public Quiz getQuiz() {
+       
+       
         Set<Quiz> quizzes = fetchResult.into(Quiz.class).stream().collect(Collectors.toSet());
         if (quizzes.size() > 1) throw new IllegalArgumentException("Multiple quizzes with same ID!? " + quizId);
         return quizzes.stream().findFirst().orElse(null);

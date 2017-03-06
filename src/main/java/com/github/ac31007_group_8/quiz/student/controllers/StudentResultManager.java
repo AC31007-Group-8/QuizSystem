@@ -15,8 +15,6 @@ import com.github.ac31007_group_8.quiz.student.*;
 import com.github.ac31007_group_8.quiz.staff.store.*;
 
 import static spark.Spark.*;
-import com.google.gson.*;
-import org.apache.commons.lang3.tuple.*;
 
 /**
  * @author Kerr, Allan (adapted from Can and Allan)
@@ -30,7 +28,6 @@ public class StudentResultManager {
     @Init
     public static void init() {
         get("/student/getResult", StudentResultManager::serveGetResult);
-        post("/student/getResult", "application/json", StudentResultManager::receiveGetResult); //Don't think this needs a post
     }
 
     public static Object serveGetResult(Request req, Response res){
@@ -38,9 +35,9 @@ public class StudentResultManager {
         TemplateEngine eng = new MustacheTemplateEngine();
         HashMap<String, Object> map = new HashMap<>();
 
-        String quizIDString = req.queryParams("quizID");
+        String quizIDString = req.queryParams("quizID");//don't need this
         int resultID = Integer.parseInt(req.queryParams("resultID"));
-        if (quizIDString == (null) || quizIDString == "")
+        if (quizIDString == (null) || quizIDString.equals(""))
         {
             //display error page
             throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
@@ -62,16 +59,17 @@ public class StudentResultManager {
         StudentResultModel studResMod = new StudentResultModel();
         List<Integer> studAnsIds = studResMod.getResultAnswers(resultID);
 
-        for (QuizSection quizSect: quiz.getQuizSections()) {
-            for (Answer answer: quizSect.getAnswers()) {
+        for (Question nextQuestion: quiz.getQuestions()) {
+            for (Answer answer: nextQuestion.getAnswers()) {
                 if(studAnsIds.contains(answer.getAnswer_id()))
                 {
                     answer.setIsStudentAnswer(true);
                 }
 
             }
-        }
-        int score = quiz.calculateScore(studAnsIds);    //TODO: Do this without re-calc
+        } 
+        //TODO: Do this without re-calc
+        int score = StudentQuizManager.calculateScore(studAnsIds,quiz);//I think we need to merge this class into StudentQuizManager (but can keep separate files for now)  
 
 
         map.put("quizID", quizID);
@@ -83,14 +81,7 @@ public class StudentResultManager {
         return eng.render(eng.modelAndView(map, "student/getResult.mustache"));
 
     }
-    //Get rid of POST handler?
-    public static Object receiveGetResult(Request req, Response res){
-
-        //TODO: Implement
-        System.out.println(req.body());
-        res.status(200);
-        return "end";
-    }
+ 
 
 
 }

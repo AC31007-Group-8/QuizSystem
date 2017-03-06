@@ -5,6 +5,9 @@
  */
 package com.github.ac31007_group_8.quiz.staff.store;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  *
  * @author Erik Jeny
@@ -74,6 +77,15 @@ public class Answer {
         this.isStudentAnswer = isStudentAnswer;
     }
 
+    
+    @Override
+    public String toString(){
+        
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        String jsonInString = gson.toJson(this);
+        return jsonInString;
+        
+    }
 
 
 

@@ -1,4 +1,4 @@
-package com.github.ac31007_group_8.quiz.student.controllers;
+package com.github.ac31007_group_8.quiz.staff.controllers;
 
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;

@@ -52,7 +52,7 @@ public class QuizStats {
     private static Object getAllResults(Request req, Response res) {
         try {
             int id = Integer.parseInt(req.params("id"));
-
+            
             StatsModel model = new StatsModel(id);
 
             Quiz quiz = model.getQuiz();

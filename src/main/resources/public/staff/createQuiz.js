@@ -127,8 +127,8 @@ function submit(){
     
     var allData = {
         title:"",
-        moduleCode:"",
-        timeLimit:"",
+        module_id:"",
+        time_limit:null,
         questions:[]
     };
     var valid = true;
@@ -142,26 +142,23 @@ function submit(){
         $("#title-column").addClass("error-highlight");
     }
     
-    //read moduleCode
-    allData.moduleCode = $("#quiz-module").val().trim();
-    if (allData.moduleCode==="-1"){
+    //read module_id
+    allData.module_id = $("#quiz-module").val().trim();
+    if (allData.module_id==="-1"){
         valid = false;
         $("#module-column").addClass("error-highlight");
     }
     
     //read time limit 
     
-    if (!$("#time-column input:checkbox").is(':checked')){
-        allData.timeLimit = "";
-    }
-    else{
+    if ($("#time-column input:checkbox").is(':checked')){
         var limit = $("#quiz-timeLimit").val().trim();
         
       
         if ((limit).match(/^[1-9]\d*(\d+)?$/)){//this ensures: no leading 0; only 0-9 (no dot or minus)
             limit  = parseInt(limit);
             if (limit<=120){
-               allData.timeLimit = limit;
+               allData.time_limit = limit;
             }
             else{
                 $("#time-column").addClass("error-highlight");
@@ -178,18 +175,18 @@ function submit(){
     //read questions
     
     $(".panel-question").each(function( index ) {
-      
+        
       if (index>0){
           
           var nextQuestion = {
-              questionText:"",
+              question:"",
               explanation:"",
-              options:[]
+              answers:[]
           };
           
           //question text
-          nextQuestion.questionText = $(this).find("textarea").eq(0).val().trim();
-          if (nextQuestion.questionText.length===0){
+          nextQuestion.question = $(this).find("textarea").eq(0).val().trim();
+          if (nextQuestion.question.length===0){
               $(this).find(".row").eq(0).addClass("error-highlight");
               valid = false;
           }
@@ -197,20 +194,30 @@ function submit(){
           //explanation
           nextQuestion.explanation = $(this).find("textarea").eq(1).val().trim();
           
-          //options
+          //answers
+          var hasCorrect = false;
           $(this).find(".allOptions .option-row").each(function(ind){//this here is an option row
               
               var optObj = {
-                  option: $(this).find("input[type=text]").val().trim(),
+                  answer: $(this).find("input[type=text]").val().trim(),
                   correct: $(this).find("input[type=checkbox]").is(":checked")
               };
               
-              if (optObj.option.length===0){
+              if (optObj.correct===true){
+                  hasCorrect = true;
+              }
+              
+              if (optObj.answer.length===0){
                   $(this).addClass("error-highlight");
                   valid=false;
               }
-              nextQuestion.options.push(optObj);
+              nextQuestion.answers.push(optObj);
           });
+          
+          if (!hasCorrect){
+              valid = false;
+              $(this).find(".allOptions").addClass("error-highlight");
+          }
           
           allData.questions.push(nextQuestion);
       }
@@ -229,25 +236,32 @@ function submit(){
         $.ajax({
                url: "/staff/createQuiz",
                type: "POST",
-               data: allData,
-               contentType:  "application/json; charset=utf-8",
+               data: JSON.stringify(allData),
+               contentType:  "application/json;",
+               dataType:"json",
                success: function( data, textStatus, jqXHR) {
                  
-                  alert(data);
-                  //and something else :(
+                 
+                 
+                 $("body").html(''+
+                        '<div class="panel panel-default panel-custom">'+
+                            '<div class="panel-body">'+
+                                '<h2>'+data.message+'</h2>'+
+                            '</div>'+
+                        '</div>');
+                   
+                 
                },
                error: function(jqXHR, textStatus, errorMessage) {
-                   
-                   alert("submit failed");
-                   
-                   if (jqXHR.status===401){
-                       //window.location = contextPath+"/Login";
-                   }
-                   else{
-                       //and even more
-                   }
-                   
                   
+                   $("body").html(''+
+                        '<div class="panel panel-default panel-custom errorPanel">'+
+                            '<div class="panel-body">'+
+                                '<h2>'+jqXHR.status+' '+errorMessage+'</h2>'+
+                                '<h3>'+JSON.parse(jqXHR.responseText).message+'</h3>'+
+                            '</div>'+
+                        '</div>');
+                   
                }
             });
         

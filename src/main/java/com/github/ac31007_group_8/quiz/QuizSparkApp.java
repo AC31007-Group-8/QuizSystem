@@ -28,8 +28,8 @@ public class QuizSparkApp {
         // Setup (do not remove this!)
         Configuration.load();
 
-        staticFiles.location("/public"); // resources/public, localhost:4567/file.html 
-        //staticFiles.externalLocation(System.getProperty("user.dir") + "/src/main/resources/public");//if you want a new version of a static file after F5 when developing (better way?)
+       staticFiles.location("/public"); // resources/public, localhost:4567/file.html 
+       //staticFiles.externalLocation(System.getProperty("user.dir") + "/src/main/resources/public");//if you want a new version of a static file after F5 when developing (better way?)
 
 
 

@@ -7,8 +7,10 @@ package com.github.ac31007_group_8.quiz.staff.models;
 
 import com.github.ac31007_group_8.quiz.Database;
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
+import  com.github.ac31007_group_8.quiz.generated.tables.records.*;
 import com.github.ac31007_group_8.quiz.staff.store.Question;
 import com.github.ac31007_group_8.quiz.staff.store.Quiz;
+import com.github.ac31007_group_8.quiz.staff.store.Answer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.jooq.DSLContext;
@@ -73,7 +75,8 @@ public class QuizModel {
         }
         catch(Exception e)
         {
-            return null;
+            e.printStackTrace();
+           
         }
         return quizzes;
     }
@@ -133,23 +136,43 @@ public class QuizModel {
         return quizzes;
     }
     
-    public boolean addQuiz(int staff_id, int time_limit, String module_id, String title, boolean publish_status) 
-    {   
-        DSLContext create = Database.getJooq();
+    
+    
+    public void saveQuiz(Quiz quizToSave, DSLContext create) throws SQLException{
         
-        int sql = create.fetchCount(QUIZ);  //Gets table row count for indexing purposes                 
+            //dafuck ??? 865ms to save this!!?
         
-        try{
-            create.insertInto(QUIZ, QUIZ.QUIZ_ID, QUIZ.STAFF_ID, QUIZ.TIME_LIMIT, QUIZ.MODULE_ID, QUIZ.TITLE, QUIZ.PUBLISH_STATUS)
-                                .values(sql++, staff_id, time_limit,module_id, title, (byte)(publish_status?1:0))
-                                .execute();
-        }
-        catch(Exception e)
-        {
-            return false;
-        }
+            //store quiz
+            QuizRecord quizR = create.newRecord(QUIZ, quizToSave);
+            quizR.store();
+            Integer quizId = quizR.getQuizId();
+           
+          
+            long start = System.currentTimeMillis();
+            quizToSave.getQuestions().stream().map((nextQuest) -> {
+                //store question
+                QuestionRecord questionR = create.newRecord(QUESTION, nextQuest);
+                questionR.setQuizId(quizId);
+                questionR.store();
+                Integer questionId = questionR.getQuestionId();
+                //store answers
+                ArrayList<AnswerRecord> answers = new ArrayList<>();
+                for (Answer a:nextQuest.getAnswers()){
+                    a.setQuestion_id(questionId);
+                    AnswerRecord answrR = create.newRecord(ANSWER, a);
+                    answers.add(answrR);
+                }
+                return answers;
+            }).forEach((answers) -> {
+                System.out.println( System.currentTimeMillis()-start);
+                create.batchInsert(answers).execute();
+                 System.out.println( System.currentTimeMillis()-start);
+            });
+            
+            
+            System.out.println( System.currentTimeMillis()-start);
         
-        return true;  
+        
     }
     
     public boolean removeQuiz(int quiz_id)

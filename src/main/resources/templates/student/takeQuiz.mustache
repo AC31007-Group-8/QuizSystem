@@ -82,13 +82,12 @@ authors: Vlad, Can, Allan
 <form action="" method="POST">
 
     <div id="questionContainer" >
-        {{#quizSections}}
+        {{#allQuestions}}
         <div class="panel panel-default panel-custom">
             <div  class="panel-body">
                 <div class="row">
-                    {{#question}}
+                    
                         <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0"><p>{{question}}</p> </div>
-                    {{/question}}
                         <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
                         <div class="row" >
                             {{#answers}}
@@ -99,7 +98,7 @@ authors: Vlad, Can, Allan
                 </div>
             </div>
         </div>
-        {{/quizSections}}
+        {{/allQuestions}}
 
 
         <div class="panel panel-default panel-custom">

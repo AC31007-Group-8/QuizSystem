@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.github.ac31007_group_8.quiz.staff.store.Question;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  *
@@ -17,26 +18,18 @@ import com.github.ac31007_group_8.quiz.staff.store.Question;
  */
 public class Quiz {
     
-    int quiz_id;
-    int staff_id;
-    int time_limit;
-    String module_id;
-    String title;
-    ArrayList<Question> questions;
-    boolean publish_status;
-    private List<QuizSection> quizSections;
+    int quiz_id =0 ;
+    int staff_id =0;
+    Integer time_limit = null;
+    String module_id = "";
+    String title= "";
+    List<Question> questions = null;
+    boolean publish_status = false;
+  
 
-    public Quiz(){
-        quiz_id = 0;
-        staff_id = 0;
-        time_limit = 0;
-        module_id = "";
-        title = "";
-        questions = null;
-        publish_status = false;
-    }
+  
     
-    public Quiz(int staff_id, int time_limit, String module_id, String title, boolean publish_status){
+    public Quiz(int staff_id, Integer time_limit, String module_id, String title, boolean publish_status){
         this.staff_id = staff_id;
         this.time_limit = time_limit;
         this.module_id = module_id;
@@ -44,7 +37,7 @@ public class Quiz {
         this.publish_status = publish_status;
     }
     
-    public Quiz(int quiz_id, int staff_id, int time_limit, String module_id, String title, boolean publish_status){
+    public Quiz(int quiz_id, int staff_id, Integer time_limit, String module_id, String title, boolean publish_status){
         this.quiz_id = quiz_id;
         this.staff_id = staff_id;
         this.time_limit = time_limit;
@@ -69,11 +62,11 @@ public class Quiz {
         this.staff_id = staff_id;
     }
 
-    public int getTime_limit() {
+    public Integer getTime_limit() {
         return time_limit;
     }
 
-    public void setTime_limit(int time_limit) {
+    public void setTime_limit(Integer time_limit) {
         this.time_limit = time_limit;
     }
 
@@ -93,11 +86,11 @@ public class Quiz {
         this.title = title;
     }
 
-    public ArrayList<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(ArrayList<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
     
@@ -113,71 +106,14 @@ public class Quiz {
         this.publish_status = publish_status;
     }
 
-    public List<QuizSection> getQuizSections(){
-        return quizSections;
-    }
-
-    public void setQuizSections(List<QuizSection> quizSections)
-    {
-        this.quizSections = quizSections;
-    }
-
-    public int calculateScore(List<Integer> answerIDs){
-
-        //calculate Score (type: INT) as: questions answered correctly out of totalquestions, as a percentage
-        //count total number of questions in quiz
-        //count number of questions answered correctly
-        //calculate score
-
-        int numberOfQuestions = 0;
-        int numberOfCorrectlyAnsweredQuestions = 0;
-
-        if (quizSections.equals(null))
-        {
-            Logger.getGlobal().info("Error: cannot mark quiz - QuizSections are null.");
-            return 0;
-        }
-
-        for (QuizSection quizSection : quizSections) {
-            numberOfQuestions++;
-            boolean isCorrect = true;
-            for (Answer answer : quizSection.getAnswers()) {
-                if (answer.isCorrect()) //we'd like to find it in user's list of answers
-                {
-                    if (!isIDInList(answerIDs, answer.getAnswer_id())) isCorrect = false;
-                }
-                else { //we'd like NOT to find it in the user's list of answers
-                    if (isIDInList(answerIDs, answer.getAnswer_id())) isCorrect = false;
-                }
-            }
-            if (isCorrect) numberOfCorrectlyAnsweredQuestions++;
-        }
-
-        Logger.getGlobal().info("Number of Questions: " + numberOfQuestions + " Number Correctly Answered: " + numberOfCorrectlyAnsweredQuestions);
-
-        return getPercentage(numberOfCorrectlyAnsweredQuestions, numberOfQuestions);
-
-    }
-
-    private int getPercentage(int small, int large)
-    {
-        if (large == 0){
-            Logger.getGlobal().info("Error: tried to divide by zero while calculating percentage score");
-            return 0;
-        }
-
-        return Math.round((float)small/(float)large * 100f);
-    }
-
-    private boolean isIDInList(List<Integer> ids, int idToFind){
-
-        for (Integer number: ids) {
-            if (number == idToFind) {
-                return true;
-            }
-        }
-
-        return false;
-
+    
+    
+    @Override
+    public String toString(){
+        
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        String jsonInString = gson.toJson(this);
+        return jsonInString;
+        
     }
 }

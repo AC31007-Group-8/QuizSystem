@@ -13,13 +13,14 @@ import com.github.ac31007_group_8.quiz.staff.store.Quiz;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import com.github.ac31007_group_8.quiz.util.Init;
-import com.github.mustachejava.DefaultMustacheFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.File;
+import com.google.gson.JsonSyntaxException;
 
 import java.util.HashMap;
+import java.util.List;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
@@ -62,7 +63,7 @@ public class QuizManager {
         
         
             System.out.println(allModules);
-            //here can take e.g. module list from DB or staff username
+            
             
             map.put("allModules", allModules);
             TemplateEngine eng = new MustacheTemplateEngine();//TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
@@ -75,44 +76,113 @@ public class QuizManager {
                return "{\"message\":\"error occured!\"}";
         }
         
-        
-        
-        
-        
-        
+
     }
     
     
     
      public static Object saveQuiz(Request req, Response res){
       
-    String json = 
-        "{"
-	+ "'timeLimit':'',"
-	+ "'moduleCode':'',"
-	+ "'title':'',"
-	+ "'questions':["
-	+	"{"
-	+		"'questionText':'',"
-	+		"'explanation':'',"
-	+		"'options':["
-        +                   "{'option':'', 'correct':''}"
-        +                "]"
-	+	"}"
-	+ "]"
-        + "}";
-        
-        
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        gson.fromJson(json, Quiz.class); //Copied from http://stackoverflow.com/questions/5128442/how-to-convert-a-string-to-jsonobject-using-gson-library 2nd Answer
+     
+         long start =  System.currentTimeMillis();
+         
+//    String json = 
+//        "{"
+//	+ "'time_limit':'',"
+//	+ "'module_code':'',"
+//	+ "'title':'gavno',"
+//	+ "'questions':["
+//	+	"{"
+//	+		"'question':'',"
+//	+		"'explanation':'',"
+//	+		"'answers':["
+//        +                   "{'answer':'', 'correct':''}"
+//        +                "]"
+//	+	"}"
+//	+ "]"
+//        + "}";
+        Gson gson = new GsonBuilder().serializeNulls().create();
 
-        //convert this (and tell me how you did it) into properly formatted json string (as shown above) and then use GSON to parse into java beans
-        System.out.println(req.body());   
-       
-        res.status(200);
-      
-       
-        return "{\"message\":\"saved successfully by ERiiic\"}";
+        try{
+
+            Quiz quizToSave = gson.fromJson(req.body(), Quiz.class); 
+            DSLContext dslCont = Database.getJooq(); 
+            QuizModel qm = new QuizModel();
+            
+            System.out.println(quizToSave);
+            boolean isValid = validateQuiz(quizToSave);
+
+            if (isValid){
+                int staffId = 1; // get from session, if not logged in -- 401
+                quizToSave.setStaff_id(staffId);
+
+                qm.saveQuiz(quizToSave,dslCont );
+
+
+                res.status(200);
+                System.out.println( System.currentTimeMillis()-start);
+                return "{\"message\":\"Saved successfully!\"}";
+            }
+            else{
+                res.status(400);
+                return "{\"message\":\"Bad input! This shouldn't happen if you don't mess with javascript!\"}";
+            }
         
+        }
+        catch(JsonSyntaxException e ){
+            LOGGER.error("Could not parse json", e);
+            res.status(400);
+            return "{\"message\":\"Bad input! This shouldn't happen if you don't mess with javascript!\"}";
+        }
+        catch (SQLException e){
+            LOGGER.error("SQLException", e);
+            res.status(500);
+            return "{\"message\":\"Database error\"}";
+        }
+        catch (DataAccessException e){
+            LOGGER.error("Data access violation", e);
+            res.status(400);
+            return "{\"message\":\"Bad input! This shouldn't happen if you don't mess with javascript!\"}";
+        }
+       
+
     }
+     
+     
+     
+     private static boolean validateQuiz(Quiz quizToSave) {
+
+        //time_limit            
+        Integer timeLimit = quizToSave.getTime_limit();
+        if (timeLimit!=null && (timeLimit>120 || timeLimit<1))return false;//if time_limit not integer, jsonParseException
+        
+        //module_code 
+        //if modified module_code values => foreign constraint fails => DataAccessException
+         
+        //title
+        String title = quizToSave.getTitle();
+        if (title == null || title.isEmpty()) return false;
+        
+        //questions + answers
+        List<Question> allQuestions = quizToSave.getQuestions();
+        if (allQuestions.isEmpty()) return false;//at least 1 question
+        
+        for (Question nextQuestion:allQuestions){
+            
+            String qText = nextQuestion.getQuestion();
+            if (qText == null || qText.isEmpty()) return false;// has question text
+            
+            ArrayList<Answer> answers = nextQuestion.getAnswers();
+           
+            boolean hasCorrect=false;
+            for (Answer a: answers){
+                String aText = a.getAnswer();
+                if (aText == null || aText.isEmpty()) return false; // each answer has text
+                if (a.isCorrect()){hasCorrect = true;}//at least 1 correct answer for each question
+            }
+            if (!hasCorrect)return false;
+        }
+         
+        return true;
+     }
 }

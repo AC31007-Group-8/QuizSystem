@@ -40,7 +40,7 @@ public class StudentQuizManager {
 
         //Validate quizID - is valid input provided?
         String quizIDString = req.queryParams("quizID");
-        if (quizIDString == (null) || quizIDString == "")
+        if (quizIDString == (null) || quizIDString.equals(""))
         {
             //display error page
             throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
@@ -61,16 +61,19 @@ public class StudentQuizManager {
             return eng.render(eng.modelAndView(map, "student/unpublishedQuiz.mustache"));
         }
 
-        //Pass on quiz sections to be displayed to the mustache view:
-        //(Was Pair<Question, List<Answer>>, refactored into QuizSection)
-        List<QuizSection> quizSections = quiz.getQuizSections();
+      
+        List<Question> allQuestions = quiz.getQuestions();
         map.put("quizID", quizID);
-        map.put("quizSections", quizSections);
+        map.put("allQuestions", allQuestions);
 
         return eng.render(eng.modelAndView(map, "student/takeQuiz.mustache"));
 
     }
 
+    
+    
+    
+    
     public static Object receiveTakeQuiz(Request req, Response res){
 
         //receive params: quizID, answerIDs, questionIDs
@@ -82,7 +85,7 @@ public class StudentQuizManager {
         List<Question> questions = quizModel.getQuestions(quizID);
 
         //get ticked answers' answerIDs:
-        List<Integer> answerIDs = new ArrayList<Integer>();
+        List<Integer> answerIDs = new ArrayList<>();
 
         for (Question question: questions) {
             int questionID = question.getQuestionID();
@@ -100,14 +103,14 @@ public class StudentQuizManager {
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
 
         //calculate score
-        int score = quiz.calculateScore(answerIDs);
+        int score = calculateScore(answerIDs, quiz);
 
         //placeholder value until student logins are implemented in sprint 2
         //TODO: Replace with the actual studentID.
         int studentID = 1;
 
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        
+        java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
 
         //ask model to write to database: duration, Score, quiz_id, student_id, date
         //as well as all the answerIDs submitted by user, for this resultID, into the result_to_answer linking table.
@@ -119,6 +122,71 @@ public class StudentQuizManager {
         return eng.render(eng.modelAndView(map, "student/endQuiz.mustache"));
 
     }
+    
+    
+    
+    
+    public static int calculateScore(List<Integer> answerIDs, Quiz quiz){
+
+        //calculate Score (type: INT) as: questions answered correctly out of totalquestions, as a percentage
+        //count total number of questions in quiz
+        //count number of questions answered correctly
+        //calculate score
+
+        int numberOfQuestions = 0;
+        int numberOfCorrectlyAnsweredQuestions = 0;
+
+        if (quiz.getQuestions()==null)
+        {
+            Logger.getGlobal().info("Error: cannot mark quiz - Questions are null.");
+            return 0;
+        }
+
+        for (Question question : quiz.getQuestions()) {
+            numberOfQuestions++;
+            boolean isCorrect = true;
+            for (Answer answer : question.getAnswers()) {
+                if (answer.isCorrect()) //we'd like to find it in user's list of answers
+                {
+                    if (!isIDInList(answerIDs, answer.getAnswer_id())) isCorrect = false;
+                }
+                else { //we'd like NOT to find it in the user's list of answers
+                    if (isIDInList(answerIDs, answer.getAnswer_id())) isCorrect = false;
+                }
+            }
+            if (isCorrect) numberOfCorrectlyAnsweredQuestions++;
+        }
+
+        Logger.getGlobal().info("Number of Questions: " + numberOfQuestions + " Number Correctly Answered: " + numberOfCorrectlyAnsweredQuestions);
+
+        return getPercentage(numberOfCorrectlyAnsweredQuestions, numberOfQuestions);
+
+    }
+
+    private static int getPercentage(int small, int large)
+    {
+        if (large == 0){
+            Logger.getGlobal().info("Error: tried to divide by zero while calculating percentage score");
+            return 0;
+        }
+
+        return Math.round((float)small/(float)large * 100f);
+    }
+
+    private static boolean isIDInList(List<Integer> ids, int idToFind){
+
+        for (Integer number: ids) {
+            if (number == idToFind) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+    
+    
+    
 
 
 }

@@ -35,7 +35,7 @@ public class Database {
     private static String getURL() {
         // Cache it, to save constant string rebuilds
         if (DB_URL != null) return DB_URL;
-        DB_URL = "jdbc:mysql://" + Configuration.DATABASE_HOST + ":" + Configuration.DATABASE_PORT + "/" + Configuration.DATABASE_SCHEMA;
+        DB_URL = "jdbc:mysql://" + Configuration.DATABASE_HOST + ":" + Configuration.DATABASE_PORT + "/" + Configuration.DATABASE_SCHEMA+"?rewriteBatchedStatements=true";
         return DB_URL;
     }
 

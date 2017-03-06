@@ -37,7 +37,7 @@ public class QuizList {
 
         QuizModel quizModel = new QuizModel();
         ArrayList<Quiz> quizTitles = quizModel.getQuizAll();
-
+        
         HashMap<String, Object> map = new HashMap<>();
         map.put("quizList", quizTitles);
         res.status(200);

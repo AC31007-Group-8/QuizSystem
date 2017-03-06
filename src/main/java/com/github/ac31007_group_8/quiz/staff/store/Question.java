@@ -14,18 +14,13 @@ import com.github.ac31007_group_8.quiz.staff.store.Answer;
  */
 public class Question {
     
-    int question_id;
-    int quiz_id;
-    ArrayList<Answer> answers;
-    String question;
-    String explanation;
+    int question_id = 0;
+    int quiz_id = 0;
+    ArrayList<Answer> answers = new ArrayList<>();
+    String question ="";
+    String explanation ="";
     
-    public Question(){
-        question_id = 0;
-        quiz_id = 0;
-        question = "";
-        explanation = "";
-    }
+   
     
     public Question(int question_id, int quiz_id, String question, String explanation){
         this.question_id = question_id;

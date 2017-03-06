@@ -139,3 +139,7 @@ textarea{
 .error-highlight, #noQuestionMessage.error-highlight{
     border: solid #118af5 2px;
 }
+
+.errorPanel{
+    background-color: #e5dcdc;
+}

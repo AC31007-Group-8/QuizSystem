@@ -51,13 +51,11 @@ and open the template in the editor.
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
                     {{#quiz}}
-                        {{#quizSections}}
+                        {{#questions}}
                             <div class="panel panel-default panel-custom">
                                 <div  class="panel-body">
                                     <div class="row">
-                                        {{#question}}
-                                            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0"><p>{{question}}</p><br><p>Explanation: {{explanation}}</p> </div>
-                                        {{/question}}
+                                        <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0"><p>{{question}}</p><br><p>Explanation: {{explanation}}</p> </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
                                             <div class="row" >
                                                 {{#answers}}
@@ -73,7 +71,7 @@ and open the template in the editor.
                                     </div>
                                 </div>
                             </div>
-                        {{/quizSections}}
+                        {{/questions}}
                     {{/quiz}}
                 </div>
             </div>
