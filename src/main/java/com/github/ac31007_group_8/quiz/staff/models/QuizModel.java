@@ -9,6 +9,7 @@ import com.github.ac31007_group_8.quiz.Database;
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
 import  com.github.ac31007_group_8.quiz.generated.tables.records.*;
 import com.github.ac31007_group_8.quiz.staff.store.Question;
+import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
 import com.github.ac31007_group_8.quiz.staff.store.Quiz;
 import com.github.ac31007_group_8.quiz.staff.store.Answer;
 import java.sql.SQLException;
@@ -53,33 +54,51 @@ public class QuizModel {
         return null;
     }
     
-    public ArrayList<Quiz> getQuizAll()
-    {      
-        ArrayList<Quiz> quizzes = new ArrayList();
-        DSLContext create = Database.getJooq(); //Connects to the database
+    public ArrayList<QuizInfo> getAllQuizInfo(DSLContext create) throws SQLException    {      
         
-        /**Creates SQL Statement**/
-        String sql = create.select()
+        ArrayList<QuizInfo> allQuizInfo = new ArrayList();
+        
+        
+
+        String sql = create.select(STAFF.FIRST_NAME,STAFF.SECOND_NAME,MODULE.MODULE_NAME,
+                                    QUIZ.PUBLISH_STATUS,QUIZ.QUIZ_ID,QUIZ.TIME_LIMIT,QUIZ.TITLE,QUIZ.MODULE_ID )
                         .from(QUIZ)
+                        .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
+                        .join(STAFF).on(QUIZ.STAFF_ID.equal(STAFF.STAFF_ID))
                         .getSQL();
-        
-        try{
-        
-            Result<Record> result = create.fetch(sql);
 
-            for(Record r : result){ //Iterates through the returned results 
-                Quiz quiz = new Quiz(r.getValue(QUIZ.QUIZ_ID), r.getValue(QUIZ.STAFF_ID), r.getValue(QUIZ.TIME_LIMIT), r.getValue(QUIZ.MODULE_ID), r.getValue(QUIZ.TITLE), r.getValue(QUIZ.PUBLISH_STATUS)!=0);
+        Result<Record> result = create.fetch(sql);
 
-                quizzes.add(quiz); //Adds current state of the model to the vector array
-            }
+        for(Record r : result){
+            allQuizInfo.add(r.into(QuizInfo.class)); 
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-           
-        }
-        return quizzes;
+        
+        return allQuizInfo;
     }
+    
+    
+    
+    
+    
+    
+    
+    public ArrayList<Quiz> getQuizzesFiltered(DSLContext dslCont,String module,boolean isPublished,String creatorSurname){
+
+        return null;
+
+    }
+    
+    
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
     public ArrayList<Quiz> getQuizAllPerStaff(int staff_id)
     {      

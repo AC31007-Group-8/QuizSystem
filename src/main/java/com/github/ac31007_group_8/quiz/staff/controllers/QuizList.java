@@ -1,6 +1,7 @@
 
 package com.github.ac31007_group_8.quiz.staff.controllers;
 
+import com.github.ac31007_group_8.quiz.Database;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
@@ -9,14 +10,15 @@ import spark.TemplateEngine;
 import spark.template.mustache.MustacheTemplateEngine;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 import com.github.ac31007_group_8.quiz.staff.*;
 import com.github.ac31007_group_8.quiz.staff.store.*;
 
 import static spark.Spark.*;
-import com.google.gson.*;
-import org.apache.commons.lang3.tuple.*;
+import java.sql.SQLException;
+import org.jooq.DSLContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -28,24 +30,76 @@ public class QuizList {
 
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuizList.class);
+    
     @Init
     public static void init() {
-        get("/staff/quizList", QuizList::getQuizName);
+        get("/staff/quizList", QuizList::getQuizList);
+        get("/staff/quizList/filter", QuizList::getFilteredQuizList);
     }
 
-    public static Object getQuizName(Request req, Response res){
+    public static Object getQuizList(Request req, Response res){
 
+        DSLContext dslCont = Database.getJooq();
         QuizModel quizModel = new QuizModel();
-        ArrayList<Quiz> quizTitles = quizModel.getQuizAll();
         
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("quizList", quizTitles);
-        res.status(200);
-        TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "staff/quizList.mustache"));
+        try{
+        
+            ArrayList<QuizInfo> quizTitles = quizModel.getAllQuizInfo(dslCont);
+
+            for (QuizInfo q:quizTitles){
+                System.out.println(q);
+            }
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("quizList", quizTitles);
+            res.status(200);
+            TemplateEngine eng = new MustacheTemplateEngine();
+            return eng.render(eng.modelAndView(map, "staff/quizList.mustache"));
+
+        
+        }
+        catch (SQLException sqle){
+            LOGGER.error("SQLException", sqle);
+            res.status(500);
+            return "Database error";//or make error page?   
+        }
+        catch(Exception e){
+            LOGGER.error("SQLException", e);
+            res.status(500);
+            return "Exception occured!";
+        }
+        
+        
 
     }
 
 
+    public static Object getFilteredQuizList(Request req, Response res){
+        
+        
+        String module = req.queryParams("module");
+        boolean isPublished = Boolean.parseBoolean(req.queryParams("published"));
+        String creatorSurname = req.queryParams("creatorSurname");
+        
+        DSLContext dslCont = Database.getJooq();
+        QuizModel quizModel = new QuizModel();
+        
+        
+        ArrayList<Quiz> quizTitles = quizModel.getQuizzesFiltered(dslCont,module,isPublished,creatorSurname);
+        
+        //Consider filtering list by module, year, abc. Name the quizes, date aswell. whcih ones are active.
+        
+        
+         System.out.println(req.queryParams());
+        System.out.println(req.queryParams("module"));     
+        
+        
+       
+          res.status(200);
+        
+          return "Hello World!";
+    }
+    
 }
 

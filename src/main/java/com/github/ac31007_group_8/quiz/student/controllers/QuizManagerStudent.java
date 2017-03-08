@@ -7,7 +7,7 @@ package com.github.ac31007_group_8.quiz.student.controllers;
 import com.github.ac31007_group_8.quiz.Database;
 
 import com.github.ac31007_group_8.quiz.student.models.QuizModelStudent;
-import com.github.ac31007_group_8.quiz.student.stores.QuizInfo;
+import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
 import com.github.ac31007_group_8.quiz.util.Init;
 import com.google.gson.Gson;
 

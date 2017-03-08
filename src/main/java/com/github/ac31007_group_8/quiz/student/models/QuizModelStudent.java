@@ -5,12 +5,16 @@
  */
 package com.github.ac31007_group_8.quiz.student.models;
 
-import com.github.ac31007_group_8.quiz.student.stores.QuizInfo;
+import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
+import static com.github.ac31007_group_8.quiz.generated.Tables.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Result;
 
 /**
  *
@@ -58,6 +62,31 @@ public class QuizModelStudent {
         }
         
         return allRelevantQuizInfo;
+    }
+    
+    
+    
+    
+    
+     public ArrayList<QuizInfo> getAllQuizInfo(DSLContext create) throws SQLException    {      
+        ArrayList<QuizInfo> allQuizInfo = new ArrayList();
+        
+        
+        /**Creates SQL Statement**/
+        String sql = create.select(MODULE.MODULE_NAME,QUIZ.QUIZ_ID,QUIZ.TIME_LIMIT,QUIZ.TITLE,QUIZ.MODULE_ID )
+                        .from(QUIZ)
+                        .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
+                        .where( QUIZ.PUBLISH_STATUS.equal((byte)1))
+                        .getSQL();
+
+        Result<Record> result = create.fetch(sql);
+
+        for(Record r : result){ //Iterates through the returned results 
+            
+            allQuizInfo.add(r.into(QuizInfo.class)); 
+        }
+        
+        return allQuizInfo;
     }
     
     
