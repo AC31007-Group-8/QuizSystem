@@ -82,7 +82,7 @@ public class QuizModel {
     
     
     
-    public ArrayList<Quiz> getQuizzesFiltered(DSLContext dslCont,String module,boolean isPublished,String creatorSurname){
+    public ArrayList<Quiz> getQuizzesFiltered(DSLContext dslCont,String moduleCode,String isPublished,String creator, String sortBy){
 
         return null;
 

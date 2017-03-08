@@ -7,13 +7,23 @@
 
 function getFiltered(){
     
-    var o = {module:'AC', year:2017};
+    
+    var choices = {
+        published : $("#publishStatusSelect").val(),
+        moduleCode: $("#quizModule").val(),
+        creator: $("#creatorNameSurname").val(),
+        sortBy: $("#sortBy").val()
+ 
+    };
+    
+    
+   
     
     
            $.ajax({
-               url: "/staff/quizListFilter",
+               url: "/staff/quizList/filter",
                type: "GET",
-               data: o,
+               data: choices,
                contentType:  "application/json;",
                dataType:"json",
                success: function( data, textStatus, jqXHR) {

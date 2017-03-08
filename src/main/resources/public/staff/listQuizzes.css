@@ -1,0 +1,80 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 08-Mar-2017, 14:16:12
+    Author     : Vlad
+*/
+
+body{
+    min-width:330px;
+}
+
+
+.panel-default .panel-heading{
+    margin:30px 50px 0 50px;
+    background-color: #ae4444;
+    background-image: none;
+    color: white;
+}
+
+
+
+.panel-default .panel-body{
+    margin:0 50px 50px 50px;
+    background-color: bisque;
+   
+}
+
+.panel-body button{
+    width:100%;
+}
+
+.panel-default .panel-heading label{
+    color:white;
+}
+
+.panel-heading h3{
+    margin:0;
+}
+.panel-body label, .panel-body select, .panel-body input{
+    width:100%;
+  
+    margin-bottom: 10px;
+}
+
+.panel-body select, .panel-body input{
+      padding-left: 10px;
+}
+
+.panel-body select, .panel-body input{
+    border: 1px solid #ccc;
+    border-radius:4px;
+    height: 25px;
+}
+
+
+.table{
+    margin:50px;
+    width: calc(100% - 100px);
+}
+
+
+.table thead{
+    border-top: 3px solid #ae4444;
+    border-bottom: 3px solid #ae4444;
+}
+
+.glyphicon{
+    font-size:x-large;
+}
+
+.glyphicon-ok-circle{
+    color: #0fcb0f;
+}
+
+.glyphicon-remove{
+    color: red;
+}

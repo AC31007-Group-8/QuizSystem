@@ -16,7 +16,7 @@ public class QuizInfo {
     String title = null;
     String module_name = null;
     String module_id = null;
-    boolean isPublished = false;
+    boolean publish_status = false;
     String first_name = null;
     String second_name = null;
 
@@ -61,11 +61,11 @@ public class QuizInfo {
     }
 
     public boolean isIsPublished() {
-        return isPublished;
+        return publish_status;
     }
 
     public void setIsPublished(boolean isPublished) {
-        this.isPublished = isPublished;
+        this.publish_status = isPublished;
     }
 
     public Integer getTime_limit() {
@@ -113,7 +113,7 @@ public class QuizInfo {
     
     @Override
     public String toString() {
-      return "id: "+quizId+" time: "+time_limit+" title: "+title+" moduleName: "+module_name+" moduleCode: "+module_id+" isPublished: "+isPublished+" creatorName: "+first_name+" "+second_name;
+      return "id: "+quizId+" time: "+time_limit+" title: "+title+" moduleName: "+module_name+" moduleCode: "+module_id+" isPublished: "+publish_status+" creatorName: "+first_name+" "+second_name;
     }
     
     

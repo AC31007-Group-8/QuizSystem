@@ -20,23 +20,80 @@ and open the template in the editor.
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-        <link rel="stylesheet" href="/staff/createQuiz.css">
+        <link rel="stylesheet" href="/staff/listQuizzes.css">
          <script src="/staff/listQuizzes.js"></script>
     </head>
     <body>
 
-    <div class="panel panel-default panel-custom">
-        <div class="panel-head">
-            <button onclick="getFiltered()">Show quizzes</button>
+    <div class="panel-default">
+        <div class="panel-heading">
+            <h3>Filter quizzes</h3>
         </div>  
         
         <div class="panel-body">
+           
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                        <label for="publishStatusSelect">Publish status: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                        <select id="publishStatusSelect" >
+                            <option value="-1">Any</option>
+                            <option value="1">Published</option>
+                            <option value="0">Unpublished</option>
+                        </select>
+                    </div>
+                    
+                    
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                         <label for="quizModule">Module code: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <select id="quizModule"  >
+                            <option value="-1">--select--</option>
+                            {{#allModules}}
+                                <option value="{{.}}">{{.}}</option>
+                            {{/allModules}}
+                        </select>
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                         <label for="creatorNameSurname">Creator: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                       <input id="creatorNameSurname" type="text" placeholder="Part of name/surname" >
+                    </div>
+                    
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                         <label for="sortBy">Sort by: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <select id="sortBy"  >
+                            <option value="-1">--select--</option>
+                            <option value="byCode">Module code</option>
+                            <option value="byName">Module name</option>
+                            <option value="byStatus">Publish status</option>
+                            <option value="byTitle">Quiz title</option>
+                        </select>
+                    </div>
+                    
+ 
+                </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    <button type="button" onclick="getFiltered()" class="btn btn-primary  btn-sm">Filter</button>
+                </div>
+                
+            </div>
+            
             
         </div>    
     </div>    
         
         
-    <div class="panel panel-default panel-custom">
+<!--    <div class="panel panel-default panel-custom">
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
@@ -44,20 +101,50 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 
-<!--====================Quiz Properties (template)=====================-->
-{{#quizList}}
-    <div class="panel panel-default panel-custom">
-      <div class="panel-body">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-              <label>Module ID: {{module_id}} Quiz Title:{{title}} <a class="btn btn-default" href="/staff/viewResults?quizID={{quiz_id}}">View results</a></label>
-          </div>
-        </div>
-      </div>
-    </div>
-{{/quizList}}
-<!--====================Quiz Properties (template)=====================-->
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Published?</th>
+      <th>Module code</th>
+      <th>Module name</th>
+      <th>Title</th>
+      <th>Time limit</th>
+      <th>Creator</th>
+      <th>Edit</th>
+      <th>View</th>
+    </tr>
+  </thead>
+  <tbody>
+      
+ 
+    {{#quizList}}
+        <tr>
+          <td>{{#publish_status}}
+                    <span class="glyphicon glyphicon-ok-circle" ></span>
+              {{/publish_status}}
+              {{^publish_status}}
+                    <span class="glyphicon glyphicon-remove" ></span>
+              {{/publish_status}}
+          </td>
+          <td>{{module_id}}</td>
+          <td>{{module_name}}</td>
+          <td>{{title}}</td>
+          <td>{{time_limit}}</td>
+          <td>{{first_name}}  {{second_name}}</td>
+          <td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID={{quiz_id}}">View</a></td>
+          <td><a class="btn btn-primary btn-sm" href="/staff/EDITQUIZ?quizID={{quiz_id}}">Edit</a></td>
+        </tr>
+    {{/quizList}}
+    
+    
+  </tbody>
+</table>
+
+
+
 
 </html>

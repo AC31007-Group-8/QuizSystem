@@ -42,17 +42,22 @@ public class QuizList {
 
         DSLContext dslCont = Database.getJooq();
         QuizModel quizModel = new QuizModel();
-        
+        HashMap<String, Object> map = new HashMap<>();
+         
         try{
         
+            ArrayList<String> moduleNames = quizModel.getModuleList(dslCont);
+            map.put("allModules", moduleNames);
+            
             ArrayList<QuizInfo> quizTitles = quizModel.getAllQuizInfo(dslCont);
-
+            map.put("quizList", quizTitles);
+            
             for (QuizInfo q:quizTitles){
                 System.out.println(q);
             }
 
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("quizList", quizTitles);
+           
+            
             res.status(200);
             TemplateEngine eng = new MustacheTemplateEngine();
             return eng.render(eng.modelAndView(map, "staff/quizList.mustache"));
@@ -78,21 +83,25 @@ public class QuizList {
     public static Object getFilteredQuizList(Request req, Response res){
         
         
-        String module = req.queryParams("module");
-        boolean isPublished = Boolean.parseBoolean(req.queryParams("published"));
-        String creatorSurname = req.queryParams("creatorSurname");
+        String isPublished = req.queryParams("published");
+        String moduleCode = req.queryParams("moduleCode");
+        String creator = req.queryParams("creator");
+        String sortBy = req.queryParams("sortBy");
+        
+        System.out.println(isPublished+" "+moduleCode+" "+creator+" "+sortBy);
+        
+      
         
         DSLContext dslCont = Database.getJooq();
         QuizModel quizModel = new QuizModel();
         
         
-        ArrayList<Quiz> quizTitles = quizModel.getQuizzesFiltered(dslCont,module,isPublished,creatorSurname);
+        ArrayList<Quiz> quizTitles = quizModel.getQuizzesFiltered(dslCont,moduleCode,isPublished,creator,sortBy);
         
         //Consider filtering list by module, year, abc. Name the quizes, date aswell. whcih ones are active.
         
         
-         System.out.println(req.queryParams());
-        System.out.println(req.queryParams("module"));     
+           
         
         
        
