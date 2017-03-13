@@ -55,10 +55,13 @@ body{
     height: 25px;
 }
 
+#contentHolder{
+    margin:50px;
+}
 
 .table{
-    margin:50px;
-    width: calc(100% - 100px);
+    margin:0;
+    width: 100%;
 }
 
 

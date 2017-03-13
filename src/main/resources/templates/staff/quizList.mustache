@@ -103,48 +103,50 @@ and open the template in the editor.
         </div>
     </div>-->
 
+    <div id="contentHolder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Published?</th>
+                    <th>Module code</th>
+                    <th>Module name</th>
+                    <th>Title</th>
+                    <th>Time limit</th>
+                    <th>Creator</th>
+                    <th>Edit</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
 
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Published?</th>
-      <th>Module code</th>
-      <th>Module name</th>
-      <th>Title</th>
-      <th>Time limit</th>
-      <th>Creator</th>
-      <th>Edit</th>
-      <th>View</th>
-    </tr>
-  </thead>
-  <tbody>
-      
- 
-    {{#quizList}}
-        <tr>
-          <td>{{#publish_status}}
-                    <span class="glyphicon glyphicon-ok-circle" ></span>
-              {{/publish_status}}
-              {{^publish_status}}
-                    <span class="glyphicon glyphicon-remove" ></span>
-              {{/publish_status}}
-          </td>
-          <td>{{module_id}}</td>
-          <td>{{module_name}}</td>
-          <td>{{title}}</td>
-          <td>{{time_limit}}</td>
-          <td>{{first_name}}  {{second_name}}</td>
-          <td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID={{quiz_id}}">View</a></td>
-          <td><a class="btn btn-primary btn-sm" href="/staff/EDITQUIZ?quizID={{quiz_id}}">Edit</a></td>
-        </tr>
-    {{/quizList}}
-    
-    
-  </tbody>
-</table>
+                {{#quizList}}
+                <tr>
+                    <td>{{#publish_status}}
+                        <span class="glyphicon glyphicon-ok-circle" ></span>
+                        {{/publish_status}}
+                        {{^publish_status}}
+                        <span class="glyphicon glyphicon-remove" ></span>
+                        {{/publish_status}}
+                    </td>
+                    <td>{{module_id}}</td>
+                    <td>{{module_name}}</td>
+                    <td>{{title}}</td>
+                    <td>{{time_limit}}</td>
+                    <td>{{first_name}}  {{second_name}}</td>
+                    <td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID={{quiz_id}}">View</a></td>
+                    <td><a class="btn btn-primary btn-sm" href="/staff/EDITQUIZ?quizID={{quiz_id}}">Edit</a></td>
+                </tr>
+                {{/quizList}}
 
 
+            </tbody>
+        </table>
+    </div>
+
+
+
+    </body>
 
 
 </html>

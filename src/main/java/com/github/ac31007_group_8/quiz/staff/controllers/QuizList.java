@@ -13,6 +13,7 @@ import java.util.*;
 
 import com.github.ac31007_group_8.quiz.staff.*;
 import com.github.ac31007_group_8.quiz.staff.store.*;
+import com.google.gson.Gson;
 
 import static spark.Spark.*;
 import java.sql.SQLException;
@@ -82,32 +83,45 @@ public class QuizList {
 
     public static Object getFilteredQuizList(Request req, Response res){
         
-        
+       
         String isPublished = req.queryParams("published");
         String moduleCode = req.queryParams("moduleCode");
         String creator = req.queryParams("creator");
         String sortBy = req.queryParams("sortBy");
         
-        System.out.println(isPublished+" "+moduleCode+" "+creator+" "+sortBy);
-        
-      
+        if (isPublished==null || moduleCode==null || creator == null || sortBy==null){//no such parameter
+            res.status(400);
+            return "{\"message\":\"Bad input!\"}";
+        }
         
         DSLContext dslCont = Database.getJooq();
         QuizModel quizModel = new QuizModel();
         
-        
-        ArrayList<Quiz> quizTitles = quizModel.getQuizzesFiltered(dslCont,moduleCode,isPublished,creator,sortBy);
-        
-        //Consider filtering list by module, year, abc. Name the quizes, date aswell. whcih ones are active.
-        
-        
-           
-        
-        
-       
-          res.status(200);
-        
-          return "Hello World!";
+        try{
+
+            ArrayList<QuizInfo> quizTitles = quizModel.getQuizzesFiltered(dslCont,moduleCode,isPublished,creator,sortBy);
+
+            String json = new Gson().toJson(quizTitles);
+
+            System.out.println(json);
+
+
+
+            res.status(200);
+
+            return json;
+          
+        }
+        catch (SQLException sqle){
+            LOGGER.error("SQLException occured!", sqle);
+            res.status(500);
+            return "{\"message\":\"Exception occured\"}";
+        }
+        catch (Exception e){
+            LOGGER.error("Exception :(", e);
+            res.status(500);
+            return "{\"message\":\"Exception occured\"}";
+        }
     }
     
 }
