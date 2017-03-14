@@ -8,6 +8,7 @@
 //http://stackoverflow.com/questions/7477/autosizing-textarea-using-prototype
 
 
+var allMdes = [];
 
 $(function(){
     
@@ -26,7 +27,7 @@ $(function(){
         }
     });
     
-    
+   
     
     
 });
@@ -81,6 +82,9 @@ function removeOption(target){
 function addQuestion(){
     
     
+    
+    
+    
     var questionsSoFar = $(".panel-question").size()-1;
     
     if (questionsSoFar===0){
@@ -92,11 +96,93 @@ function addQuestion(){
     clonedQuestion.removeAttr('hidden');
     clonedQuestion.removeAttr('id');
    
-    var html = clonedQuestion.get(0).outerHTML;
+   
     
+    var html = clonedQuestion.get(0).outerHTML;
    $(".panel-question").last().after(html);
    
+   var addedQuestionId ;//relates question to mdeEditor in the list
+   if (allMdes.length===0){  
+       addedQuestionId = 0; 
+   }
+   else{ 
+       addedQuestionId =  allMdes[allMdes.length - 1].id+1;   
+   }
    
+   
+    $(".panel-question").last().data('id',addedQuestionId );
+   
+    var newMde = new SimpleMDE({autofocus: true,
+                                element: $(".panel-question").last().find("textarea").first()[0],
+                               
+                                toolbar:["bold", "italic", "|", "quote","unordered-list","ordered-list","|","link","image","|","preview",
+                                   
+            
+                                    {name: "side-by-side",
+                                         action:  function(){beforeToggleSidebyside(addedQuestionId);},
+                                         className: "fa fa-columns no-disable no-mobile",
+                                         title: "Toggle Side By Side"
+                                    },
+                                    {name: "fullscreen",
+                                         action:  function(){beforeToggleFullscreen(addedQuestionId);},
+                                         className: "fa fa-arrows-alt no-disable no-mobile",
+                                         title: "Toggle Fullscreen"
+                                    }],
+                                placeholder: "Question content"  
+                               
+                               });
+    newMde.id = addedQuestionId;
+    allMdes.push(newMde);
+   
+   
+    
+}
+
+//some elements on page have position:absolute, so, when it goes fullscreen they still remain.
+//change their position to relative before going fullscreen and then back
+//+ change mutual behavior of sideBySide and fullScreen
+function beforeToggleFullscreen(mdeId){
+
+    var targetMde = $.grep(allMdes, function(e){ return e.id === mdeId; })[0];
+    
+    if (!targetMde.isFullscreenActive() ){
+        $(".question-lable").addClass("tempInitial");
+        $(".question-remove").addClass("tempInitial");
+        $(".mandatory-option").addClass("tempInitial");
+    }
+    else{
+        $(".question-lable").removeClass("tempInitial");
+        $(".question-remove").removeClass("tempInitial");
+        $(".mandatory-option").removeClass("tempInitial");
+    }
+    
+    targetMde.toggleFullScreen();
+   
+}
+
+
+function beforeToggleSidebyside(mdeId){
+
+    var targetMde = $.grep(allMdes, function(e){ return e.id === mdeId; })[0];
+    
+    
+    if (!targetMde.isSideBySideActive() && !targetMde.isFullscreenActive()  ){
+        $(".question-lable").addClass("tempInitial");
+        $(".question-remove").addClass("tempInitial");
+        $(".mandatory-option").addClass("tempInitial");
+        targetMde.toggleSideBySide();
+        
+    }
+    else if (targetMde.isFullscreenActive() && !targetMde.isSideBySideActive()){
+         targetMde.toggleSideBySide();
+    }
+    else if (targetMde.isFullscreenActive() && targetMde.isSideBySideActive()){
+        $(".question-lable").removeClass("tempInitial");
+        $(".question-remove").removeClass("tempInitial");
+        $(".mandatory-option").removeClass("tempInitial");
+        targetMde.toggleFullScreen();
+    }
+    
     
 }
 
@@ -107,11 +193,22 @@ function removeQuestion(target){
     var questionToRemove = $(target).closest(".panel-question");
     var removedRowIndex = $(".panel-question").index( questionToRemove );
     
+    var idToRemove = questionToRemove.data('id');
+    for(var i = 0; i < allMdes.length; i++) {
+        if(allMdes[i].id === idToRemove) {
+            allMdes.splice(i, 1);
+            break;
+        }
+    }
+    
+    
+    
     questionToRemove.nextAll().each(function( index ) {
        $(this).find(".question-lable").first().text("Question "+(removedRowIndex+index));
     });
     
     questionToRemove.remove();
+    
     
     if ( $(".panel-question").size() ===1){//only hidden template
         $("#noQuestionMessage").show();
@@ -185,7 +282,13 @@ function submit(){
           };
           
           //question text
-          nextQuestion.question = $(this).find("textarea").eq(0).val().trim();
+          var questionId = $(this).data('id');
+          nextQuestion.question = $.grep(allMdes, function(e){ return e.id === questionId; })[0].value();
+          
+          
+          valid = false;
+          
+         // simplemde.value();
           if (nextQuestion.question.length===0){
               $(this).find(".row").eq(0).addClass("error-highlight");
               valid = false;

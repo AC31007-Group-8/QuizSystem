@@ -19,9 +19,15 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+        
+        
         <link rel="stylesheet" href="/staff/createQuiz.css">
         <script src="/staff/createQuiz.js"></script>
+        
+        <!--markdown editor simpleMDE -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+       
     </head>
     <body>
         
@@ -81,18 +87,18 @@ and open the template in the editor.
                 <button onclick="removeQuestion(this)" class="btn btn-mini btn-primary question-remove">Remove</button>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
-                        <label for="quiz-question-text" class="mandatory">Question text</label>
+                        <label class="mandatory">Question text</label>
                         <div class="input-group" >
-                            <textarea id="quiz-question-text" class="form-control" ></textarea>
+                            <textarea class="form-control" ></textarea>
                         </div>
 
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
-                        <label for="quiz-question-explanation">Explanation text</label>
+                        <label>Explanation text</label>
                         <div class="input-group" >
-                            <textarea id="quiz-question-explanation" class="form-control" ></textarea>
+                            <textarea  class="form-control" ></textarea>
                         </div><!-- /input-group -->
 
                     </div>

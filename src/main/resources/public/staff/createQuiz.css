@@ -143,3 +143,18 @@ textarea{
 .errorPanel{
     background-color: #e5dcdc;
 }
+
+
+/*initial height of markdown editor*/
+.CodeMirror, .CodeMirror-scroll {
+    min-height: 200px;
+}
+
+/*changes position to initial when MDE is in fullscreen*/
+.tempInitial{
+    position:initial;
+}
+
+.tempInitial:before{
+    position:initial;
+}
