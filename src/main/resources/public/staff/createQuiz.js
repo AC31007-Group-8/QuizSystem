@@ -139,7 +139,7 @@ function addQuestion(){
 }
 
 //some elements on page have position:absolute, so, when it goes fullscreen they still remain.
-//change their position to relative before going fullscreen and then back
+//change their position to initial  before going fullscreen and then back
 //+ change mutual behavior of sideBySide and fullScreen
 function beforeToggleFullscreen(mdeId){
 
@@ -159,7 +159,6 @@ function beforeToggleFullscreen(mdeId){
     targetMde.toggleFullScreen();
    
 }
-
 
 function beforeToggleSidebyside(mdeId){
 
@@ -283,12 +282,10 @@ function submit(){
           
           //question text
           var questionId = $(this).data('id');
-          nextQuestion.question = $.grep(allMdes, function(e){ return e.id === questionId; })[0].value();
+          nextQuestion.question = $.grep(allMdes, function(e){ return e.id === questionId; })[0].value().trim();
           
-          
-          valid = false;
-          
-         // simplemde.value();
+
+       
           if (nextQuestion.question.length===0){
               $(this).find(".row").eq(0).addClass("error-highlight");
               valid = false;

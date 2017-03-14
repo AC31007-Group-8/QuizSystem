@@ -25,6 +25,9 @@ authors: Vlad, Can, Allan
 
     <link rel="stylesheet" href="/student/takeQuiz.css">
     <script src="/student/takeQuiz.js"></script>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
 </head>
 <body>
 
@@ -86,8 +89,8 @@ authors: Vlad, Can, Allan
         <div class="panel panel-default panel-custom">
             <div  class="panel-body">
                 <div class="row">
-                    
-                        <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0"><p>{{question}}</p> </div>
+                     
+                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">{{{question}}} </div>
                         <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
                         <div class="row" >
                             {{#answers}}

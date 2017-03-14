@@ -2,6 +2,10 @@
  * Created by Can on 21/02/2017 Edited by Allan
  */
 
+
+
+
+
 var elapsedTime = 0;
 var intervalID; //for timer, needed for stopping
 

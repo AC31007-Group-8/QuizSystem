@@ -17,6 +17,10 @@ import static spark.Spark.*;
 import com.google.gson.*;
 import org.apache.commons.lang3.tuple.*;
 
+import io.github.gitbucket.markedj.*;
+
+
+
 /**
  * @author Can G, Allan M
  */
@@ -63,6 +67,10 @@ public class StudentQuizManager {
 
       
         List<Question> allQuestions = quiz.getQuestions();
+        for (Question q:allQuestions){
+            q.setQuestion(Marked.marked(q.getQuestion()));   
+        }
+       
         map.put("quizID", quizID);
         map.put("allQuestions", allQuestions);
 
