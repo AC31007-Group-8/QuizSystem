@@ -3,41 +3,129 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.ac31007_group_8.quiz.test.staff;
+package com.github.ac31007_group_8.quiz.test;
 
 import com.github.ac31007_group_8.quiz.Database;
+import org.junit.Test;
+
+import spark.Request;
+import spark.Response;
+
+
+
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizList;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.jooq.DSLContext;
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.mockito.Mock;
+
+import static org.mockito.Mockito.*;
 import org.powermock.api.mockito.PowerMockito;
+
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import spark.Request;
-import spark.Response;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import org.mockito.Mock;
+
 
 /**
  *
  * @author Vlad
+ * 
  */
 
 
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({QuizList.class, Database.class}) 
-public class QuizListTest {
+
+public class QuizListTest_Example {
     
+//TO MAKE A REAL CONNECTION, but I don't
+//    
+//    @BeforeClass
+//    public static void beforeClass() {
+//      
+//        QuizList.init();
+//        Spark.awaitInitialization();
+//    }
+//    
+//    @AfterClass
+//    public static void afterClass() {
+//        Spark.stop();
+//    }
+    
+    
+    
+//    private TestResponse makePostRequest(String path, String body) throws IOException {
+//        
+//        URL url = new URL("http://localhost:4567" + path);
+//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//        connection.setRequestMethod("POST");
+//        connection.setDoOutput(true);
+//        connection.addRequestProperty("Content-Type", "application/" + "POST");
+//        connection.setRequestProperty("Content-Length", Integer.toString(body.length()));
+//        connection.getOutputStream().write(body.getBytes("UTF8"));//add request body
+//        connection.connect();
+//        
+//        
+//        
+//        return new TestResponse(connection.getResponseCode());
+//    }
+//    
+//    
+//    private TestResponse makeGetRequest(String path) throws IOException {
+//        URL url = new URL("http://localhost:4567" + path);
+//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//        connection.setRequestMethod("GET");
+//        //connection.setDoInput(true);
+//        
+//        
+//        connection.connect();
+//        String responseBody = IOUtils.toString(connection.getInputStream());
+//        return new TestResponse(connection.getResponseCode(), responseBody);
+//    }
+//    
+//    
+//    private static class TestResponse {
+//        public final String body;
+//        public final int status;
+//
+//        public TestResponse(int status, String body) {
+//            this.status = status;
+//            this.body = body;
+//        }
+//        
+//        
+//        public TestResponse(int status) {
+//            this.status = status;
+//            body=null;
+//        }
+//    }
+//     @Test
+//    public void testBadModuleParameter() throws IOException {
+//        TestResponse res = makeGetRequest("/staff/quizListFilter?module=----&year=2017");
+//        assertEquals(200, res.status);
+//        assertNotNull(res.body); 
+//        assertEquals("Hello World!", res.body);
+//    }
+//    @Test
+//    public void testRootRoute() throws IOException {
+//        TestResponse res = makeGetRequest("/staff/quizListFilter?module=AC&year=2017");
+//        assertEquals(200, res.status);
+//        assertNotNull(res.body); 
+//        assertEquals("Hello World!", res.body);
+//    }
+//    
+//        
+    
+    
+    
+  
     private Request req ;      
     private Response res ;
     
@@ -68,37 +156,9 @@ public class QuizListTest {
         when(req.queryParams("moduleCode")).thenReturn("AC1234");//set back
     }
     
+
     @Test
-    public void publishStatusIsRequired() throws Exception {
-        when(req.queryParams("published")).thenReturn(null);
-        String jsonResp = (String) QuizList.getFilteredQuizList(req, res);
-        assertEquals("{\"message\":\"Bad input!\"}",jsonResp);
-        when(req.queryParams("published")).thenReturn("1");
-    }
-    
-    @Test
-    public void creatorIsRequired() throws Exception {
-        when(req.queryParams("creator")).thenReturn(null);
-        String jsonResp = (String) QuizList.getFilteredQuizList(req, res);
-        assertEquals("{\"message\":\"Bad input!\"}",jsonResp);
-        when(req.queryParams("creator")).thenReturn("Iain");
-    }
-    
-    @Test
-    public void sortByIsRequired() throws Exception {
-       
-        when(req.queryParams("sortBy")).thenReturn(null);
-        String jsonResp = (String) QuizList.getFilteredQuizList(req, res);
-        assertEquals("{\"message\":\"Bad input!\"}",jsonResp);
-        when(req.queryParams("sortBy")).thenReturn("byTitle");
-    }
-    
-    
-    
-    
-    
-    @Test
-    public void moduleCodeDoesNotExist() throws SQLException {        
+    public void moduleCodeDoesNotExist() throws SQLException{        
        
         PowerMockito.when(quizModelMock.getQuizzesFiltered(any(DSLContext.class),eq("AC1234"),eq("1"), eq("Iain"), eq("byTitle"))).thenReturn(new ArrayList<>());
                 
@@ -131,6 +191,14 @@ public class QuizListTest {
 
     }
     
-    
-    
 }
+
+
+
+
+
+
+
+
+
+

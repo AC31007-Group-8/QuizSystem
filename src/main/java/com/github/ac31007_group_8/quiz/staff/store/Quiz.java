@@ -26,7 +26,9 @@ public class Quiz {
     List<Question> questions = null;
     boolean publish_status = false;
   
+    public Quiz(){
 
+    }
   
     
     public Quiz(int staff_id, Integer time_limit, String module_id, String title, boolean publish_status){

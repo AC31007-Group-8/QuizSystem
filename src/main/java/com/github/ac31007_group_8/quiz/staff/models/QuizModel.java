@@ -58,6 +58,7 @@ public class QuizModel {
     
     public ArrayList<QuizInfo> getQuizzesFiltered(DSLContext dslCont,String moduleCode,String isPublished,String creator, String sortBy) throws SQLException{
 
+
         List<Condition> conditions = new ArrayList<>();
         
         if (!moduleCode.equals("-1")){
@@ -101,14 +102,17 @@ public class QuizModel {
 
         ArrayList<QuizInfo> allQuizInfo = new ArrayList();
         
+        
         for(Record r : result){
             allQuizInfo.add(r.into(QuizInfo.class)); 
         }
         
+       
         return allQuizInfo;
         
 
     }
+    
     
     
     public void saveQuiz(Quiz quizToSave, DSLContext create) throws SQLException{

@@ -20,6 +20,22 @@ public class QuizInfo {
     String first_name = null;
     String second_name = null;
 
+    
+    public QuizInfo(int quizId, Integer time, String title, String moduleName, String module_id, boolean ps, String fName, String sName){
+        this.quizId = quizId;
+        time_limit = time;
+        this.title = title;
+        module_name= moduleName;
+        this.module_id = module_id;
+        publish_status = ps;
+        first_name = fName;
+        second_name = sName;
+    }
+    
+    public QuizInfo(){
+    }
+    
+    
     public int getQuizId() {
         return quizId;
     }
@@ -60,7 +76,7 @@ public class QuizInfo {
         this.module_id = moduleCode;
     }
 
-    public boolean isIsPublished() {
+    public boolean isPublished() {
         return publish_status;
     }
 
