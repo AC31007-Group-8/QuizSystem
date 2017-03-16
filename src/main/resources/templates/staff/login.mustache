@@ -1,1 +1,22 @@
+{{> header}}
+
 This is the login page.
+
+<br/>
+
+{{#user}}
+    You are already logged in as {{username}}. Logging in below will sign you out of your account.
+    <br/>
+{{/user}}
+
+<form action="" method="post">
+    Staff ID:<br>
+    <input type="text" name="username" value="">
+    <br>
+    Password:<br>
+    <input type="password" name="password" value="">
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
+{{> footer}}
