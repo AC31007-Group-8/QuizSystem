@@ -57,6 +57,14 @@ public class StudentLoginController {
 
         StudentLoginModel loginModel = new StudentLoginModel();
         User user = loginModel.getUser(username, password);
+
+        if (user == null)
+        {
+            //display invalid details page
+            map = ParameterManager.getAllParameters(req);
+            return eng.render(eng.modelAndView(map, "invalidUser.mustache"));
+        }
+
         req.session().attribute("user", user);
         
         map = ParameterManager.getAllParameters(req); //update after login

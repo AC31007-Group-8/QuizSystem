@@ -60,6 +60,14 @@ public class StaffLoginController {
 
         StaffLoginModel loginModel = new StaffLoginModel();
         User user = loginModel.getUser(username, password);
+
+        if (user == null)
+        {
+            //display invalid details page
+            map = ParameterManager.getAllParameters(req);
+            return eng.render(eng.modelAndView(map, "invalidUser.mustache"));
+        }
+
         req.session().attribute("user", user);
 
         map = ParameterManager.getAllParameters(req);

@@ -20,6 +20,10 @@ public class StudentLoginModel {
     public StudentLoginModel(){
         dbConnection = Database.getJooq(); //Connects to the database
     }
+    public StudentLoginModel(DSLContext dslContext)
+    {
+        dbConnection = dslContext;
+    }
 
     public boolean isValidLogin(String username, String password)
     {
@@ -54,7 +58,8 @@ public class StudentLoginModel {
             Result<Record> result = dbConnection.select().from(STUDENT).where(STUDENT.PASSWORD.equal(password).and(STUDENT.MATRIC_NUMBER.equal(username))).fetch();
 
             for(Record r : result){ //Iterates through the returned results - there should only be 1.
-                User user = new User("Student " + r.get(STUDENT.MATRIC_NUMBER));
+                User user = new User(r.get(STUDENT.EMAIL), r.get(STUDENT.STUDENT_ID).toString());
+                user.setEmail(r.get(STUDENT.EMAIL));
                 return user;
             }
         }
