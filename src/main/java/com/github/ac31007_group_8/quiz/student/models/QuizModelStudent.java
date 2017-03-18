@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record5;
 import org.jooq.Result;
 import org.jooq.exception.DataAccessException;
 
@@ -71,16 +72,14 @@ public class QuizModelStudent {
     
      public ArrayList<QuizInfo> getAllQuizInfo(DSLContext create) throws DataAccessException    {      
         ArrayList<QuizInfo> allQuizInfo = new ArrayList();
-        
-        
-        /**Creates SQL Statement**/
-        String sql = create.select(MODULE.MODULE_NAME,QUIZ.QUIZ_ID,QUIZ.TIME_LIMIT,QUIZ.TITLE,QUIZ.MODULE_ID )
-                        .from(QUIZ)
-                        .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
-                        .where( QUIZ.PUBLISH_STATUS.equal((byte)1))
-                        .getSQL();
 
-        Result<Record> result = create.fetch(sql);
+
+
+        Result<Record5<String, Integer, Integer, String, String>> result = create.select(MODULE.MODULE_NAME,QUIZ.QUIZ_ID,QUIZ.TIME_LIMIT,QUIZ.TITLE,QUIZ.MODULE_ID )
+                .from(QUIZ)
+                .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
+                .where( QUIZ.PUBLISH_STATUS.equal((byte)1))
+                .fetch();
 
         for(Record r : result){ //Iterates through the returned results 
             

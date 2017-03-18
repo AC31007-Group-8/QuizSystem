@@ -47,7 +47,7 @@ public class StudentQuizList {
 
         try{
             ArrayList<QuizInfo> quizTitles = qms.getAllQuizInfo(dslCont);
-
+            //LOGGER.info("Quiz Count: " + quizTitles.size());
             HashMap<String, Object> map = ParameterManager.getAllParameters(req);
             map.put("quizList", quizTitles);
             res.status(200);
