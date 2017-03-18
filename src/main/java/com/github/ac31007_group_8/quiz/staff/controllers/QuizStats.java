@@ -5,7 +5,9 @@ import com.github.ac31007_group_8.quiz.generated.tables.pojos.Answer;
 import com.github.ac31007_group_8.quiz.generated.tables.pojos.Question;
 import com.github.ac31007_group_8.quiz.generated.tables.pojos.Quiz;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
+import com.github.ac31007_group_8.quiz.staff.models.ResultsCSVModel;
 import com.github.ac31007_group_8.quiz.staff.models.StatsModel;
+import com.github.ac31007_group_8.quiz.util.CSVConverter;
 import com.github.ac31007_group_8.quiz.util.Init;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -45,8 +47,35 @@ public class QuizStats {
 
     @Init
     public static void init() {
+        get("/staff/getResults/csv/:id", QuizStats::getResultsCSV);
         get("/staff/getResults/:id", QuizStats::getAllResults);
         get("/staff/getResults/:id/:student", QuizStats::getResultsForStudent);
+    }
+
+    private static Object getResultsCSV(Request req, Response res) {
+        try {
+            int id = Integer.parseInt(req.params("id"));
+            ResultsCSVModel model = new ResultsCSVModel(id);
+
+            Quiz quiz = model.getQuiz();
+            if (quiz == null) throw halt(404, "{\"error\": \"no such quiz\"}");
+            Set<ResultsCSVModel.QuizResult> results = model.getResults();
+
+            CSVConverter<ResultsCSVModel.QuizResult> converter =
+                    new CSVConverter<>(ResultsCSVModel.QuizResult.class, results);
+
+            // Based on http://stackoverflow.com/q/27244780
+            res.raw().setContentType("application/octet-stream");
+            res.raw().setHeader("Content-Disposition","attachment; filename=" + id + ".csv");
+            return converter.toCSV();
+        } catch (HaltException ex) {
+            throw ex; // Propagate halt() calls
+        } catch (NumberFormatException ex) {
+            throw halt(400, "{\"error\": \"invalid id\"}");
+        } catch (Exception ex) {
+            LOGGER.error("Error handling request.", ex);
+            throw halt(500);
+        }
     }
 
     private static Object getAllResults(Request req, Response res) {

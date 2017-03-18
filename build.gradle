@@ -19,7 +19,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'com.github.ac31007_group_8.quiz'
 version = '0.0.1'
-mainClassName = 'com.github.ac31007_group_8.quiz.init.Main'
+mainClassName = "com.github.ac31007_group_8.quiz.init.Main"
 
 jooq {
     Properties props = new Properties()
@@ -73,6 +73,9 @@ jooq {
 task setup(dependsOn: generateDatabaseJooqSchemaSource) {}
 tasks.eclipse.dependsOn setup
 
+// Include Shadowed -all jar during build.
+build.dependsOn += shadowJar
+
 configurations {
     ideaCompile
 }
@@ -116,6 +119,12 @@ dependencies {
 idea {
     module {
         scopes.COMPILE.plus += [ configurations.ideaCompile ]
+    }
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "com.github.ac31007_group_8.quiz.init.Main")
     }
 }
 

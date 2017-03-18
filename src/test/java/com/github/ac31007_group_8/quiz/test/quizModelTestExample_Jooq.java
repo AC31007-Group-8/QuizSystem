@@ -5,6 +5,7 @@
  */
 package com.github.ac31007_group_8.quiz.test;
 
+import com.github.ac31007_group_8.quiz.Database;
 import static com.github.ac31007_group_8.quiz.generated.Tables.MODULE;
 import static com.github.ac31007_group_8.quiz.generated.Tables.QUIZ;
 import static com.github.ac31007_group_8.quiz.generated.Tables.STAFF;
@@ -78,8 +79,8 @@ public class quizModelTestExample_Jooq {
     
     @Before
     public void init(){
-        Connection connection = new MockConnection(provider);
-        dslCont = DSL.using(connection, MYSQL);
+        Database.setMockProvider(provider);
+        dslCont = Database.getJooq();
         qm = new QuizModel();
     }
     

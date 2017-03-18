@@ -175,7 +175,7 @@ public class StudentQuizManager {
         }
        
 
-        GoogleMail.Send("QuizResultSender1@gmail.com", "spamAllanToDeath", "vladislav.voicehovich@gmail.com", "Quiz Results", message, targetFile);
+        GoogleMail.Send("QuizResultSender1@gmail.com", "spamAllanToDeath", "mckinlayallan@gmail.com ", "Quiz Results", message, targetFile);
          
          
         targetFile.delete();

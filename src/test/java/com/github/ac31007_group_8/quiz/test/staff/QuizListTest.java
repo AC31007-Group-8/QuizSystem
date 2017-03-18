@@ -12,6 +12,7 @@ import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
@@ -122,9 +123,9 @@ public class QuizListTest {
     }
     
     @Test
-    public void modelThrowsExceptionTest() throws SQLException {        
+    public void modelThrowsExceptionTest() throws DataAccessException {        
        
-        PowerMockito.when(quizModelMock.getQuizzesFiltered(any(DSLContext.class),eq("AC1234"),eq("1"), eq("Iain"), eq("byTitle"))).thenThrow(new SQLException());
+        PowerMockito.when(quizModelMock.getQuizzesFiltered(any(DSLContext.class),eq("AC1234"),eq("1"), eq("Iain"), eq("byTitle"))).thenThrow(new DataAccessException("Exception!"));
                 
         String jsonResp = (String) QuizList.getFilteredQuizList(req, res);
         assertEquals("{\"message\":\"Exception occured\"}",jsonResp);

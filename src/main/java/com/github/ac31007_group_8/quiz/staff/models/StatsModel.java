@@ -43,8 +43,6 @@ public class StatsModel {
      * @return The Quiz object, or null if it doesn't exist.
      */
     public Quiz getQuiz() {
-       
-       
         Set<Quiz> quizzes = fetchResult.into(Quiz.class).stream().collect(Collectors.toSet());
         if (quizzes.size() > 1) throw new IllegalArgumentException("Multiple quizzes with same ID!? " + quizId);
         return quizzes.stream().findFirst().orElse(null);
