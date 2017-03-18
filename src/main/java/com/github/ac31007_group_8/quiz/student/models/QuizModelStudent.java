@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.exception.DataAccessException;
 
 /**
  *
@@ -68,7 +69,7 @@ public class QuizModelStudent {
     
     
     
-     public ArrayList<QuizInfo> getAllQuizInfo(DSLContext create) throws SQLException    {      
+     public ArrayList<QuizInfo> getAllQuizInfo(DSLContext create) throws DataAccessException    {      
         ArrayList<QuizInfo> allQuizInfo = new ArrayList();
         
         

@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import static spark.Spark.*;
 import java.sql.SQLException;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +66,8 @@ public class QuizList {
 
         
         }
-        catch (SQLException sqle){
-            LOGGER.error("SQLException", sqle);
+        catch (DataAccessException dae){
+            LOGGER.error("SQLException", dae);
             res.status(500);
             return "Database error";//or make error page?   
         }
@@ -105,8 +106,8 @@ public class QuizList {
             return json;
           
         }
-        catch (SQLException sqle){
-            LOGGER.error("SQLException occured!", sqle);
+        catch (DataAccessException dae){
+            LOGGER.error("SQL Exception occured!", dae);
             res.status(500);
             return "{\"message\":\"Exception occured\"}";
         }

@@ -1,6 +1,5 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
-import com.github.ac31007_group_8.quiz.Configuration;
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizManager;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
@@ -13,25 +12,25 @@ import java.util.*;
 import java.util.logging.Logger;
 
 
-import com.github.ac31007_group_8.quiz.student.*;
+
 import com.github.ac31007_group_8.quiz.staff.store.*;
 import com.github.ac31007_group_8.quiz.util.GoogleMail;
+
 
 import static spark.Spark.*;
 
 import io.github.gitbucket.markedj.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
-import javax.servlet.ServletContext;
 import org.slf4j.LoggerFactory;
+
 
 
 
@@ -119,7 +118,6 @@ public class StudentQuizManager {
 
             for (String value:values) {
                 answerIDs.add(Integer.parseInt(value));
-                Logger.getGlobal().info("Adding answer with ID: " + value);
             }
         }
 
@@ -135,6 +133,8 @@ public class StudentQuizManager {
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss");
         String pageHtml = createHtml(questions, answerIDs, quiz, score, df.format(sqlDate), duration);
         
+       
+        
         try{
             String message = "Quiz results for quiz: "+quiz.getTitle();
             sendEmail(pageHtml, message);
@@ -145,7 +145,7 @@ public class StudentQuizManager {
         }
         catch(AddressException ae){
             LOGGER.error("Wrong format of email address", ae);
-           
+           //add could not send email text to endQuiz
         }
         catch(MessagingException me){
             LOGGER.error("MessagingException", me);
@@ -169,17 +169,16 @@ public class StudentQuizManager {
         
         File targetFile = new File(path, fileName);
         targetFile.deleteOnExit();//if for some reason is not deleted when has to
-        
-        PrintWriter writer = new PrintWriter(targetFile);
-        writer.println(pageHtml);
-        writer.flush();
-        writer.close();
+        try (PrintWriter writer = new PrintWriter(targetFile)) {
+            writer.println(pageHtml);
+            writer.flush();
+        }
        
 
         GoogleMail.Send("QuizResultSender1@gmail.com", "spamAllanToDeath", "vladislav.voicehovich@gmail.com", "Quiz Results", message, targetFile);
          
          
-         targetFile.delete();
+        targetFile.delete();
        
         
         
@@ -216,7 +215,7 @@ public class StudentQuizManager {
                 String answerList ="";
                 for (Answer a:qAnswers){
                     
-                    String correctnessSpan = a.isCorrect()?"<span style='padding-left:10px; color:#3dbc3d' title='correct answer'>&#10004;</span>":"<span style='padding-left:10px; color:red' title='incorrect answer'>&#x2717;</span>";
+                    String correctnessSpan = a.isCorrect()?"<span style='padding-left:10px; color:#3dbc3d' title='correct answer'>&euro;</span>":"<span style='padding-left:10px; color:red' title='incorrect answer'>&#x2717;</span>";
                     
                     if (answersByStudent.contains(a.getAnswer_id())){
                         String answeredCorrectlySpan = a.isCorrect()?"<span style='padding-left:10px;' title='your answer'>&#9899;</span>":"<span style='padding-left:10px;' title='your answer'>&#9898;</span>" ; 
@@ -249,33 +248,7 @@ public class StudentQuizManager {
 
     }
     
-    private static void createPdf(List<Question> allQuestions, List<Integer> answersByStudent ) {
-        //        try {
-//            String k = "<html><body><h1 style=\"color:red\">Quiz results</h1></body></html>";
-//
-//           
-//            Options options = new  Options();
-//            options.setXhtml(true);//without this does not close img tag and cannot create pdf :(
-//            String s = Marked.marked( allQuestions.get(0).getQuestion(), options);
-//            
-//            
-//            System.out.println(s);
-            
-            
-//            OutputStream file = new FileOutputStream(new File("C:\\Users\\Vlad\\Documents\\NetBeansProjects\\QuizSystem\\Test.pdf"));
-//            
-//            Document document = new Document();
-//            PdfWriter writer = PdfWriter.getInstance(document, file);
-//            document.open();
-//            InputStream is = new ByteArrayInputStream(s.getBytes());
-//            XMLWorkerHelper.getInstance().parseXHtml(writer, document, is);
-//            document.close();
-//            file.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        
-    }
+    
     
     
     

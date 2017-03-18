@@ -60,11 +60,12 @@ public class QuizManagerStudent {
             
         }
         catch(SQLException sqle){
-            System.out.println("SQL exception happened :(");
+            LOGGER.error("SQL exception happened !", sqle);
+            return "sql exception";
         }
         
         
-        return null;
+       
         
         
         

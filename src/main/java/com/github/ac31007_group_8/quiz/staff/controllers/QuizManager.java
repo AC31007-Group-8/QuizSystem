@@ -71,9 +71,10 @@ public class QuizManager {
             return eng.render(eng.modelAndView(map, "staff/createQuiz.mustache"));
             
         }
-        catch (SQLException sqle){
-            System.out.println("Sqlexception in sendQuizForm :(");
-               return "{\"message\":\"error occured!\"}";
+        catch (DataAccessException dae){
+            LOGGER.error("Sql Exception occured!", dae);
+            res.status(500);
+            return "{\"message\":\"error occured!\"}";
         }
         
 
@@ -133,12 +134,7 @@ public class QuizManager {
             LOGGER.error("Could not parse json", e);
             res.status(400);
             return "{\"message\":\"Bad input! This shouldn't happen if you don't mess with javascript!\"}";
-        }
-        catch (SQLException e){
-            LOGGER.error("SQLException", e);
-            res.status(500);
-            return "{\"message\":\"Database error\"}";
-        }
+        }      
         catch (DataAccessException e){
             LOGGER.error("Data access violation", e);
             res.status(400);

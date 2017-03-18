@@ -2,10 +2,10 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
 import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.staff.controllers.QuizManager;
 import com.github.ac31007_group_8.quiz.student.models.QuizModelStudent;
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
 import com.github.ac31007_group_8.quiz.util.Init;
-import java.sql.SQLException;
 import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
@@ -14,6 +14,8 @@ import spark.template.mustache.MustacheTemplateEngine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.jooq.DSLContext;
+import org.jooq.exception.DataAccessException;
+import org.slf4j.LoggerFactory;
 
 import static spark.Spark.*;
 
@@ -23,6 +25,8 @@ import static spark.Spark.*;
  */
 public class StudentQuizList {
 
+    
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(QuizManager.class);
     public StudentQuizList(){
 
     }
@@ -46,8 +50,9 @@ public class StudentQuizList {
             TemplateEngine eng = new MustacheTemplateEngine();
             return eng.render(eng.modelAndView(map, "student/quizListStudent.mustache"));
         }
-        catch (SQLException sqle){
-            return null;
+        catch (DataAccessException dae){
+            LOGGER.error("SQL exception happened !", dae);
+            return "Sql exception";
         }
         
         
