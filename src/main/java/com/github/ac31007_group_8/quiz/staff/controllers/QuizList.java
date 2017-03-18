@@ -2,6 +2,9 @@
 package com.github.ac31007_group_8.quiz.staff.controllers;
 
 import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
+import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
@@ -44,7 +47,8 @@ public class QuizList {
 
         DSLContext dslCont = Database.getJooq();
         QuizModel quizModel = new QuizModel();
-        HashMap<String, Object> map = new HashMap<>();
+
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
          
         try{
         
@@ -77,7 +81,14 @@ public class QuizList {
             return "Exception occured!";
         }
         
+
+        ArrayList<Quiz> quizTitles = quizModel.getQuizAll();
         
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
+        map.put("quizList", quizTitles);
+        res.status(200);
+        TemplateEngine eng = new MustacheTemplateEngine();
+        return eng.render(eng.modelAndView(map, "quizList.mustache"));
 
     }
 
