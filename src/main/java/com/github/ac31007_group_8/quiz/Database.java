@@ -9,6 +9,7 @@ import org.jooq.tools.jdbc.MockDataProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -89,7 +90,7 @@ public class Database {
      *
      * @param mockDataProvider The mock provider, or null to disable again.
      */
-    public static void setMockProvider(MockDataProvider mockDataProvider) {
+    public static void setMockProvider(@Nullable MockDataProvider mockDataProvider) {
         Database.mockDataProvider = mockDataProvider;
     }
 
