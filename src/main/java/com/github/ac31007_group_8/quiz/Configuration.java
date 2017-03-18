@@ -1,10 +1,19 @@
 package com.github.ac31007_group_8.quiz;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Application configuration.
@@ -28,12 +37,23 @@ public class Configuration {
         props = new Properties();
         File propsFile = new File("config.properties");
         if (propsFile.exists() && propsFile.isFile() && propsFile.canRead()) {
+            // Load from disk
             try {
                 FileInputStream inputStream = new FileInputStream(propsFile);
                 props.load(inputStream);
                 inputStream.close();
             } catch (Exception ex) {
                 // This shouldn't ever happen.
+                throw new RuntimeException(ex);
+            }
+        } else {
+            // Load from classpath
+            try {
+                InputStream is = Configuration.class.getClassLoader().getResourceAsStream("config.properties");
+                props.load(is);
+            } catch (NullPointerException ex) {
+                // Pass - not on classpath.
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
