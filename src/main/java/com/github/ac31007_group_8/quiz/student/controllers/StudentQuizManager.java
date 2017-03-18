@@ -1,5 +1,6 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
@@ -43,7 +44,7 @@ public class StudentQuizManager {
         if (quizIDString == (null) || quizIDString.equals(""))
         {
             //display error page
-            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
+            throw halt(400, eng.render(eng.modelAndView(map, "invalidQuiz.mustache")));
         }
         int quizID = Integer.parseInt(quizIDString);
 
@@ -52,13 +53,13 @@ public class StudentQuizManager {
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
         if (quiz == null)
         {
-            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
+            throw halt(400, eng.render(eng.modelAndView(map, "invalidQuiz.mustache")));
         }
 
         //Don't show quiz if unpublished
         if (!quiz.isPublish_status())
         {
-            return eng.render(eng.modelAndView(map, "student/unpublishedQuiz.mustache"));
+            return eng.render(eng.modelAndView(map, "unpublishedQuiz.mustache"));
         }
 
       
@@ -66,7 +67,7 @@ public class StudentQuizManager {
         map.put("quizID", quizID);
         map.put("allQuestions", allQuestions);
 
-        return eng.render(eng.modelAndView(map, "student/takeQuiz.mustache"));
+        return eng.render(eng.modelAndView(map, "takeQuiz.mustache"));
 
     }
 
@@ -116,10 +117,10 @@ public class StudentQuizManager {
         //as well as all the answerIDs submitted by user, for this resultID, into the result_to_answer linking table.
         quizModel.writeResult(score, quizID, studentID, sqlDate, duration, answerIDs);
 
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
 
         TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "student/endQuiz.mustache"));
+        return eng.render(eng.modelAndView(map, "endQuiz.mustache"));
 
     }
     

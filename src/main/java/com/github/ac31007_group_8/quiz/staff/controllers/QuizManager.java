@@ -6,6 +6,7 @@
 package com.github.ac31007_group_8.quiz.staff.controllers;
 
 import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.staff.store.Answer;
 import com.github.ac31007_group_8.quiz.staff.store.Question;
@@ -54,7 +55,7 @@ public class QuizManager {
     public static Object sendQuizForm(Request req, Response res){
        
         QuizModel qm = new QuizModel();
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
         
         try{
             DSLContext dslCont = Database.getJooq(); //Connects to the database
@@ -68,7 +69,7 @@ public class QuizManager {
             map.put("allModules", allModules);
             TemplateEngine eng = new MustacheTemplateEngine();//TemplateEngine eng = new MustacheTemplateEngine(new DefaultMustacheFactory(new File("./src/main/webapp/WEB-INF")));
 
-            return eng.render(eng.modelAndView(map, "staff/createQuiz.mustache"));
+            return eng.render(eng.modelAndView(map, "createQuiz.mustache"));
             
         }
         catch (SQLException sqle){

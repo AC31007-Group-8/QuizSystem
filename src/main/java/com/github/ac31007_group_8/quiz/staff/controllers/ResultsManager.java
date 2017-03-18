@@ -1,5 +1,6 @@
 package com.github.ac31007_group_8.quiz.staff.controllers;
 
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
@@ -46,13 +47,13 @@ public class ResultsManager {
         studentID = 1; //Place holder no login atm
 
         //specify values to be displayed on page:
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
         map.put("quiz", quizID); //passing values to mustache to be displayed on the page by putting them in a hashmap
         map.put("testKey", "testVal");
 
         //render page:
         TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "staff/viewResults.mustache"));
+        return eng.render(eng.modelAndView(map, "viewResults.mustache"));
 
 
     }

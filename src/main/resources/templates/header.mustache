@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="headerStyle.css">
+    <link rel="stylesheet" type="text/css" href="{{baseURL}}/headerStyle.css">
 
 </head>
 
@@ -19,7 +19,7 @@
 
         <!-- Logo -->
         <div class="navbar-header">
-            <a href="main" class="navbar-brand"> <img class="img-responsive" style="width:256px;" src="Logo.png"> <small style="float:right;">Be Inquisitive.</small> </a>
+            <a href="main" class="navbar-brand"> <img class="img-responsive" style="width:256px;" src="{{baseURL}}/Logo.png"> <small style="float:right;">Be Inquisitive.</small> </a>
         </div>
 
         <!-- Navigation buttons -->
@@ -28,19 +28,29 @@
 
             <!--Left Side-->
             <ul class="nav navbar-nav">
+            {{#user}}
+                {{#isStaff}}
                 <li> <a href="{{baseURL}}/staff/quizList"> Quiz List </a></li>
                 <li> <a href="{{baseURL}}/staff/createQuiz"> Create Quiz </a></li>
+                {{/isStaff}}
+                {{^isStaff}}
+                    <li> <a href="{{baseURL}}/student/studentQuizList"> Quiz List  </a></li>
+                {{/isStaff}}
+            {{/user}}
+            {{^user}}
+                <li> <a href="{{baseURL}}/student/login"> Please log in to use this website. </a></li>
+            {{/user}}
             </ul>
 
             <!--Right Side-->
             <ul class="nav navbar-nav navbar-right">
                 {{#user}}
 					<li> <a href="{{baseURL}}/staff/viewProfile"> Logged in as {{username}} </a></li>
-                    <li> <a href="{{baseURL}}/logOut"> Log out </a></li>
+                    <li> <a href="{{baseURL}}/logout"> Log out </a></li>
                 {{/user}}
                 {{^user}}
                     <li> <a href="{{baseURL}}/staff/login">Staff Login </a></li>
-                    <li> <a href="{{baseURL}}/staff/login">Student Login </a></li>
+                    <li> <a href="{{baseURL}}/student/login">Student Login </a></li>
                 {{/user}}
 
 

@@ -1,5 +1,6 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.student.models.StudentResultModel;
 import com.github.ac31007_group_8.quiz.util.Init;
@@ -33,14 +34,14 @@ public class StudentResultManager {
     public static Object serveGetResult(Request req, Response res){
 
         TemplateEngine eng = new MustacheTemplateEngine();
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
 
         String quizIDString = req.queryParams("quizID");//don't need this
         int resultID = Integer.parseInt(req.queryParams("resultID"));
         if (quizIDString == (null) || quizIDString.equals(""))
         {
             //display error page
-            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
+            throw halt(400, eng.render(eng.modelAndView(map, "invalidQuiz.mustache")));
         }
         int quizID = Integer.parseInt(quizIDString);
 
@@ -48,12 +49,12 @@ public class StudentResultManager {
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
         if (quiz == null)
         {
-            throw halt(400, eng.render(eng.modelAndView(map, "student/invalidQuiz.mustache")));
+            throw halt(400, eng.render(eng.modelAndView(map, "invalidQuiz.mustache")));
         }
 
         if (!quiz.isPublish_status())
         {
-            return eng.render(eng.modelAndView(map, "student/unpublishedQuiz.mustache"));
+            return eng.render(eng.modelAndView(map, "unpublishedQuiz.mustache"));
         }
 
         StudentResultModel studResMod = new StudentResultModel();
@@ -78,7 +79,7 @@ public class StudentResultManager {
 
 
 
-        return eng.render(eng.modelAndView(map, "student/getResult.mustache"));
+        return eng.render(eng.modelAndView(map, "getResult.mustache"));
 
     }
  

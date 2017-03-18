@@ -1,8 +1,8 @@
-package com.github.ac31007_group_8.quiz.staff.controllers;
+package com.github.ac31007_group_8.quiz.student.controllers;
 
 import com.github.ac31007_group_8.quiz.common.ParameterManager;
-import com.github.ac31007_group_8.quiz.staff.models.StaffLoginModel;
 import com.github.ac31007_group_8.quiz.staff.store.User;
+import com.github.ac31007_group_8.quiz.student.models.StudentLoginModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
 import spark.Response;
@@ -17,19 +17,18 @@ import static spark.Spark.halt;
 import static spark.Spark.post;
 
 /**
- * Created by Can on 07/03/2017.
+ * Created by Can on 16/03/2017.
  */
-public class StaffLoginController {
+public class StudentLoginController {
 
-    public StaffLoginController(){
+    public StudentLoginController(){
 
     }
 
     @Init
     public static void init() {
-        get("/staff/login", StaffLoginController::serveLogin);
-        post("/staff/login", "application/json", StaffLoginController::receiveLogin);
-        get("/logout", StaffLoginController::serveLogout);
+        get("/student/login", StudentLoginController::serveLogin);
+        post("/student/login", "application/json", StudentLoginController::receiveLogin);
     }
 
     public static Object serveLogin(Request req, Response res) {
@@ -38,9 +37,7 @@ public class StaffLoginController {
         TemplateEngine eng = new MustacheTemplateEngine();
         HashMap<String, Object> map = ParameterManager.getAllParameters(req);
 
-        Logger.getGlobal().info("User is null: " + (req.session().attribute("user")==null));
-
-        return eng.render(eng.modelAndView(map, "staffLogin.mustache"));
+        return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
     }
 
     public static Object receiveLogin(Request req, Response res) {
@@ -58,26 +55,12 @@ public class StaffLoginController {
             throw halt(400, eng.render(eng.modelAndView(map, "badRequest.mustache")));
         }
 
-        StaffLoginModel loginModel = new StaffLoginModel();
+        StudentLoginModel loginModel = new StudentLoginModel();
         User user = loginModel.getUser(username, password);
         req.session().attribute("user", user);
-
-        map = ParameterManager.getAllParameters(req);
-
-        return eng.render(eng.modelAndView(map, "staffLogin.mustache"));
+        
+        map = ParameterManager.getAllParameters(req); //update after login
+        return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
     }
-
-    public static Object serveLogout(Request req, Response res) {
-
-        req.session().removeAttribute("user");
-        //Sat up template engine
-        TemplateEngine eng = new MustacheTemplateEngine();
-        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
-
-        Logger.getGlobal().info("User is null: " + (req.session().attribute("user")==null));
-
-        return eng.render(eng.modelAndView(map, "staffLogin.mustache"));
-    }
-
 
 }
