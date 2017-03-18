@@ -19,7 +19,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'com.github.ac31007_group_8.quiz'
 version = '0.0.1'
-mainClassName = 'com.github.ac31007_group_8.quiz.init.Main'
+mainClassName = "com.github.ac31007_group_8.quiz.init.Main"
 
 jooq {
     Properties props = new Properties()
@@ -73,6 +73,9 @@ jooq {
 task setup(dependsOn: generateDatabaseJooqSchemaSource) {}
 tasks.eclipse.dependsOn setup
 
+// Include Shadowed -all jar during build.
+build.dependsOn += shadowJar
+
 configurations {
     ideaCompile
 }
@@ -98,22 +101,18 @@ dependencies {
     testCompile group: 'org.powermock', name: 'powermock-core', version: '1.6.6'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.6.6'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.6'
-
-   
     compile group: 'io.github.gitbucket', name: 'markedj', version: '1.0.9'
-    
-
-
-
-           
-          
-    
-    
 }
 
 idea {
     module {
         scopes.COMPILE.plus += [ configurations.ideaCompile ]
+    }
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "com.github.ac31007_group_8.quiz.init.Main")
     }
 }
 
