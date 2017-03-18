@@ -61,12 +61,10 @@ public class QuizList {
             for (QuizInfo q:quizTitles){
                 System.out.println(q);
             }
-
-           
             
             res.status(200);
             TemplateEngine eng = new MustacheTemplateEngine();
-            return eng.render(eng.modelAndView(map, "staff/quizList.mustache"));
+            return eng.render(eng.modelAndView(map, "quizList.mustache"));
 
         
         }
@@ -80,15 +78,6 @@ public class QuizList {
             res.status(500);
             return "Exception occured!";
         }
-        
-
-        ArrayList<Quiz> quizTitles = quizModel.getQuizAll();
-        
-        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
-        map.put("quizList", quizTitles);
-        res.status(200);
-        TemplateEngine eng = new MustacheTemplateEngine();
-        return eng.render(eng.modelAndView(map, "quizList.mustache"));
 
     }
 
