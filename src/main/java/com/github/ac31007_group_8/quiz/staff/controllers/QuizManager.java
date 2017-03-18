@@ -109,7 +109,7 @@ public class QuizManager {
             DSLContext dslCont = Database.getJooq(); 
             QuizModel qm = new QuizModel();
             
-            System.out.println(quizToSave);
+            
             boolean isValid = validateQuiz(quizToSave);
 
             if (isValid){

@@ -189,11 +189,7 @@ public class StudentQuizModel {
         {
             int resultID = record.get(RESULT.RESULT_ID);
 
-            Logger.getGlobal().info("Recording answers for result ID: " + resultID);
-
-            //write each submitted answer into DB
             for (Integer answerID : answerIDs) {
-                Logger.getGlobal().info("Record answer, ID: " + answerID);
                 dbConnection.insertInto(RESULT_TO_ANSWER, RESULT_TO_ANSWER.RESULT_ID, RESULT_TO_ANSWER.ANSWER_ID)
                         .values(resultID, answerID).execute();
             }

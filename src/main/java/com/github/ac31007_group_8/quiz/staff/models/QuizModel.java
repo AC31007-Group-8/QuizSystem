@@ -20,6 +20,7 @@ import org.jooq.Record;
 import org.jooq.Record8;
 import org.jooq.Result;
 import org.jooq.SortField;
+import org.jooq.exception.DataAccessException;
 import static org.jooq.impl.DSL.val;
 
 /**
@@ -32,7 +33,7 @@ public class QuizModel {
     }
     
     
-    public ArrayList<QuizInfo> getAllQuizInfo(DSLContext create) throws SQLException    {      
+    public ArrayList<QuizInfo> getAllQuizInfo(DSLContext create) throws DataAccessException    {      
         
         ArrayList<QuizInfo> allQuizInfo = new ArrayList();
         
@@ -56,7 +57,7 @@ public class QuizModel {
     
 
     
-    public ArrayList<QuizInfo> getQuizzesFiltered(DSLContext dslCont,String moduleCode,String isPublished,String creator, String sortBy) throws SQLException{
+    public ArrayList<QuizInfo> getQuizzesFiltered(DSLContext dslCont,String moduleCode,String isPublished,String creator, String sortBy) throws DataAccessException{
 
 
         List<Condition> conditions = new ArrayList<>();
@@ -115,9 +116,8 @@ public class QuizModel {
     
     
     
-    public void saveQuiz(Quiz quizToSave, DSLContext create) throws SQLException{
+    public void saveQuiz(Quiz quizToSave, DSLContext create) throws DataAccessException{
         
-            //dafuck ??? 865ms to save this!!?
         
             //store quiz
             QuizRecord quizR = create.newRecord(QUIZ, quizToSave);
@@ -125,7 +125,7 @@ public class QuizModel {
             Integer quizId = quizR.getQuizId();
            
           
-            long start = System.currentTimeMillis();
+          
             quizToSave.getQuestions().stream().map((nextQuest) -> {
                 //store question
                 QuestionRecord questionR = create.newRecord(QUESTION, nextQuest);
@@ -141,19 +141,19 @@ public class QuizModel {
                 }
                 return answers;
             }).forEach((answers) -> {
-                System.out.println( System.currentTimeMillis()-start);
+              
                 create.batchInsert(answers).execute();
-                 System.out.println( System.currentTimeMillis()-start);
+               
             });
             
             
-            System.out.println( System.currentTimeMillis()-start);
+           
         
         
     }
         
       
-    public ArrayList<String> getModuleList(DSLContext dslCont) throws SQLException{
+    public ArrayList<String> getModuleList(DSLContext dslCont) throws DataAccessException{
         
         DSLContext create = Database.getJooq();
     

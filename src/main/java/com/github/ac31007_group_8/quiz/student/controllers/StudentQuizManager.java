@@ -1,5 +1,7 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
+import com.github.ac31007_group_8.quiz.Configuration;
+import com.github.ac31007_group_8.quiz.staff.controllers.QuizManager;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import spark.Request;
@@ -10,14 +12,26 @@ import spark.template.mustache.MustacheTemplateEngine;
 import java.util.*;
 import java.util.logging.Logger;
 
+
 import com.github.ac31007_group_8.quiz.student.*;
 import com.github.ac31007_group_8.quiz.staff.store.*;
+import com.github.ac31007_group_8.quiz.util.GoogleMail;
 
 import static spark.Spark.*;
-import com.google.gson.*;
-import org.apache.commons.lang3.tuple.*;
 
 import io.github.gitbucket.markedj.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.servlet.ServletContext;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -29,7 +43,8 @@ public class StudentQuizManager {
     public StudentQuizManager(){
 
     }
-
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(QuizManager.class);
+    
     @Init
     public static void init() {
         get("/student/takeQuiz", StudentQuizManager::serveTakeQuiz);
@@ -37,7 +52,8 @@ public class StudentQuizManager {
     }
 
     public static Object serveTakeQuiz(Request req, Response res){
-
+        
+        
         //Sat up template engine
         TemplateEngine eng = new MustacheTemplateEngine();
         HashMap<String, Object> map = new HashMap<>();
@@ -107,23 +123,37 @@ public class StudentQuizManager {
             }
         }
 
-        //retrieve quiz from DB
+
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
-
-        //calculate score
         int score = calculateScore(answerIDs, quiz);
-
-        //placeholder value until student logins are implemented in sprint 2
-        //TODO: Replace with the actual studentID.
         int studentID = 1;
-
-        
         java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
-
-        //ask model to write to database: duration, Score, quiz_id, student_id, date
-        //as well as all the answerIDs submitted by user, for this resultID, into the result_to_answer linking table.
         quizModel.writeResult(score, quizID, studentID, sqlDate, duration, answerIDs);
 
+        
+        //SEND EMAIL
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss");
+        String pageHtml = createHtml(questions, answerIDs, quiz, score, df.format(sqlDate), duration);
+        
+        try{
+            String message = "Quiz results for quiz: "+quiz.getTitle();
+            sendEmail(pageHtml, message);
+        }
+        catch(FileNotFoundException fnfe){
+            LOGGER.error("File not found", fnfe);
+           
+        }
+        catch(AddressException ae){
+            LOGGER.error("Wrong format of email address", ae);
+           
+        }
+        catch(MessagingException me){
+            LOGGER.error("MessagingException", me);
+           
+        }
+         
+        
+        
         HashMap<String, Object> map = new HashMap<>();
 
         TemplateEngine eng = new MustacheTemplateEngine();
@@ -131,6 +161,121 @@ public class StudentQuizManager {
 
     }
     
+    
+    private static void sendEmail(String pageHtml, String message) throws FileNotFoundException, AddressException, MessagingException{
+       
+        String fileName = UUID.randomUUID().toString()+".html";
+        String path = StudentQuizManager.class.getResource("/temp").getPath();
+        
+        File targetFile = new File(path, fileName);
+        targetFile.deleteOnExit();//if for some reason is not deleted when has to
+        
+        PrintWriter writer = new PrintWriter(targetFile);
+        writer.println(pageHtml);
+        writer.flush();
+        writer.close();
+       
+
+        GoogleMail.Send("QuizResultSender1@gmail.com", "spamAllanToDeath", "vladislav.voicehovich@gmail.com", "Quiz Results", message, targetFile);
+         
+         
+         targetFile.delete();
+       
+        
+        
+        
+    }
+    
+    
+    private static String createHtml(List<Question> allQuestions, List<Integer> answersByStudent, Quiz quiz, int score,String whenTaken, int duration) {
+
+      
+            Options options = new  Options();
+            options.setXhtml(true);//without this does not close img tag and cannot create pdf
+            
+            //I have tried using html generation libraries (rendersnake and ecs), but it looks even messier due to iteration
+            //And gmail attachment viewer does not support <style> tag -- only inline
+            
+            //SUMMARY
+            String quizModuleCode = "<li class='summaryItem' style='font-weight:bolder;'>Module code: <span style='font-weight:normal; padding-left:10px; color:yellowgreen;'>"+quiz.getModule_id()+"</span></li>";
+            String quizTitle = "<li class='summaryItem' style='font-weight:bolder;'>Title: <span style='font-weight:normal; padding-left:10px; color:yellowgreen;'>"+quiz.getTitle()+"</span></li>";
+            String quizScore = "<li class='summaryItem' style='font-weight:bolder;'>Score: <span style='font-weight:normal; padding-left:10px; color:yellowgreen;'>"+score+"</span></li>";
+            String quizTimeTaken = "<li class='summaryItem' style='font-weight:bolder;'>Time taken: <span style='font-weight:normal; padding-left:10px; color:yellowgreen;'>"+duration+"</span></li>";
+            String quizWhenTaken = "<li class='summaryItem' style='font-weight:bolder;'>Date: <span style='font-weight:normal; padding-left:10px; color:yellowgreen;'>"+whenTaken+"</span></li>";
+            String summary = "<div style='padding:25px; background-color:grey;color:white;'><h1>Summary</h1><ul style='font-size:larger;'>"+quizModuleCode+quizTitle+quizScore+quizTimeTaken+quizWhenTaken+"</ul></div>";
+            
+            
+            //QUESTIONS
+            String allQuestionHtml = "";
+            int counter =0;
+            for (Question q:allQuestions){
+                counter++;
+                String qTextDiv = "<div style='padding-top:20px;'><label style='font-weight:bolder; font-size:large;'>Text:</label>"+Marked.marked( q.getQuestion(), options)+"</div>";                
+                String explanationDiv = "<div style='padding-top:20px;'><label style='font-weight:bolder; font-size:large;'>Explanation:</label><div>"+q.getExplanation()+"</div></div>";
+                ArrayList<Answer> qAnswers = q.getAnswers();
+                String answerList ="";
+                for (Answer a:qAnswers){
+                    
+                    String correctnessSpan = a.isCorrect()?"<span style='padding-left:10px; color:#3dbc3d' title='correct answer'>&#10004;</span>":"<span style='padding-left:10px; color:red' title='incorrect answer'>&#x2717;</span>";
+                    
+                    if (answersByStudent.contains(a.getAnswer_id())){
+                        String answeredCorrectlySpan = a.isCorrect()?"<span style='padding-left:10px;' title='your answer'>&#9899;</span>":"<span style='padding-left:10px;' title='your answer'>&#9898;</span>" ; 
+                        answerList+= "<li>"+a.getAnswer()+correctnessSpan+answeredCorrectlySpan+"</li>";
+                    }
+                    else{
+                        answerList+= "<li>"+a.getAnswer()+correctnessSpan+"</li>";
+                    }
+                    
+                    
+                    
+                }
+                answerList = "<div style='padding-top:20px;'><label style='font-weight:bolder; font-size:large;'>Options:</label><ol>"+answerList+"</ol></div>";
+                
+               
+                String bgColor = "background-color: "+ ((counter%2==1)? "papayawhip":"none");
+                allQuestionHtml+=  "<div style='padding:25px; "+bgColor+";' ><h1>Question "+counter+"</h1>"+qTextDiv+answerList+explanationDiv+"</div>";
+                
+            }
+            
+            //PUT TOGETHER
+           
+            String contentDiv = "<div style='margin:25px'>"+summary+allQuestionHtml+"</div>";
+            String allHtml = "<html><head></head><body>"+contentDiv+"</body></html>";
+            
+            return allHtml;
+            
+            
+      
+
+    }
+    
+    private static void createPdf(List<Question> allQuestions, List<Integer> answersByStudent ) {
+        //        try {
+//            String k = "<html><body><h1 style=\"color:red\">Quiz results</h1></body></html>";
+//
+//           
+//            Options options = new  Options();
+//            options.setXhtml(true);//without this does not close img tag and cannot create pdf :(
+//            String s = Marked.marked( allQuestions.get(0).getQuestion(), options);
+//            
+//            
+//            System.out.println(s);
+            
+            
+//            OutputStream file = new FileOutputStream(new File("C:\\Users\\Vlad\\Documents\\NetBeansProjects\\QuizSystem\\Test.pdf"));
+//            
+//            Document document = new Document();
+//            PdfWriter writer = PdfWriter.getInstance(document, file);
+//            document.open();
+//            InputStream is = new ByteArrayInputStream(s.getBytes());
+//            XMLWorkerHelper.getInstance().parseXHtml(writer, document, is);
+//            document.close();
+//            file.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        
+    }
     
     
     

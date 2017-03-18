@@ -292,8 +292,8 @@ function submit(){
           }
           
           //explanation
-          nextQuestion.explanation = $(this).find("textarea").eq(1).val().trim();
-          
+          nextQuestion.explanation = $(this).find("textarea").eq(2).val().trim();
+        
           //answers
           var hasCorrect = false;
           $(this).find(".allOptions .option-row").each(function(ind){//this here is an option row
