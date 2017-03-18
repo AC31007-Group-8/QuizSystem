@@ -4,6 +4,8 @@ import com.github.ac31007_group_8.quiz.util.CircularBuffer;
 
 import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.jooq.tools.jdbc.MockConnection;
+import org.jooq.tools.jdbc.MockDataProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +26,7 @@ public class Database {
 
     private static String DB_URL;
     private static Logger LOGGER = LoggerFactory.getLogger(Database.class);
+    private static MockDataProvider mockDataProvider = null;
     private static CircularBuffer<Connection> connBuffer = new CircularBuffer<>(8, (conn) -> {
         try {
             conn.close();
@@ -50,7 +53,12 @@ public class Database {
      */
     public static Connection getConnection() {
         try {
-            Connection conn = DriverManager.getConnection(getURL(), Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD);
+            Connection conn;
+            if (mockDataProvider != null) {
+                conn = new MockConnection(mockDataProvider);
+            } else {
+                conn = DriverManager.getConnection(getURL(), Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD);
+            }
             // The buffer will automatically close connections after 8 other connections have been established,
             // keeping our 'live' connection count to, at worst, 8.
             connBuffer.add(conn);
@@ -73,6 +81,16 @@ public class Database {
      */
     public static DSLContext getJooq() {
         return DSL.using(getConnection(), SQLDialect.MYSQL);
+    }
+
+    /**
+     * Allows overriding jOOQ connections returned by getJooq() via the jOOQ MockDataProvider. This affects ALL jOOQ
+     * connections (via getJooq) after this point! Passing null reverts the behaviour to normal.
+     *
+     * @param mockDataProvider The mock provider, or null to disable again.
+     */
+    public static void setMockProvider(MockDataProvider mockDataProvider) {
+        Database.mockDataProvider = mockDataProvider;
     }
 
 }
