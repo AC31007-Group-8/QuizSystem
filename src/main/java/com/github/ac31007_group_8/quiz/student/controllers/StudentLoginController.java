@@ -69,7 +69,10 @@ public class StudentLoginController {
         req.session().attribute("user", user);
         
         map = ParameterManager.getAllParameters(req); //update after login
-        return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
+
+        res.redirect(ParameterManager.getBaseURL(req) + "studentQuizList");
+        return null;
+        //return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
     }
 
 }
