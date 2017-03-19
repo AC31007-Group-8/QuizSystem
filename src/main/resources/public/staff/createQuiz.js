@@ -216,7 +216,7 @@ function removeQuestion(target){
     
 }
 
-function submit(){
+function submit(contextPath){
     
     
     $(".error-highlight").removeClass("error-highlight");
@@ -334,7 +334,7 @@ function submit(){
         
         
         $.ajax({
-               url: "/staff/createQuiz",
+               url: contextPath+"/staff/createQuiz",
                type: "POST",
                data: JSON.stringify(allData),
                contentType:  "application/json;",
@@ -343,7 +343,7 @@ function submit(){
                  
                  
                  
-                 $("body").html(''+
+                 $("#createQuizHolder").html(''+
                         '<div class="panel panel-default panel-custom">'+
                             '<div class="panel-body">'+
                                 '<h2>'+data.message+'</h2>'+
@@ -354,7 +354,7 @@ function submit(){
                },
                error: function(jqXHR, textStatus, errorMessage) {
                   
-                   $("body").html(''+
+                   $("#createQuizHolder").html(''+
                         '<div class="panel panel-default panel-custom errorPanel">'+
                             '<div class="panel-body">'+
                                 '<h2>'+jqXHR.status+' '+errorMessage+'</h2>'+

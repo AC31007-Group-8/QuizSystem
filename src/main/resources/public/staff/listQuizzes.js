@@ -5,7 +5,7 @@
  */
 
 
-function getFiltered(){
+function getFiltered(contextPath){
     
     
     var choices = {
@@ -17,7 +17,7 @@ function getFiltered(){
     };
     
     $.ajax({
-        url: "/staff/quizList/filter",
+        url: contextPath+"/staff/quizList/filter",
         type: "GET",
         data: choices,
         contentType:  "application/json;",

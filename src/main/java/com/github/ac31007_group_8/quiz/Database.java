@@ -58,6 +58,7 @@ public class Database {
             if (mockDataProvider != null) {
                 conn = new MockConnection(mockDataProvider);
             } else {
+                Class.forName("com.mysql.jdbc.Driver");  
                 conn = DriverManager.getConnection(getURL(), Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD);
             }
             // The buffer will automatically close connections after 8 other connections have been established,

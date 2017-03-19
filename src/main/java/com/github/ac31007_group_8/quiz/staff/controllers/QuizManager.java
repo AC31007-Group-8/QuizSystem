@@ -86,7 +86,7 @@ public class QuizManager {
      public static Object saveQuiz(Request req, Response res){
       
      
-         long start =  System.currentTimeMillis();
+         
          
 //    String json = 
 //        "{"
@@ -122,7 +122,7 @@ public class QuizManager {
 
 
                 res.status(200);
-                System.out.println( System.currentTimeMillis()-start);
+              
                 return "{\"message\":\"Saved successfully!\"}";
             }
             else{
@@ -140,6 +140,11 @@ public class QuizManager {
             LOGGER.error("Data access violation", e);
             res.status(400);
             return "{\"message\":\"Bad input! This shouldn't happen if you don't mess with javascript!\"}";
+        }
+        catch(Exception e ){
+            LOGGER.error("Data access violation", e);
+            res.status(500);
+            return "{\"message\":\"Internal server error!\"}";
         }
        
 

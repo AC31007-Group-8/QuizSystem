@@ -12,8 +12,8 @@ and open the template in the editor.
         {{> headerResources}}
 
        
-        <link rel="stylesheet" href="/staff/listQuizzes.css">
-         <script src="/staff/listQuizzes.js"></script>
+        <link rel="stylesheet" href="{{baseURL}}/staff/listQuizzes.css">
+         <script src="{{baseURL}}/staff/listQuizzes.js"></script>
     </head>
     <body>
 
@@ -78,7 +78,7 @@ and open the template in the editor.
                 </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-                    <button type="button" onclick="getFiltered()" class="btn btn-primary  btn-sm">Filter</button>
+                    <button type="button" onclick="getFiltered('{{baseURL}}')" class="btn btn-primary  btn-sm">Filter</button>
                 </div>
                 
             </div>

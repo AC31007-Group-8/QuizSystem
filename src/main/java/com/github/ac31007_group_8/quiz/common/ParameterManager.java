@@ -3,7 +3,7 @@ package com.github.ac31007_group_8.quiz.common;
 import spark.Request;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 
 /**
  * Created by Can on 12/03/2017.
@@ -20,13 +20,20 @@ public class ParameterManager {
 
     public static void addAllParameters(HashMap<String, Object> map, Request req)
     {
-        addURLParameters(map);
+        addURLParameters(map, req);
         addSessionParameters(map, req);
     }
 
-    public static void addURLParameters(HashMap<String, Object> map)
+    public static void addURLParameters(HashMap<String, Object> map, Request req)
     {
-        map.put("baseURL", "http://localhost:4567");
+      
+        ServletContext sc = req.raw().getSession().getServletContext();
+        if (sc==null){//jetty
+             map.put("baseURL","");
+        }
+        else{
+            map.put("baseURL",sc.getContextPath());//tomcat
+        }
     }
 
 

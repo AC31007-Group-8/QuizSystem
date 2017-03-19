@@ -7,146 +7,141 @@ and open the template in the editor.
 <html>
     <head>
         <title>Create quiz</title>
-        
-        
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        
+
+
         {{> headerResources}}
-       
-        
-        <link rel="stylesheet" href="/staff/createQuiz.css">
-        <script src="/staff/createQuiz.js"></script>
-        
-        
+
         <!--markdown editor simpleMDE -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-       
+
+
+        <link rel="stylesheet" href="{{baseURL}}/staff/createQuiz.css">
+        <script src="{{baseURL}}/staff/createQuiz.js"></script>
+
     </head>
     <body>
         {{> header}}
+        <div id="createQuizHolder">
+            <div class="panel panel-default panel-custom">
+                <div class="panel-body">
 
-        <div class="panel panel-default panel-custom">
-            <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">  
 
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">  
-
-                        <label for="quiz-title" class="mandatory" >Quiz title</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="quiz-title" >
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="module-column">
-                        <label for="quiz-module" class="mandatory">Module</label>
-                        <select id="quiz-module" class="input-group">
-                            <option value="-1">--select--</option>
-                            {{#allModules}}
-                                <option value="{{.}}">{{.}}</option>
-                            {{/allModules}}
-                            
-                        </select>
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="time-column">
-                        <label for="quiz-timeLimit">Time limit (min)</label>
-                        <div class="input-group" >
-                            <input type="number" disabled id="quiz-timeLimit" class="form-control" placeholder="max 120">
-                            <span class="input-group-addon">
-                                <input type="checkbox" >
-                            </span>
-
-                        </div><!-- /input-group -->
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-
-        
-        <div id="noQuestionMessage">
-            Quiz must have at least one question!
-        </div>
-        
-
-        <!--====================question0 (template)=====================-->
-        
-        
-        <div class="panel panel-default panel-question" hidden id="question0">
-            <div class="panel-body">
-                
-                
-                <label class="question-lable">question 0</label>
-                <button onclick="removeQuestion(this)" class="btn btn-mini btn-primary question-remove">Remove</button>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
-                        <label class="mandatory">Question text</label>
-                        <div class="input-group" >
-                            <textarea class="form-control" ></textarea>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
-                        <label>Explanation text</label>
-                        <div class="input-group" >
-                            <textarea  class="form-control" ></textarea>
-                        </div><!-- /input-group -->
-
-                    </div>
-                </div>
-                <div class="row margin-top-20">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <button class="addOptionButton" onclick="addOption(this)"><span class="glyphicon glyphicon-plus glyph-large pull-left " ></span>Add option</button>
-                    </div>
-                    
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 allOptions"  title="Must have at least 1 correct answer">
-                        <div class="row option-row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="input-group" >
-                                    <span class="mandatory-option"></span>
-                                    <input type="text" class="form-control" placeholder="option 1">
-                                    <span class="input-group-addon shrinkable"> 
-                                        <input type="checkbox" >
-                                    </span>
-                                    <span class="input-group-addon shrinkable" >Correct?</span>
-                                    <span class="input-group-btn ">
-                                        <button title="Remove option" class="shrinkable btn btn-default btn-custom disabled" type="button"> <span class="glyphicon glyphicon-remove" ></span></button>
-                                    </span>
-                                   
-                                </div>
+                            <label for="quiz-title" class="mandatory" >Quiz title</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="quiz-title" >
                             </div>
                         </div>
-                        
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="module-column">
+                            <label for="quiz-module" class="mandatory">Module</label>
+                            <select id="quiz-module" class="input-group">
+                                <option value="-1">--select--</option>
+                                {{#allModules}}
+                                <option value="{{.}}">{{.}}</option>
+                                {{/allModules}}
+
+                            </select>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="time-column">
+                            <label for="quiz-timeLimit">Time limit (min)</label>
+                            <div class="input-group" >
+                                <input type="number" disabled id="quiz-timeLimit" class="form-control" placeholder="max 120">
+                                <span class="input-group-addon">
+                                    <input type="checkbox" >
+                                </span>
+
+                            </div><!-- /input-group -->
+                        </div>
+
+
                     </div>
                 </div>
+            </div>
 
+
+            <div id="noQuestionMessage">
+                Quiz must have at least one question!
+            </div>
+
+
+            <!--====================question0 (template)=====================-->
+
+
+            <div class="panel panel-default panel-question" hidden id="question0">
+                <div class="panel-body">
+
+
+                    <label class="question-lable">question 0</label>
+                    <button onclick="removeQuestion(this)" class="btn btn-mini btn-primary question-remove">Remove</button>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
+                            <label class="mandatory">Question text</label>
+                            <div class="input-group" >
+                                <textarea class="form-control" ></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">  
+                            <label>Explanation text</label>
+                            <div class="input-group" >
+                                <textarea  class="form-control" ></textarea>
+                            </div><!-- /input-group -->
+
+                        </div>
+                    </div>
+                    <div class="row margin-top-20">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <button class="addOptionButton" onclick="addOption(this)"><span class="glyphicon glyphicon-plus glyph-large pull-left " ></span>Add option</button>
+                        </div>
+
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 allOptions"  title="Must have at least 1 correct answer">
+                            <div class="row option-row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="input-group" >
+                                        <span class="mandatory-option"></span>
+                                        <input type="text" class="form-control" placeholder="option 1">
+                                        <span class="input-group-addon shrinkable"> 
+                                            <input type="checkbox" >
+                                        </span>
+                                        <span class="input-group-addon shrinkable" >Correct?</span>
+                                        <span class="input-group-btn ">
+                                            <button title="Remove option" class="shrinkable btn btn-default btn-custom disabled" type="button"> <span class="glyphicon glyphicon-remove" ></span></button>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--================== end of question 0=======================-->
+
+
+            <div class="panel panel-default panel-custom" >
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                            <button onclick="addQuestion()">Add question</button>
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                            <button onclick="submit('{{baseURL}}')" >Submit</button>
+
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-
-         <!--================== end of question 0=======================-->
-         
-         
-         <div class="panel panel-default panel-custom" >
-             <div class="panel-body">
-                 <div class="row">
-                     <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                         <button onclick="addQuestion()">Add question</button>
-
-                     </div>
-                     
-                     <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                         <button onclick="submit()" >Submit</button>
-
-                     </div>
-                 </div>
-
-             </div>
-         </div>
-
     </body>
 </html>
