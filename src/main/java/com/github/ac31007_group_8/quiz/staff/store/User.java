@@ -22,4 +22,11 @@ public class User {
     public void setEmail(String email){
         this.email = email;
     }
+
+    public boolean isStaff(){
+        return isStaff;
+    }
+    public String getName(){
+        return name;
+    }
 }

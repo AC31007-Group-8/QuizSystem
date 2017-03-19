@@ -2,7 +2,9 @@ package com.github.ac31007_group_8.quiz.common;
 
 import spark.Request;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javax.servlet.ServletContext;
 
 /**
@@ -36,11 +38,31 @@ public class ParameterManager {
         }
     }
 
+    public static String getBaseURL(Request req){
+        ServletContext sc = req.raw().getSession().getServletContext();
+        if (sc==null){//jetty
+            return "";
+        }
+        else{
+            return sc.getContextPath();//tomcat
+        }
+    }
+
 
     public static void addSessionParameters(HashMap<String,Object> map, Request req){
         for (String attribute : req.session().attributes()) {
             map.put(attribute, req.session().attribute(attribute));
         }
+    }
+
+    public static void writeMessage(HashMap<String, Object> map, String message){
+        List<String> msgs = (List<String>)map.get("messages");
+        if (msgs == null) {
+            msgs = new ArrayList<String>();
+            map.put("messages", msgs); //replace old value
+        }
+        msgs.add(message);
+
     }
 
 }

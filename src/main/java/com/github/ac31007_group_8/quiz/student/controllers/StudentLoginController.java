@@ -62,7 +62,8 @@ public class StudentLoginController {
         {
             //display invalid details page
             map = ParameterManager.getAllParameters(req);
-            return eng.render(eng.modelAndView(map, "invalidUser.mustache"));
+            ParameterManager.writeMessage(map, "The login details you supplied were incorrect. Please try again.");
+            return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
         }
 
         req.session().attribute("user", user);
