@@ -3,6 +3,17 @@ AC31007 Coursework
 
 **Note: This project requires Java 8!**
 
+## On Databases
+Before running, the schema needs to be set up on the database server. To do this, import `docs/createQuizDB.sql` using
+your favoured MySQL tools. If you cannot run the project with the `root` account, create a new account like this:
+```sql
+CREATE USER 'quizsystem' IDENTIFIED BY 'banana';
+GRANT ALL PRIVILEGES ON quizsystem.* TO 'quizsystem';
+```
+...replacing the password before running it of course.
+
+Once done, proceed to the configuration step in `docs/database.md`.
+
 ## Building and Running
 **If using Netbeans or IDEA, run the `gradle setup` target to generate key files!**
 
