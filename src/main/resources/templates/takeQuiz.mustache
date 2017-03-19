@@ -6,121 +6,129 @@ and open the template in the editor.
 authors: Vlad, Can, Allan
 -->
 <html>
-<head>
-    <title>Create quiz</title>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <title>Create quiz</title>
 
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        {{>headerResources}}
 
-    <link rel="stylesheet" href="{{baseURL}}/staff/createQuiz.css">
-
-    <link rel="stylesheet" href="{{baseURL}}/student/takeQuiz.css">
-    <script src="{{baseURL}}/student/takeQuiz.js"></script>
-    
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
-</head>
-<body>
+        <link rel="stylesheet" href="{{baseURL}}/student/takeQuiz.css">
+        <script src="{{baseURL}}/student/takeQuiz.js"></script>
 
 
-<div class="panel panel-default panel-custom">
-    <div  class="panel-body">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+    </head>
+    <body>
 
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
-                <h1>Quiz title:  {{quizTitle}} </h1>
-                <h3>Module code:  {{moduleCode}} </h3>
-                <h3>Time limit:  {{timeLimit}} </h3>
-            </div>
-        </div>
+        {{>header}}
 
-    </div>
-</div>
 
-<div id="startButton" class="panel panel-default panel-custom">
-    <div  class="panel-body">
+        <div id="contentHolder">
+            <div class="panel panel-default panel-red">
+                <div  class="panel-body">
 
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                <p>Press the "Start Quiz" button to start the test.</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                <button onclick="startQuiz()">Start Quiz</button>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<div id="counterContainer" class="panel panel-default panel-custom">
-    <div  class="panel-body">
-
-        <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                <p> Seconds elapsed: </p>
-                <p id="counter"> 0 </p>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
-            </div>
-        </div>
-
-    </div>
-</div>
-<form action="" method="POST">
-
-    <div id="questionContainer" >
-        {{#allQuestions}}
-        <div class="panel panel-default panel-custom">
-            <div  class="panel-body">
-                <div class="row">
-                     
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">{{{question}}} </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
-                        <div class="row" >
-                            {{#answers}}
-                                <div><p><input type="checkbox" name="question{{question_id}}" value="{{answer_id}}">{{answer}}</div></p>
-                            {{/answers}}
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                            <h3 style="color:wheat;">Quiz title:  {{quizTitle}} </h3>
+                            <h3 style="color:darkseagreen;">Module code:  {{moduleCode}} </h3>
+                            <h3 style="color:white;">Time limit:  {{timeLimitOfQuiz}} </h3>
                         </div>
                     </div>
+
                 </div>
             </div>
-        </div>
-        {{/allQuestions}}
 
 
-        <div class="panel panel-default panel-custom">
-            <div  class="panel-body">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0"></div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
-                        <input type="hidden" name="quizID" value="{{quizID}}">
-                        <input type="hidden" name="duration" value="0" id="FormCounter">
-                        <input type="submit" id="submitButton" onclick="endQuiz()">
+
+
+            <div id="startButton" class="panel panel-default panel-red">
+                <div  class="panel-body">
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                            <p>Press the "Start Quiz" button to start the test.</p>
+                        </div>
                     </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+                            <button onclick="startQuiz()">Start Quiz</button>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3  col-xs-0">
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+            <div id="counterContainer" class="panel panel-default panel-custom" data-tlimit="{{timeLeft}}">
+                <div  class="panel-body" style="padding:5px;">
+
+                    <div class="row">
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <span>Time left:</span>
+                            <span id="leftCounter">{{timeLimitOfQuiz}}</span>
+                        </div>
+                      
+
+                    </div>
+
+                </div>
+            </div>
+            <script>var qInd=0;</script>
+            <form action="" method="POST" id="theForm">
+
+                <div id="questionContainer" >
+                    {{#allQuestions}}
+                    <div class="panel panel-default panel-question" data-qid="{{question_id}}">
+                        <div  class="panel-body">
+                            <div class="row">
+                                
+                                <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12"> <h2>Question {{questionIndex}}</h2> {{{question}}} </div>
+                               
+                            </div>
+                            <hr>
+                            <div class="row optionsRow">
+                                 <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                                    
+                                        {{#answers}}
+                                        <div class="row" >
+                                             <input id="{{answer_id}}" type="checkbox" name="question{{question_id}}" value="{{answer_id}}"><label for="{{answer_id}}">{{answer}}</label>
+                                        </div> 
+                                       {{/answers}}
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {{/allQuestions}}
+
+
+                    <div class="panel panel-default panel-red">
+                        <div  class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-6" style="text-align: center">
+                                    <label for="emailResults" id="emailResultLabel"><input id="emailResults" type="checkbox" name="emailResult">  Send result to my email</label>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-6">
+                                    <input type="hidden" name="quizID" value="{{quizID}}">
+                                    <input type="hidden" name="duration" value="0" id="FormCounter">
+    
+                                    <input type="submit" id="submitButton">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
         </div>
 
-    </div>
-</form>
-</body>
+    </body>
 </html>
 
