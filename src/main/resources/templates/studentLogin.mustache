@@ -10,26 +10,32 @@
 
         {{> header}}
 
-        {{#user}}
-        You are already logged in as {{name}}. Logging in below will sign you out of your account.
         <br/>
-        {{/user}}
 
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
 
-        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3> Student Login </h3>
+                    <p> Please log in by entering your details below. </p>
+                </div>
 
-            <h1> Student Login </h1>
-            <p> Please log in by entering your details below. </p>
-
-            <form action="{{baseURL}}/student/login" method="post">
-                Matriculation Number:<br>
-                <input type="text" name="username" value="">
-                <br>
-                Password:<br>
-                <input type="password" name="password" value="">
-                <br><br>
-                <input type="submit" value="Submit">
-            </form>
+                <div class="panel-body">
+                    <form action="{{baseURL}}/student/login" method="post">
+                        <p>Matriculation Number:</p>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="username" value="">
+                        </div>
+                        <p>Password:</p>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" value="">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-default" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
 
         </div>
 

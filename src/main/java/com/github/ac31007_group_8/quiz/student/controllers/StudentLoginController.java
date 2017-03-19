@@ -51,8 +51,9 @@ public class StudentLoginController {
 
         if (username == null || username.equals("") || password == null || password.equals(""))
         {
-            //display error page
-            throw halt(400, eng.render(eng.modelAndView(map, "badRequest.mustache")));
+            //handle invalid input
+            ParameterManager.writeMessage(map, "All of the fields below need to be filled in. Please try again.");
+            return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
         }
 
         StudentLoginModel loginModel = new StudentLoginModel();
@@ -60,15 +61,18 @@ public class StudentLoginController {
 
         if (user == null)
         {
-            //display invalid details page
-            map = ParameterManager.getAllParameters(req);
-            return eng.render(eng.modelAndView(map, "invalidUser.mustache"));
+            //display invalid details message
+            ParameterManager.writeMessage(map, "The login details you supplied were incorrect. Please try again.");
+            return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
         }
 
         req.session().attribute("user", user);
         
         map = ParameterManager.getAllParameters(req); //update after login
-        return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
+
+        res.redirect(map.get("baseURL") + "/student/QuizList");
+        return null;
+        //return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
     }
 
 }
