@@ -1,25 +1,36 @@
-{{> header}}
+<html>
+    <head>
+        <title>Staff login</title>
+       
+        {{> headerResources}}
+    </head>
 
-{{#user}}
-    You are already logged in as {{name}}. Logging in below will sign you out of your account.
-    <br/>
-{{/user}}
+    <body>
+        {{> header}}
 
-<div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+        {{#user}}
+        You are already logged in as {{name}}. Logging in below will sign you out of your account.
+        <br/>
+        {{/user}}
 
-    <h1> Staff Login </h1>
-    <p> Please log in by entering your details below. </p>
+        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
 
-    <form action="{{baseURL}}/staff/login" method="post">
-        Staff ID:<br>
-        <input type="text" name="username" value="">
-        <br>
-        Password:<br>
-        <input type="password" name="password" value="">
-        <br><br>
-        <input type="submit" value="Submit">
-    </form>
+            <h1> Staff Login </h1>
+            <p> Please log in by entering your details below. </p>
 
-</div>
+            <form action="{{baseURL}}/staff/login" method="post">
+                Staff ID:<br>
+                <input type="text" name="username" value="">
+                <br>
+                Password:<br>
+                <input type="password" name="password" value="">
+                <br><br>
+                <input type="submit" value="Submit">
+            </form>
 
-{{> footer}}
+        </div>
+
+        {{> footer}}
+
+    </body>
+</html>

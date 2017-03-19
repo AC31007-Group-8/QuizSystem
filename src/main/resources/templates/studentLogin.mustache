@@ -1,26 +1,39 @@
-{{> header}}
+<html>
+    <head>
+        <title>Student login</title>
+        
+        {{> headerResources}}
+    </head>
 
-{{#user}}
-    You are already logged in as {{name}}. Logging in below will sign you out of your account.
-    <br/>
-{{/user}}
+    <body>
 
 
-<div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
+        {{> header}}
 
-    <h1> Student Login </h1>
-    <p> Please log in by entering your details below. </p>
+        {{#user}}
+        You are already logged in as {{name}}. Logging in below will sign you out of your account.
+        <br/>
+        {{/user}}
 
-    <form action="{{baseURL}}/student/login" method="post">
-        Matriculation Number:<br>
-        <input type="text" name="username" value="">
-        <br>
-        Password:<br>
-        <input type="password" name="password" value="">
-        <br><br>
-        <input type="submit" value="Submit">
-    </form>
 
-</div>
+        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12">
 
-{{> footer}}
+            <h1> Student Login </h1>
+            <p> Please log in by entering your details below. </p>
+
+            <form action="{{baseURL}}/student/login" method="post">
+                Matriculation Number:<br>
+                <input type="text" name="username" value="">
+                <br>
+                Password:<br>
+                <input type="password" name="password" value="">
+                <br><br>
+                <input type="submit" value="Submit">
+            </form>
+
+        </div>
+
+        {{> footer}}
+
+    </body>
+</html>

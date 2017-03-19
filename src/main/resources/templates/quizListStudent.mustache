@@ -1,19 +1,29 @@
-{{> header}}
+<html>
+    <head>
+        <title>Quiz system</title>
+        {{> headerResources}}
+    </head>
 
-<link rel="stylesheet" href="/staff/createQuiz.css">
+    <body>
 
-<!--====================Quiz Properties (template)=====================-->
-{{#quizList}}
-    <div class="panel panel-default panel-custom">
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
-              <label>Module ID: {{module_id}} Quiz Title:{{title}} <a class="btn btn-default" href="/student/takeQuiz?quizID={{quizId}}">Take Quiz</a></label>
-          </div>
+
+        {{> header}}
+
+        <link rel="stylesheet" href="/staff/createQuiz.css">
+
+        <!--====================Quiz Properties (template)=====================-->
+        {{#quizList}}
+        <div class="panel panel-default panel-custom">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
+                        <label>Module ID: {{module_id}} Quiz Title:{{title}} <a class="btn btn-default" href="/student/takeQuiz?quizID={{quizId}}">Take Quiz</a></label>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-{{/quizList}}
-<!--====================Quiz Properties (template)=====================-->
+        {{/quizList}}
+        <!--====================Quiz Properties (template)=====================-->
 
+    </body>
 </html>

@@ -1,5 +1,7 @@
 package com.github.ac31007_group_8.quiz.test.login;
 
+import com.github.ac31007_group_8.quiz.test.util.TestResponse;
+import com.github.ac31007_group_8.quiz.test.util.TestRequest;
 import com.github.ac31007_group_8.quiz.QuizSparkApp;
 import com.github.ac31007_group_8.quiz.generated.tables.records.StaffRecord;
 import com.github.ac31007_group_8.quiz.generated.tables.records.StudentRecord;

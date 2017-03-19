@@ -36,9 +36,7 @@ public class StaffLoginModel {
                     .where(STAFF.PASSWORD.equal(password).and(STAFF.STAFF_NUMBER.equal(username)))
                     .fetch();
 
-            for(Record r : result){ //Iterates through the returned results
-                return true;
-            }
+            return !result.isEmpty();
         }
         catch(Exception e)
         {

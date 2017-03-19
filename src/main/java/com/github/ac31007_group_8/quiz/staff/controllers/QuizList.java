@@ -14,12 +14,10 @@ import spark.template.mustache.MustacheTemplateEngine;
 
 import java.util.*;
 
-import com.github.ac31007_group_8.quiz.staff.*;
 import com.github.ac31007_group_8.quiz.staff.store.*;
 import com.google.gson.Gson;
 
 import static spark.Spark.*;
-import java.sql.SQLException;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
 import org.slf4j.Logger;
@@ -58,9 +56,7 @@ public class QuizList {
             ArrayList<QuizInfo> quizTitles = quizModel.getAllQuizInfo(dslCont);
             map.put("quizList", quizTitles);
             
-            for (QuizInfo q:quizTitles){
-                System.out.println(q);
-            }
+          
             
             res.status(200);
             TemplateEngine eng = new MustacheTemplateEngine();
