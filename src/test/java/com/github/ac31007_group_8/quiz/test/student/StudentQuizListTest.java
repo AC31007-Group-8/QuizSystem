@@ -6,15 +6,18 @@
 package com.github.ac31007_group_8.quiz.test.student;
 
 import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizList;
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfoStudent;
+import com.github.ac31007_group_8.quiz.staff.store.User;
 
 
 import com.github.ac31007_group_8.quiz.student.controllers.StudentQuizList;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
 import static org.junit.Assert.assertEquals;
@@ -45,15 +48,20 @@ import org.mockito.stubbing.Answer;
 
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({QuizList.class, Database.class}) 
+@PrepareForTest({StudentQuizList.class, Database.class, ParameterManager.class}) 
 public class StudentQuizListTest {
     
     private Request req ;      
     private Response res ;
-    
+    private HashMap<String, Object> sessionMap = new HashMap<>();
     @Before
     public void init() throws Exception{
         PowerMockito.mockStatic(Database.class);//to do nothing when Database.getJooq is called
+        
+        PowerMockito.mockStatic(ParameterManager.class);
+        User u =new User("a@a.com",1);
+        sessionMap.put("user",u);
+        when(ParameterManager.getAllParameters(any(Request.class))).thenReturn(sessionMap);
         
         req = mock(Request.class);       
         res = mock(Response.class);
@@ -65,16 +73,8 @@ public class StudentQuizListTest {
         when(req.queryParams("relevant")).thenReturn("isRelevant");//isRelevant, notRelevant, any
         
         PowerMockito.whenNew(StudentQuizModel.class).withNoArguments().thenReturn(studentQuizModelMock);
-    }
-    
-    
-    @Mock
-    private  StudentQuizModel studentQuizModelMock ;
-    
-    
-    @Test
-    public void filtered_statusOk() throws Exception{
-       
+   
+        
         doAnswer(new Answer<Void>() {
             public Void answer(InvocationOnMock invocation) {
                           
@@ -82,17 +82,52 @@ public class StudentQuizListTest {
                 return null;
             }
         }).when(res).status(anyInt());
+    }
+    
+    
+    @Mock
+    private  StudentQuizModel studentQuizModelMock ;
+    
+    
+    
+    //---------------------------RELEVANT ---------------------------
+    @Test
+    public void relevant_statusOk() throws Exception{
         
-        StudentQuizList.getFilteredQuizList(req, res);
+        PowerMockito.when(studentQuizModelMock.getRelevantQuizzes(anyInt(), any(Connection.class))).thenReturn(new ArrayList<>());
+        
+        StudentQuizList.sendRelevantQuizzes(req, res);
         assertEquals(res.status(),200);
     }
     
     
     
     @Test
+    public void relevant_hasUserInSession() throws Exception{
+ 
+        when(ParameterManager.getAllParameters(any(Request.class))).thenReturn(new HashMap<>());
+        PowerMockito.when(studentQuizModelMock.getRelevantQuizzes(anyInt(), any(Connection.class))).thenReturn(new ArrayList<>());
+        assertEquals("{\"session expired\":\"impossible happened\"}", StudentQuizList.sendRelevantQuizzes(req, res));
+        assertEquals(res.status(),401);
+        
+        when(ParameterManager.getAllParameters(any(Request.class))).thenReturn(sessionMap);//set back
+    }
+    
+    @Test
     public void relevant_responseNotNull() throws Exception {
         assertNotNull(StudentQuizList.sendRelevantQuizzes(req, res));
     }
+    
+    
+    //---------------------------FILTERED ---------------------------
+    @Test
+    public void filtered_statusOk() throws Exception{
+        
+        StudentQuizList.getFilteredQuizList(req, res);
+        assertEquals(res.status(),200);
+    }
+    
+    
     
     @Test
     public void filtered_responseNotNull() throws Exception {

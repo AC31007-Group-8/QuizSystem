@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
-import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
+
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfoStudent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -211,7 +211,7 @@ public class StudentQuizModel {
     
     
     
-    public ArrayList<QuizInfo> getRelevantQuizzes(int studentId, Connection conn) throws SQLException{
+    public ArrayList<QuizInfoStudent> getRelevantQuizzes(int studentId, Connection conn) throws SQLException{
         
         
         PreparedStatement stmt = conn.prepareStatement("SELECT quiz.quiz_id, quiz.time_limit, quiz.Title, module.module_name, module.module_id" +
@@ -227,16 +227,16 @@ public class StudentQuizModel {
         
         
         ResultSet rs = stmt.executeQuery();   
-        ArrayList<QuizInfo> allRelevantQuizInfo = new ArrayList<QuizInfo>();
+        ArrayList<QuizInfoStudent> allRelevantQuizInfo = new ArrayList<>();
         
         while (rs.next()){
             
-                QuizInfo next = new QuizInfo();
+                QuizInfoStudent next = new QuizInfoStudent();
                 next.setQuizId(rs.getInt(1));
-                next.setTimeLimit(rs.getInt(2)); 
+                next.setTime_limit(rs.getInt(2)); 
                 next.setTitle(rs.getString(3)); 
-                next.setModuleName(rs.getString(4)); 
-                next.setModuleCode(rs.getString(5));
+                next.setModule_name(rs.getString(4)); 
+                next.setModule_id(rs.getString(5));
                         
                 allRelevantQuizInfo.add(next);       
         }

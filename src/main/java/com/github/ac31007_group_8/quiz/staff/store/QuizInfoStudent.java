@@ -22,6 +22,10 @@ public class QuizInfoStudent {
     String second_name = null;
 
     
+    public QuizInfoStudent(){
+        
+    }
+    
     public QuizInfoStudent(int quizId, Integer time, String title, String moduleName, String module_id, boolean isRelevant,boolean isTaken, String fName, String sName){
         this.quizId = quizId;
         time_limit = time;

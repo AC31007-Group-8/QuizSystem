@@ -5,9 +5,8 @@ import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.util.Init;
 import com.github.ac31007_group_8.quiz.Database;
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizManager;
-import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
+import com.github.ac31007_group_8.quiz.staff.store.QuizInfoStudent;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
-import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.SQLException;
 import spark.Request;
@@ -18,8 +17,6 @@ import spark.template.mustache.MustacheTemplateEngine;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.jooq.DSLContext;
-import org.jooq.exception.DataAccessException;
 import org.slf4j.LoggerFactory;
 
 import static spark.Spark.*;
@@ -49,6 +46,10 @@ public class StudentQuizList {
     //SEND RELEVANT QUIZZES
     public static Object sendRelevantQuizzes(Request req, Response res){
         
+        
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req); 
+        TemplateEngine eng = new MustacheTemplateEngine();
+        
         int studentId = 1; //get from session!
         
         Connection conn = Database.getConnection();
@@ -56,13 +57,13 @@ public class StudentQuizList {
         
         try{
             
-            ArrayList<QuizInfo> allQuizInfo = qms.getRelevantQuizzes(studentId, conn);
+            ArrayList<QuizInfoStudent> allQuizInfo = qms.getRelevantQuizzes(studentId, conn);
 
 
-            HashMap<String, Object> map = ParameterManager.getAllParameters(req);
+         
             map.put("quizList", allQuizInfo);
             res.status(200);
-            TemplateEngine eng = new MustacheTemplateEngine();
+           
             return eng.render(eng.modelAndView(map, "quizListStudent.mustache"));
             
             
