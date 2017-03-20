@@ -170,6 +170,34 @@ public class StudentQuizModel {
         return null;
     }
 
+    public Quiz getQuiz(int quizID, DSLContext context){
+
+        if (context!=null)
+        {
+            dbConnection=context;
+        }
+
+        try{
+
+            //Refactored to use prepared statements using JOOQ:
+            Result<Record> result = dbConnection.select()
+                    .from(QUIZ)
+                    .where(QUIZ.QUIZ_ID.equal(quizID))
+                    .fetch();
+
+            for(Record r : result){ //Iterates through the returned results
+                Quiz quiz = new Quiz(r.get(QUIZ.QUIZ_ID),r.get(QUIZ.STAFF_ID), r.get(QUIZ.TIME_LIMIT),
+                        r.get(QUIZ.MODULE_ID), r.get(QUIZ.TITLE), r.get(QUIZ.PUBLISH_STATUS)!=0);   //!=0 Converts a single bit to boolean
+                return quiz;
+            }
+        }
+        catch(Exception e)
+        {
+            Logger.getGlobal().info("Exception: " + e.getMessage());
+        }
+        return null;
+    }
+
     
     
     

@@ -7,9 +7,12 @@ package com.github.ac31007_group_8.quiz.test.staff;
 
 import com.github.ac31007_group_8.quiz.Database;
 import com.github.ac31007_group_8.quiz.QuizSparkApp;
+import com.github.ac31007_group_8.quiz.generated.tables.records.QuizRecord;
+import com.github.ac31007_group_8.quiz.generated.tables.records.StaffRecord;
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizList;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
 import com.github.ac31007_group_8.quiz.staff.models.StaffLoginModel;
+import com.github.ac31007_group_8.quiz.staff.store.Quiz;
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
 
 import java.io.IOException;
@@ -17,17 +20,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.github.ac31007_group_8.quiz.staff.store.User;
+import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.test.util.TestRequest;
 import com.github.ac31007_group_8.quiz.test.util.TestResponse;
 import org.jooq.DSLContext;
+import org.jooq.Result;
+import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
 
+import org.jooq.impl.DSL;
+import org.jooq.tools.jdbc.MockConnection;
+import org.jooq.tools.jdbc.MockDataProvider;
+import org.jooq.tools.jdbc.MockExecuteContext;
+import org.jooq.tools.jdbc.MockResult;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.github.ac31007_group_8.quiz.generated.Tables.QUIZ;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -172,5 +184,115 @@ public class QuizListTest {
        assertNull(response);
    }
 
+    @Test
+    public void PublishStatusChangeResponseTest() {
+        boolean exceptionThrown = false;
+        TestResponse response = null;
+        try {
+            response = TestRequest.makePOSTRequest("/staff/changePublishStatus", "quizID=-1&publishTarget=false");
+        } catch (IOException ex)
+        {
+            exceptionThrown = true;
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        assertTrue(exceptionThrown);
+        assertNull(response);
+    }
+
+    @Test
+    public void PublishStatusModelUpdateTest() {
+
+        // Initialise your data provider (implementation further down):
+        MockDataProvider provider = new PublishStatusMockDataProvider();
+        MockConnection connection = new MockConnection(provider);
+
+        // Pass the mock connection to a jOOQ DSLContext:
+        DSLContext testContext = DSL.using(connection, SQLDialect.MYSQL);
+
+        StudentQuizModel quizModel = new StudentQuizModel();
+
+        //Make sure it's false initially
+        Quiz quiz = quizModel.getQuiz(1, testContext);
+        assertNotNull(quiz);
+        assertFalse(quiz.isPublish_status());
+
+        QuizModel quizWriteModel = new QuizModel();
+
+        boolean exceptionThrown = false;
+        try {
+            quizWriteModel.setPublishStatus(testContext, 1, true);
+            ((PublishStatusMockDataProvider)provider).setUpdated();
+        } catch (Exception ex) {
+            exceptionThrown = true;
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        assertFalse(exceptionThrown);
+
+        //Then ensure that its publish status was changed to true.
+        quiz = quizModel.getQuiz(1, testContext);
+        assertTrue(quiz.isPublish_status());
+
+
+    }
+
     
+}
+
+
+class PublishStatusMockDataProvider implements MockDataProvider {
+
+    private static boolean wasUpdated = false;
+
+    private MockResult[] getResult(DSLContext create)
+    {
+        MockResult[] mock = new MockResult[1];
+        Result<QuizRecord> result = create.newResult(QUIZ);
+        if (!wasUpdated)
+        {
+            result.add(create.newRecord(QUIZ));
+            result.get(0).setValue(QUIZ.QUIZ_ID, 1);
+            result.get(0).setValue(QUIZ.STAFF_ID, 1);
+            result.get(0).setValue(QUIZ.MODULE_ID, "AC11111");
+            result.get(0).setValue(QUIZ.TITLE, "Test Quiz");
+            result.get(0).setValue(QUIZ.TIME_LIMIT, 100);
+            result.get(0).setValue(QUIZ.PUBLISH_STATUS, (byte)0);
+        } else {
+            result.add(create.newRecord(QUIZ));
+            result.get(0).setValue(QUIZ.QUIZ_ID, 1);
+            result.get(0).setValue(QUIZ.STAFF_ID, 1);
+            result.get(0).setValue(QUIZ.MODULE_ID, "AC11111");
+            result.get(0).setValue(QUIZ.TITLE, "Test Quiz");
+            result.get(0).setValue(QUIZ.TIME_LIMIT, 100);
+            result.get(0).setValue(QUIZ.PUBLISH_STATUS, (byte)1);
+        }
+
+        mock[0] = new MockResult(1, result);
+        return mock;
+    }
+
+    @Override
+    public MockResult[] execute(MockExecuteContext ctx) throws SQLException {
+        System.out.println("WasUpdated: " + wasUpdated);
+        // You might need a DSLContext to create org.jooq.Result and org.jooq.Record objects
+        DSLContext create = DSL.using(SQLDialect.MYSQL);
+        MockResult[] mock = new MockResult[1];
+
+        // The execute context contains SQL string(s), bind values, and other meta-data
+        String sql = ctx.sql();
+
+        System.out.println("Query: " + ctx.sql());
+
+        if (sql.toUpperCase().startsWith("SELECT")) {
+            mock = getResult(create);
+        }
+        else if (sql.toUpperCase().startsWith("UPDATE")) {
+            setUpdated();
+        }
+
+        return mock;
+    }
+
+    public void setUpdated(){
+        wasUpdated = true;
+    }
 }
