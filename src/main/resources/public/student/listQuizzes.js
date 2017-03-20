@@ -71,7 +71,7 @@ function getFiltered(contextPath){
                         '<td>' + nextQuizInfo.module_name + '</td>' +
                         '<td>' + nextQuizInfo.title + '</td>' +
                         '<td>' + timeL + '</td>' +
-                        '<td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID=' + nextQuizInfo.quizId + '">Take</a></td>' +
+                        '<td><a class="btn btn-primary btn-sm" href="'+contextPath+'/student/takeQuiz?quizID=' + nextQuizInfo.quizId + '">Take</a></td>' +
                         
                         '</tr>'
                         );

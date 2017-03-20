@@ -49,8 +49,9 @@ function getFiltered(contextPath){
                     '<th>Title</th>' +
                     '<th>Time limit</th>' +
                     '<th>Creator</th>' +
-                    '<th>Edit</th>' +
-                    '<th>View</th>' +
+                    '<th>Quiz</th>' +
+                    '<th>Results</th>' +
+                    '<th>Preview Quiz</th>' +
                     '</tr>' +
                     '</thead>' +
                     '<tbody>' +
@@ -67,8 +68,9 @@ function getFiltered(contextPath){
                         '<td>' + nextQuizInfo.title + '</td>' +
                         '<td>' + timeL + '</td>' +
                         '<td>' + nextQuizInfo.first_name + ' ' + nextQuizInfo.second_name + '</td>' +
-                        '<td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID=' + nextQuizInfo.quizId + '">View</a></td>' +
-                        '<td><a class="btn btn-primary btn-sm" href="/staff/EDITQUIZ?quizID=' + nextQuizInfo.quizId + '">Edit</a></td>' +
+                        '<td><a class="btn btn-primary btn-sm" href="'+contextPath+'/staff/viewQuiz?quizID=' + nextQuizInfo.quizId + '">View</a></td>' +
+                        '<td><a class="btn btn-primary btn-sm" href="'+contextPath+'/staff/viewResults?quizID=' + nextQuizInfo.quizId + '">View</a></td>' +
+                        '<td><a class="btn btn-primary btn-sm" href="'+contextPath+'/staff/previewQuiz?quizID=' + nextQuizInfo.quizId + '">Preview</a></td>' +
                         '</tr>'
                         );
             });
