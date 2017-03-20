@@ -23,11 +23,11 @@ body{
 
 
 .panel-red{
-    background-color: #ae4444;
+    background-color: teal;
 }
 
 .panel-question hr{
-    border-top: 3px solid #ae4444;
+    border-top: 3px solid teal;
 }
 
 .panel-question label{
@@ -39,7 +39,7 @@ body{
 }
 .message-panel, .message-panel h1, .message-panel p{
     background-color: white;
-    color: #ae4444;
+    color: teal;
 }
 
 

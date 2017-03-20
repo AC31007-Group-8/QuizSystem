@@ -14,6 +14,8 @@ import com.github.ac31007_group_8.quiz.staff.store.Answer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -21,6 +23,8 @@ import org.jooq.Record8;
 import org.jooq.Result;
 import org.jooq.SortField;
 import org.jooq.exception.DataAccessException;
+import sun.rmi.runtime.Log;
+
 import static org.jooq.impl.DSL.val;
 
 /**
@@ -170,6 +174,28 @@ public class QuizModel {
         }
         return allModules;
     }
+
+    public void setPublishStatus(int quizID, boolean status){
+
+        DSLContext context = Database.getJooq();
+
+        Byte statusByte = 0;
+        if (status == true)  statusByte = 1;
+        context.update(QUIZ)
+                .set(QUIZ.PUBLISH_STATUS, statusByte)
+                .where(QUIZ.QUIZ_ID.equal(quizID)).execute();
+    }
+
+    public void setPublishStatus(DSLContext context, int quizID, boolean status){
+
+        Byte statusByte = 0;
+        if (status == true)  statusByte = 1;
+        context.update(QUIZ)
+                .set(QUIZ.PUBLISH_STATUS, statusByte)
+                .where(QUIZ.QUIZ_ID.equal(quizID)).execute();
+    }
+
+
     
     
     
@@ -178,42 +204,42 @@ public class QuizModel {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    // INCORRECT BELOW :)
-    
-    
-     public Quiz getQuiz(int quiz_id){
-        
-        DSLContext create = Database.getJooq(); //Connects to the database
-        
+    // OLD CODE BELOW WHICH HAS SINCE BEEN REFACTORED
+
+
+
+
+    public Quiz getQuiz(DSLContext create, int quiz_id){
+
+        if (create == null)
+        {
+            create = Database.getJooq(); //Connects to the database
+        }
+
         String sql = create.select()
-                            .from(QUIZ)
-                            .where(QUIZ.QUIZ_ID.equal(quiz_id))
-                            .getSQL();
-        
+                .from(QUIZ)
+                .where(QUIZ.QUIZ_ID.equal(quiz_id))
+                .getSQL();
+
         try{
-        
+
             Result<Record> result = create.fetch(sql);
 
             for(Record r : result){ //Iterates through the returned results
-                Quiz quiz = new Quiz(r.getValue(QUIZ.QUIZ_ID), r.getValue(QUIZ.STAFF_ID), r.getValue(QUIZ.TIME_LIMIT), r.getValue(QUIZ.MODULE_ID), r.getValue(QUIZ.TITLE), r.getValue(QUIZ.PUBLISH_STATUS)!=0); 
-
+                Quiz quiz = new Quiz(r.getValue(QUIZ.QUIZ_ID), r.getValue(QUIZ.STAFF_ID), r.getValue(QUIZ.TIME_LIMIT), r.getValue(QUIZ.MODULE_ID), r.getValue(QUIZ.TITLE), r.getValue(QUIZ.PUBLISH_STATUS)!=0);
+                System.out.println("About to return QUIZ!");
+                Logger.getGlobal().info("About to return QUIZ!");
                 return quiz; //Returns current version of the model
             }
         }
         catch(Exception e)
         {
+            System.out.println("Exception: " + e.getMessage());
         }
+        System.out.println("About to return null!");
+        Logger.getGlobal().info("About to return null!");
         return null;
     }
-    
     
     
     public ArrayList<Quiz> getQuizAllPerStaff(int staff_id)

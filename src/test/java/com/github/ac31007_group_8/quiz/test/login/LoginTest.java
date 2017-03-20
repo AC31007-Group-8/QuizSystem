@@ -171,8 +171,10 @@ public class LoginTest {
             exceptionThrown = true;
             System.out.println("Exception: " + ex.getMessage());
         }
-        assertTrue(exceptionThrown); //should reject
-        assertNull(response);
+        assertFalse(exceptionThrown);
+        assertNotNull(response);
+        assertEquals(200, response.status);
+        assertNotNull(response.body);
     }
 
     @Test
@@ -241,7 +243,22 @@ public class LoginTest {
     }
 
     @Test
-    public void PublicAccessToLoginPageTest() {
+    public void StudentOnlyAccessTest() {
+        boolean exceptionThrown = false;
+        TestResponse response = null;
+        try {
+            response = TestRequest.makeGETRequest("/student/testAddress");
+        } catch (IOException ex)
+        {
+            exceptionThrown = true;
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        assertTrue(exceptionThrown); //should reject
+        assertNull(response);
+    }
+
+    @Test
+    public void PublicAccessToStaffLoginPageTest() {
         boolean exceptionThrown = false;
         TestResponse response = null;
         try {
@@ -251,9 +268,29 @@ public class LoginTest {
             exceptionThrown = true;
             System.out.println("Exception: " + ex.getMessage());
         }
-        assertFalse(exceptionThrown); //should reject
+        assertFalse(exceptionThrown); //should allow access
         assertNotNull(response);
+        assertEquals(200, response.status);
+        assertNotNull(response.body);
     }
+
+    @Test
+    public void PublicAccessToStudentLoginPageTest() {
+        boolean exceptionThrown = false;
+        TestResponse response = null;
+        try {
+            response = TestRequest.makeGETRequest("/student/login");
+        } catch (IOException ex)
+        {
+            exceptionThrown = true;
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        assertFalse(exceptionThrown); //should allow access
+        assertNotNull(response);
+        assertEquals(200, response.status);
+        assertNotNull(response.body);
+    }
+    
 
 }
 
@@ -263,6 +300,7 @@ class StaffLoginMockDataProvider implements MockDataProvider {
     @Override
     public MockResult[] execute(MockExecuteContext ctx) throws SQLException {
 
+        //This class is based on: https://www.jooq.org/doc/3.4/manual/tools/jdbc-mocking/
         // You might need a DSLContext to create org.jooq.Result and org.jooq.Record objects
         DSLContext create = DSL.using(SQLDialect.MYSQL);
         MockResult[] mock = new MockResult[1];
@@ -278,7 +316,6 @@ class StaffLoginMockDataProvider implements MockDataProvider {
         // You decide, whether any given statement returns results, and how many
         else if (sql.toUpperCase().startsWith("SELECT")) {
 
-            // Always return one author record
             Result<StaffRecord> result = create.newResult(STAFF);
             result.add(create.newRecord(STAFF));
             result.get(0).setValue(STAFF.STAFF_ID, 1);
@@ -298,22 +335,16 @@ class StudentLoginMockDataProvider implements MockDataProvider {
     @Override
     public MockResult[] execute(MockExecuteContext ctx) throws SQLException {
 
-        // You might need a DSLContext to create org.jooq.Result and org.jooq.Record objects
         DSLContext create = DSL.using(SQLDialect.MYSQL);
         MockResult[] mock = new MockResult[1];
 
-        // The execute context contains SQL string(s), bind values, and other meta-data
         String sql = ctx.sql();
 
-        // Exceptions are propagated through the JDBC and jOOQ APIs
         if (sql.toUpperCase().startsWith("DROP")) {
             throw new SQLException("Statement not supported: " + sql);
         }
-
-        // You decide, whether any given statement returns results, and how many
         else if (sql.toUpperCase().startsWith("SELECT")) {
 
-            // Always return one author record
             Result<StudentRecord> result = create.newResult(STUDENT);
             result.add(create.newRecord(STUDENT));
             result.get(0).setValue(STUDENT.STUDENT_ID, 1);

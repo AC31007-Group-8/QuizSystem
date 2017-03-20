@@ -15,7 +15,7 @@ body{
 
 .panel-default .panel-heading{
     margin:30px 50px 0 50px;
-    background-color: #ae4444;
+    background-color: teal;
     background-image: none;
     color: white;
 }
@@ -66,8 +66,8 @@ body{
 
 
 .table thead{
-    border-top: 3px solid #ae4444;
-    border-bottom: 3px solid #ae4444;
+    border-top: 3px solid teal;
+    border-bottom: 3px solid teal;
 }
 
 .glyphicon{
