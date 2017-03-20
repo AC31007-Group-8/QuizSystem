@@ -196,7 +196,7 @@ public class QuizModelTest {
         assertEquals(allQi.get(0).getModuleName(),"Computers");
         assertTrue(allQi.get(0).isPublished());
         assertEquals(allQi.get(0).getQuizId(),2);
-        assertEquals(allQi.get(0).getTimeLimit(),3);
+        assertEquals(allQi.get(0).getTimeLimit(),(Integer)3);
         assertEquals(allQi.get(0).getTitle(),"IainsQuiz");
         assertEquals(allQi.get(0).getModule_id(),"AC123");
         

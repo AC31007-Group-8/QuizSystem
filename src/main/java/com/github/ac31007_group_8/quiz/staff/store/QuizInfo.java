@@ -44,11 +44,11 @@ public class QuizInfo {
         this.quizId = quizId;
     }
 
-    public int getTimeLimit() {
+    public Integer getTimeLimit() {
         return time_limit;
     }
 
-    public void setTimeLimit(int timeLimit) {
+    public void setTimeLimit(Integer timeLimit) {
         this.time_limit = timeLimit;
     }
 

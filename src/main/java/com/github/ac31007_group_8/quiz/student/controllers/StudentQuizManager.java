@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import com.github.ac31007_group_8.quiz.staff.store.*;
-import com.github.ac31007_group_8.quiz.student.models.QuizModelStudent;
+
 import com.github.ac31007_group_8.quiz.util.GoogleMail;
 import com.google.gson.Gson;
 
@@ -46,7 +46,7 @@ public class StudentQuizManager {
     public static void init() {
         get("/student/takeQuiz", StudentQuizManager::serveTakeQuiz);
         post("/student/takeQuiz", "application/json", StudentQuizManager::receiveTakeQuiz);
-        get("/student/relevantQuizzes", StudentQuizManager::sendRelevantQuizzes);
+        
     }
 
     
@@ -346,38 +346,7 @@ public class StudentQuizManager {
     }
     
     
-    //SEND RELEVANT QUIZZES
-    public static Object sendRelevantQuizzes(Request req, Response res){
-        
-        int studentId = 1; //get from session!
-        
-        Connection conn = Database.getConnection();
-        QuizModelStudent qms = new QuizModelStudent();
-        
-        try{
-            
-            ArrayList<QuizInfo> allQuizzes = qms.getRelevantQuizzes(studentId, conn);
-
-
-            //for Callum:
-            //instead of this make a page and fill it with data (no need to convert to gson).
-            //mustache stuff
-            
-            String json = new Gson().toJson(allQuizzes);
-            System.out.println(json);
-            res.status(200);
-            return json;
-            
-            
-        }
-        catch(SQLException sqle){
-            LOGGER.error("SQL exception happened !", sqle);
-            return "sql exception";
-        }
-        
-
-        
-    }
+    
     
     
     

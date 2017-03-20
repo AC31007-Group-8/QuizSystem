@@ -12,6 +12,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
+import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
+import com.github.ac31007_group_8.quiz.staff.store.QuizInfoStudent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import org.jooq.exception.DataAccessException;
 
 
 ///**
@@ -200,4 +208,60 @@ public class StudentQuizModel {
         }
     }
 
+    
+    
+    
+    public ArrayList<QuizInfo> getRelevantQuizzes(int studentId, Connection conn) throws SQLException{
+        
+        
+        PreparedStatement stmt = conn.prepareStatement("SELECT quiz.quiz_id, quiz.time_limit, quiz.Title, module.module_name, module.module_id" +
+                                        " FROM quiz" +
+                                        " INNER JOIN module" +
+                                        " ON quiz.module_id = module.module_id" +
+                                        " INNER JOIN student_to_module" +
+                                        " ON student_to_module.module_id = module.module_id " +
+                                        " INNER JOIN student" +
+                                        " ON student.student_id = student_to_module.student_id" +
+                                        " WHERE publish_status=1 AND student.student_id=?;");
+        stmt.setInt(1,studentId);
+        
+        
+        ResultSet rs = stmt.executeQuery();   
+        ArrayList<QuizInfo> allRelevantQuizInfo = new ArrayList<QuizInfo>();
+        
+        while (rs.next()){
+            
+                QuizInfo next = new QuizInfo();
+                next.setQuizId(rs.getInt(1));
+                next.setTimeLimit(rs.getInt(2)); 
+                next.setTitle(rs.getString(3)); 
+                next.setModuleName(rs.getString(4)); 
+                next.setModuleCode(rs.getString(5));
+                        
+                allRelevantQuizInfo.add(next);       
+        }
+        
+        return allRelevantQuizInfo;
+    }
+    
+    
+    
+    
+    
+     public ArrayList<QuizInfoStudent> getFilteredQuizInfo(DSLContext create, String moduleCode, String creator, String sortBy, String taken, String relevant) throws DataAccessException    {      
+         
+        ArrayList<QuizInfoStudent> allQuizInfo = new ArrayList();
+
+
+
+        return allQuizInfo;
+       
+    }
+    
+    
+    
 }
+
+
+
+
