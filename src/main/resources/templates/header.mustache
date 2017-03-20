@@ -1,57 +1,65 @@
 
 
-
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{baseURL}}/student/login">Quiz System</a>
+      
+<!--      <a href="{{baseURL}}" class="navbar-brand"> <img class="img-responsive" style="width:256px;" src="{{baseURL}}/Logo.png"> <small style="float:right;">Be Inquisitive.</small> </a>-->
+      
+    </div>
     
-   
+    
+    
+    
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-default" style="margin-bottom:0;">
-    <div class="container-fluid">
-
-        <!-- Logo -->
-        <div class="navbar-header">
-            <a href="{{baseURL}}" class="navbar-brand"> <img class="img-responsive" style="width:256px;" src="{{baseURL}}/Logo.png"> <small style="float:right;">Be Inquisitive.</small> </a>
-        </div>
-
-        <!-- Navigation buttons -->
-        <div>
-
-
-            <!--Left Side-->
-            <ul class="nav navbar-nav">
+        
             {{#user}}
                 {{#isStaff}}
-                <li> <a href="{{baseURL}}/staff/quizList"> Quiz List </a></li>
-                <li> <a href="{{baseURL}}/staff/createQuiz"> Create Quiz </a></li>
+                <li> <a href="{{baseURL}}/staff/quizList"> Quiz List <span class="sr-only">(current)</span></a></li>
+                <li> <a href="{{baseURL}}/staff/createQuiz"> Create Quiz <span class="sr-only">(current)</span></a></li>
                 {{/isStaff}}
                 {{^isStaff}}
-                    <li> <a href="{{baseURL}}/student/studentQuizList"> Quiz List  </a></li>
+                    <li> <a href="{{baseURL}}/student/relevantQuizzes"> Quiz List  <span class="sr-only">(current)</span></a></li>
                 {{/isStaff}}
             {{/user}}
             {{^user}}
-                <li> <a href="{{baseURL}}/student/login"> Please log in to use this website. </a></li>
+                <li> <a href="{{baseURL}}/student/login"> Please log in to use this website.<span class="sr-only">(current)</span> </a></li>
             {{/user}}
-            </ul>
-
-            <!--Right Side-->
-            <ul class="nav navbar-nav navbar-right">
-                {{#user}}
-					<li> <a href="{{baseURL}}/staff/viewProfile"> Logged in as {{name}} </a></li>
-                    <li> <a href="{{baseURL}}/logout"> Log out </a></li>
-                {{/user}}
-                {{^user}}
-                    <li> <a href="{{baseURL}}/staff/login">Staff Login </a></li>
-                    <li> <a href="{{baseURL}}/student/login">Student Login </a></li>
-                {{/user}}
-
-            </ul>
-
-
-        </div>
-
-    </div>
+        
+        
+      </ul>
+  
+      <ul class="nav navbar-nav navbar-right">
+            {{#user}}
+                                    <li> <a> {{name}} </a></li>
+                <li> <a href="{{baseURL}}/logout"> Log out </a></li>
+            {{/user}}
+            {{^user}}
+                <li> <a href="{{baseURL}}/staff/login">Staff Login </a></li>
+                <li> <a href="{{baseURL}}/student/login">Student Login </a></li>
+            {{/user}}
+        
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
 </nav>
+
+
+
+
+
 
 <!--Notifications-->
 {{#messages}}

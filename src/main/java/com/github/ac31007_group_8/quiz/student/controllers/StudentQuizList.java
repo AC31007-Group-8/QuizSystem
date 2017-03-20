@@ -150,7 +150,7 @@ public class StudentQuizList {
             ArrayList<QuizInfoStudent> quizTitles = quizModel.getFilteredQuizInfo(dslCont,moduleCode,sortBy, taken, relevant, studentId);
             String json = new Gson().toJson(quizTitles);
             System.out.println(json);
-            res.status(200);
+            res.status(200);  
             return json;
           
         }

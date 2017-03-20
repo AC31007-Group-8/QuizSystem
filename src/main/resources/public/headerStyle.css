@@ -1,14 +1,14 @@
 body{
     background-color:#E5E5E5;
 }
-
+/*
 #contentColumn.col-md-10 {
     background-color:#99AA99;
-    /*height: 100%;*/
+    height: 100%;
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 83px);
-    /* height: calc(100vh - 83px); /* viewport height - header height */
+     height: calc(100vh - 83px); /* viewport height - header height 
 }
 
 table tr{
@@ -89,7 +89,7 @@ a:hover .mainButton{
     left:15vw;
     width:70vw;
     background-color:#99AA99;
-    min-height: calc(100vh - 83px); /* viewport height - header height */
+    min-height: calc(100vh - 83px);  viewport height - header height 
     padding:10px;
 }
 
@@ -183,6 +183,7 @@ imgbox-wrapper{
 .input-group {
     width: 100%;
 }
+*/
 
 .notificationInfoDiv {
     margin:auto;
