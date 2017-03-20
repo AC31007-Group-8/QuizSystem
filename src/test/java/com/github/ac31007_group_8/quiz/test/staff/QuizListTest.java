@@ -6,17 +6,29 @@
 package com.github.ac31007_group_8.quiz.test.staff;
 
 import com.github.ac31007_group_8.quiz.Database;
+import com.github.ac31007_group_8.quiz.QuizSparkApp;
 import com.github.ac31007_group_8.quiz.staff.controllers.QuizList;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
+import com.github.ac31007_group_8.quiz.staff.models.StaffLoginModel;
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.github.ac31007_group_8.quiz.staff.store.User;
+import com.github.ac31007_group_8.quiz.test.util.TestRequest;
+import com.github.ac31007_group_8.quiz.test.util.TestResponse;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
-import static org.junit.Assert.assertEquals;
+
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.powermock.api.mockito.PowerMockito;
@@ -27,21 +39,34 @@ import spark.Response;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import org.mockito.Mock;
+import spark.Spark;
 
 /**
  *
  * @author Vlad
  */
 
-
-
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({QuizList.class, Database.class}) 
+@PrepareForTest({QuizList.class, Database.class})
 public class QuizListTest {
-    
     private Request req ;      
     private Response res ;
-    
+
+    @BeforeClass
+    public static void setUpClass() {
+
+        QuizSparkApp.init();
+        Spark.awaitInitialization();
+
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+
+        Spark.stop();
+
+    }
+
     @Before
     public void init() throws Exception{
         PowerMockito.mockStatic(Database.class);//to do nothing when Database.getJooq is called
@@ -132,6 +157,20 @@ public class QuizListTest {
 
     }
     
-    
+   @Test
+    public void serveQuizPreviewPage(){
+       boolean exceptionThrown = false;
+       TestResponse response = null;
+       try {
+           response = TestRequest.makeGETRequest("/staff/previewQuiz");
+       } catch (IOException ex)
+       {
+           exceptionThrown = true;
+           System.out.println("Exception: " + ex.getMessage());
+       }
+       assertTrue(exceptionThrown); //Expected status code 401, which should throw an exception
+       assertNull(response);
+   }
+
     
 }

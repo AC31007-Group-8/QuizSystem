@@ -6,7 +6,9 @@ import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.Database;
 import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.staff.models.QuizModel;
+import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
+import io.github.gitbucket.markedj.Marked;
 import spark.Request;
 import spark.Response;
 import spark.TemplateEngine;
@@ -14,10 +16,12 @@ import spark.template.mustache.MustacheTemplateEngine;
 
 import java.util.*;
 
+import com.github.ac31007_group_8.quiz.staff.*;
 import com.github.ac31007_group_8.quiz.staff.store.*;
 import com.google.gson.Gson;
 
 import static spark.Spark.*;
+import java.sql.SQLException;
 import org.jooq.DSLContext;
 import org.jooq.exception.DataAccessException;
 import org.slf4j.Logger;
@@ -39,6 +43,52 @@ public class QuizList {
     public static void init() {
         get("/staff/quizList", QuizList::getQuizList);
         get("/staff/quizList/filter", QuizList::getFilteredQuizList);
+        get("/staff/previewQuiz", QuizList::servePreviewQuiz);
+    }
+
+    public static Object servePreviewQuiz(Request req, Response res){
+        TemplateEngine eng = new MustacheTemplateEngine();
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
+
+        //Validate quizID - is valid input provided?
+        String quizIDString = req.queryParams("quizID");
+        if (quizIDString == (null) || quizIDString.equals(""))
+        {
+            //display error page
+            throw halt(400, eng.render(eng.modelAndView(map, "invalidQuiz.mustache")));
+        }
+        int quizID = Integer.parseInt(quizIDString);
+
+        StudentQuizModel quizModel = new StudentQuizModel();
+        Quiz quiz = quizModel.getCompleteQuiz(quizID);
+
+        List<Question> allQuestions = quiz.getQuestions();
+        int ind=1;
+        for (Question q:allQuestions){
+
+            q.setQuestion(Marked.marked(q.getQuestion()));
+            q.setQuestionIndex(ind);
+            ind++;
+        }
+
+        map.put("quizTitle", quiz.getTitle());
+        map.put("moduleCode", quiz.getModule_id());
+
+        Integer inMinutes = quiz.getTime_limit();
+        if (inMinutes == null){
+            map.put("timeLimitOfQuiz", "-");
+        }
+        else{
+            int h = inMinutes/60;
+            int m = inMinutes - h*60;
+
+            map.put("timeLimitOfQuiz",((h+"").length()<2?"0"+h:h)+":"+((m+"").length()<2?"0"+m:m)+":00");
+        }
+        map.put("timeLeft", inMinutes);
+
+        map.put("allQuestions", allQuestions);
+
+        return eng.render(eng.modelAndView(map, "previewQuiz.mustache"));
     }
 
     public static Object getQuizList(Request req, Response res){
@@ -56,7 +106,9 @@ public class QuizList {
             ArrayList<QuizInfo> quizTitles = quizModel.getAllQuizInfo(dslCont);
             map.put("quizList", quizTitles);
             
-          
+            for (QuizInfo q:quizTitles){
+                System.out.println(q);
+            }
             
             res.status(200);
             TemplateEngine eng = new MustacheTemplateEngine();
