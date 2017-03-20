@@ -1,5 +1,6 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
+import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.student.models.ResultListModel;
 import com.github.ac31007_group_8.quiz.util.Init;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ public class ResultList {
         ResultListModel resultModel = new ResultListModel();
 
         StudentResults studResults = resultModel.getCompleteQuizzes(studentID);
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
         map.put("studentResults", studResults);
 
         return eng.render(eng.modelAndView(map, "resultList.mustache"));
