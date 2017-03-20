@@ -1,6 +1,7 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
 import com.github.ac31007_group_8.quiz.common.ParameterManager;
+import com.github.ac31007_group_8.quiz.staff.controllers.StaffLoginController;
 import com.github.ac31007_group_8.quiz.staff.store.User;
 import com.github.ac31007_group_8.quiz.student.models.StudentLoginModel;
 import com.github.ac31007_group_8.quiz.util.Init;
@@ -12,9 +13,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import static spark.Spark.get;
-import static spark.Spark.halt;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 /**
  * Created by Can on 16/03/2017.
@@ -29,6 +28,7 @@ public class StudentLoginController {
     public static void init() {
         get("/student/login", StudentLoginController::serveLogin);
         post("/student/login", "application/json", StudentLoginController::receiveLogin);
+        before("/student/*", StudentLoginController::filterStudent);
     }
 
     public static Object serveLogin(Request req, Response res) {
@@ -70,9 +70,28 @@ public class StudentLoginController {
         
         map = ParameterManager.getAllParameters(req); //update after login
 
-        res.redirect(map.get("baseURL") + "/student/QuizList");
+        res.redirect(map.get("baseURL") + "/student/studentQuizList");
         return null;
         //return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
+    }
+
+    public static void filterStudent(Request req, Response res)
+    {
+        //do not restrict access to the login page.
+        if (req.url().endsWith("student/login"))
+        {
+            return;
+        }
+        //check if authenticated for all other pages
+        User user = req.session().attribute("user");
+        if (user == null || user.isStaff())
+        {
+            //Set up template engine
+            TemplateEngine eng = new MustacheTemplateEngine();
+            HashMap<String, Object> map = ParameterManager.getAllParameters(req);
+            ParameterManager.writeMessage(map, "You must log in as a student to access this functionality!");
+            throw halt(401, eng.render(eng.modelAndView(map, "studentLogin.mustache")));
+        }
     }
 
 }

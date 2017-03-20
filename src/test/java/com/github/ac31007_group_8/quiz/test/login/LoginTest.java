@@ -243,7 +243,22 @@ public class LoginTest {
     }
 
     @Test
-    public void PublicAccessToLoginPageTest() {
+    public void StudentOnlyAccessTest() {
+        boolean exceptionThrown = false;
+        TestResponse response = null;
+        try {
+            response = TestRequest.makeGETRequest("/student/testAddress");
+        } catch (IOException ex)
+        {
+            exceptionThrown = true;
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        assertTrue(exceptionThrown); //should reject
+        assertNull(response);
+    }
+
+    @Test
+    public void PublicAccessToStaffLoginPageTest() {
         boolean exceptionThrown = false;
         TestResponse response = null;
         try {
@@ -253,9 +268,29 @@ public class LoginTest {
             exceptionThrown = true;
             System.out.println("Exception: " + ex.getMessage());
         }
-        assertFalse(exceptionThrown); //should reject
+        assertFalse(exceptionThrown); //should allow access
         assertNotNull(response);
+        assertEquals(200, response.status);
+        assertNotNull(response.body);
     }
+
+    @Test
+    public void PublicAccessToStudentLoginPageTest() {
+        boolean exceptionThrown = false;
+        TestResponse response = null;
+        try {
+            response = TestRequest.makeGETRequest("/student/login");
+        } catch (IOException ex)
+        {
+            exceptionThrown = true;
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        assertFalse(exceptionThrown); //should allow access
+        assertNotNull(response);
+        assertEquals(200, response.status);
+        assertNotNull(response.body);
+    }
+    
 
 }
 
