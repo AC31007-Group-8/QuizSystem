@@ -108,8 +108,8 @@ and open the template in the editor.
                     <th>Title</th>
                     <th>Time limit</th>
                     <th>Creator</th>
-                    <th>Edit</th>
                     <th>View</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,8 +129,8 @@ and open the template in the editor.
                     <td>{{title}}</td>
                     <td>{{time_limit}}</td>
                     <td>{{first_name}}  {{second_name}}</td>
-                    <td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID={{quiz_id}}">View</a></td>
-                    <td><a class="btn btn-primary btn-sm" href="/staff/EDITQUIZ?quizID={{quiz_id}}">Edit</a></td>
+                    <td><a class="btn btn-primary btn-sm" href="/staff/viewQuiz?quizID={{quiz_id}}">View</a></td>
+                    <td><a class="btn btn-primary btn-sm" href="/staff/editQuiz?quizID={{quiz_id}}">Edit</a></td>
                 </tr>
                 {{/quizList}}
 
