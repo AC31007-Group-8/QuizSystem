@@ -44,6 +44,7 @@ public class QuizList {
         get("/staff/quizList", QuizList::getQuizList);
         get("/staff/quizList/filter", QuizList::getFilteredQuizList);
         get("/staff/previewQuiz", QuizList::servePreviewQuiz);
+        post("/staff/changePublishStatus", QuizList::changePublishStatus);
     }
 
     public static Object servePreviewQuiz(Request req, Response res){
@@ -61,6 +62,16 @@ public class QuizList {
 
         StudentQuizModel quizModel = new StudentQuizModel();
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
+
+        String publishStatus = "Not Published";
+        String publishTarget = "true";
+        if (quiz.isPublish_status()) {
+            publishStatus = "Published";
+            publishTarget = "false";
+        }
+        map.put("publishStatus", publishStatus);
+        map.put("publishTarget", publishTarget);
+        map.put("quizID", quizIDString);
 
         List<Question> allQuestions = quiz.getQuestions();
         int ind=1;
@@ -89,6 +100,33 @@ public class QuizList {
         map.put("allQuestions", allQuestions);
 
         return eng.render(eng.modelAndView(map, "previewQuiz.mustache"));
+    }
+
+    public static Object changePublishStatus(Request req, Response res){
+
+        TemplateEngine eng = new MustacheTemplateEngine();
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
+
+        boolean targetStatus = false;
+        if (req.queryParams("publishTarget").equals("true")) targetStatus = true;
+
+        //Validate quizID - is valid input provided?
+        String quizIDString = req.queryParams("quizID");
+        if (quizIDString == (null) || quizIDString.equals("") || req.queryParams("publishTarget") == null)
+        {
+            //display error page
+            ParameterManager.writeMessage(map, "Quiz publish status could not be changed - please try again.");
+            throw halt(400, eng.render(eng.modelAndView(map, "invalidQuiz.mustache")));
+            //return  eng.render(eng.modelAndView(map, "invalidQuiz.mustache"));
+        }
+        int quizID = Integer.parseInt(quizIDString);
+
+        QuizModel quizModel = new QuizModel();
+        quizModel.setPublishStatus( quizID, targetStatus);
+
+        res.redirect("previewQuiz?quizID="+quizIDString);
+        return null;
+
     }
 
     public static Object getQuizList(Request req, Response res){
