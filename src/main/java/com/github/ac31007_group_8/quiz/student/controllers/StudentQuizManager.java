@@ -84,8 +84,12 @@ public class StudentQuizManager {
 
       
         List<Question> allQuestions = quiz.getQuestions();
+        int ind=1;
         for (Question q:allQuestions){
-            q.setQuestion(Marked.marked(q.getQuestion()));   
+            
+            q.setQuestion(Marked.marked(q.getQuestion())); 
+            q.setQuestionIndex(ind);
+            ind++;
         }
         
         map.put("quizTitle", quiz.getTitle());
@@ -93,14 +97,16 @@ public class StudentQuizManager {
         
         Integer inMinutes = quiz.getTime_limit();
         if (inMinutes == null){
-             map.put("timeLimit", "---");
+             map.put("timeLimitOfQuiz", "-");
         }
         else{
             int h = inMinutes/60;
             int m = inMinutes - h*60;
-            map.put("timeLimit", "h: "+h+" m: "+m);
+           
+            map.put("timeLimitOfQuiz",((h+"").length()<2?"0"+h:h)+":"+((m+"").length()<2?"0"+m:m)+":00");
         }
-      
+        map.put("timeLeft", inMinutes);
+        
         map.put("allQuestions", allQuestions);
 
         return eng.render(eng.modelAndView(map, "takeQuiz.mustache"));
@@ -113,10 +119,16 @@ public class StudentQuizManager {
     
     public static Object receiveTakeQuiz(Request req, Response res){
 
+        
+        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
+        TemplateEngine eng = new MustacheTemplateEngine();
+        
         //receive params: quizID, answerIDs, questionIDs
         int quizID = Integer.parseInt(req.queryParams("quizID"));
         int duration = Integer.parseInt(req.queryParams("duration"));
-
+        boolean emailResult = req.queryParams("emailResult")!=null;
+  
+        
         //retrieve questionIDs in the quiz.
         StudentQuizModel quizModel = new StudentQuizModel();
         List<Question> questions = quizModel.getQuestions(quizID);
@@ -128,7 +140,10 @@ public class StudentQuizManager {
             int questionID = question.getQuestionID();
             String[] values = req.queryParamsValues(("question" + Integer.toString(questionID)));
 
-            if (values == null) Logger.getGlobal().info("No answers submitted for question with ID " + questionID);
+            if (values == null){
+                    Logger.getGlobal().info("No answers submitted for question with ID " + questionID);
+                    throw halt(400, eng.render(eng.modelAndView(map, "badRequest.mustache")));
+            }
 
             for (String value:values) {
                 answerIDs.add(Integer.parseInt(value));
@@ -138,47 +153,55 @@ public class StudentQuizManager {
 
         Quiz quiz = quizModel.getCompleteQuiz(quizID);
         int score = calculateScore(answerIDs, quiz);
-        int studentID = 1;
+        
+        User currentUser = (User)req.session().attribute("user");
+        if (currentUser==null || currentUser.isStaff()){
+            LOGGER.error("IMPOSSIBLE HAPPENED. should be prevented in filter!");
+            res.redirect(map.get("baseURL")+"/student/login", 301); 
+            return null;
+        }
+
         java.sql.Date sqlDate = new java.sql.Date(new Date().getTime());
-        quizModel.writeResult(score, quizID, studentID, sqlDate, duration, answerIDs);
+        quizModel.writeResult(score, quizID, currentUser.getUserid(), sqlDate, duration, answerIDs);
         
         
-        
-        
-        //SEND EMAIL
-        DateFormat df = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss");
-        String pageHtml = createHtml(questions, answerIDs, quiz, score, df.format(sqlDate), duration);
-        
-       
-        
-        try{
-            String message = "Quiz results for quiz: "+quiz.getTitle();
-            sendEmail(pageHtml, message);
-        }
-        catch(FileNotFoundException fnfe){
-            LOGGER.error("File not found", fnfe);
-           
-        }
-        catch(AddressException ae){
-            LOGGER.error("Wrong format of email address", ae);
-           //add could not send email text to endQuiz
-        }
-        catch(MessagingException me){
-            LOGGER.error("MessagingException", me);
-           
-        }
-        
+        String mailResult = "";
+        if (emailResult){
+            //SEND EMAIL
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd/ HH:mm:ss");
+            String pageHtml = createHtml(questions, answerIDs, quiz, score, df.format(sqlDate), duration);
 
-        HashMap<String, Object> map = ParameterManager.getAllParameters(req);
+            try{
+                String message = "Quiz results for quiz: "+quiz.getTitle();
+                
+                
+                sendEmail(pageHtml, message, currentUser.getEmail());
+                
+                mailResult = "Email sent.";
+            }
+            catch(FileNotFoundException fnfe){
+                LOGGER.error("File not found", fnfe);
+                mailResult = "Failed to send email.";
+            }
+            catch(AddressException ae){
+                LOGGER.error("Wrong format of email address", ae);
+               mailResult = "Failed to send email.";
+            }
+            catch(MessagingException me){
+                LOGGER.error("MessagingException", me);
+                mailResult = "Failed to send email.";
+            }
+        }
+        
+        map.put("mailResult",mailResult);
 
-        TemplateEngine eng = new MustacheTemplateEngine();
         return eng.render(eng.modelAndView(map, "endQuiz.mustache"));
 
     }
     
     
     
-       private static void sendEmail(String pageHtml, String message) throws FileNotFoundException, AddressException, MessagingException{
+       private static void sendEmail(String pageHtml, String message, String email) throws FileNotFoundException, AddressException, MessagingException{
        
         String fileName = UUID.randomUUID().toString()+".html";
         String path = StudentQuizManager.class.getResource("/temp").getPath();
@@ -191,7 +214,7 @@ public class StudentQuizManager {
         }
        
 
-        GoogleMail.Send("QuizResultSender1@gmail.com", "spamAllanToDeath", "vladislav.voicehovich@gmail.com", "Quiz Results", message, targetFile);
+        GoogleMail.Send("QuizResultSender1@gmail.com", "spamAllanToDeath", email, "Quiz Results", message, targetFile);
          
          
         targetFile.delete();

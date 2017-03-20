@@ -58,7 +58,7 @@ public class StaffLoginModel {
             Result<Record> result = dbConnection.select().from(STAFF).where(STAFF.PASSWORD.equal(password).and(STAFF.STAFF_NUMBER.equal(username))).fetch();
 
             for(Record r : result){ //Iterates through the returned results - there should only be 1.
-                User user = new User(r.get(STAFF.FIRST_NAME) + " " + r.get(STAFF.SECOND_NAME), username);
+                User user = new User(r.get(STAFF.FIRST_NAME) + " " + r.get(STAFF.SECOND_NAME), r.get(STAFF.STAFF_ID));
                 user.setStaff();
                 return user;
             }

@@ -3,6 +3,7 @@
     <head>
         <title>Quiz system</title>
         {{> headerResources}}
+        <link rel="stylesheet" href="{{baseURL}}/student/takeQuiz.css">
     </head>
 
     <body>
@@ -10,15 +11,24 @@
 
         {{> header}}
 
-        <br/>
+       
 
-        Status code 400 - Bad Request
-        <br/>
-        Something went wrong. Please ensure that your input was correct.
+        <div class="panel panel-default message-panel">
+            <div  class="panel-body">
 
-        <br/>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12">
+                        <h1>  Status code 400 - Bad Request</h1>
+                        <p>Something went wrong. Please ensure that your input was correct.</p>
+  
+                    </div>
+                </div>
 
-        {{> footer}}
+            </div>
+        </div>
+        
+        
+        
 
     </body>
 </html>

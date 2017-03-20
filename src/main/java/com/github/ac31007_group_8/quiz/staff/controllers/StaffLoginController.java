@@ -77,9 +77,9 @@ public class StaffLoginController {
         }
 
         req.session().attribute("user", user);
-        map = ParameterManager.getAllParameters(req);
+        
 
-        res.redirect(ParameterManager.getBaseURL(req) + "/staff/quizList");
+        res.redirect(map.get("baseURL") + "/staff/quizList");
         return null;
         //return eng.render(eng.modelAndView(map, "staffLogin.mustache"));
     }
@@ -98,8 +98,8 @@ public class StaffLoginController {
 
         ParameterManager.writeMessage(map, "You have been logged out of your account.");
 
-        if (wasStaff) res.redirect(ParameterManager.getBaseURL(req) + "staff/login");
-        if (!wasStaff) res.redirect(ParameterManager.getBaseURL(req) + "student/login");
+        if (wasStaff) res.redirect(map.get("baseURL") + "/staff/login");
+        if (!wasStaff) res.redirect(map.get("baseURL") + "/student/login");
         return null;
         //return eng.render(eng.modelAndView(map, "staffLogin.mustache"));
     }
@@ -119,7 +119,7 @@ public class StaffLoginController {
             TemplateEngine eng = new MustacheTemplateEngine();
             HashMap<String, Object> map = ParameterManager.getAllParameters(req);
             ParameterManager.writeMessage(map, "You must log in as a staff member to access this functionality!");
-            halt(401, eng.render(eng.modelAndView(map, "staffLogin.mustache")));
+            throw halt(401, eng.render(eng.modelAndView(map, "staffLogin.mustache")));
         }
     }
 

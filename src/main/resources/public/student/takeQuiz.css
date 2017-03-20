@@ -2,9 +2,81 @@
 #counterContainer {display: none;} /* hide by default, enable using JS */
 #questionContainer {display: none;} /* hide by default, enable using JS */
 #submitButton {display: none;} /* hide by default, enable using JS */
-p{
-    color:whitesmoke;
-}
+
 h1{
     color:white;
+}
+
+.panel-red p{
+    color:white;
+}
+
+body{
+    min-width:330px;
+}
+
+.panel.panel-default{
+    margin:50px;
+   
+    border: 2px solid #795548;
+}
+
+
+.panel-red{
+    background-color: #ae4444;
+}
+
+.panel-question hr{
+    border-top: 3px solid #ae4444;
+}
+
+.panel-question label{
+    padding-left:5px;
+}
+
+.panel-question .panel-body .row{
+    padding-left:30px;
+}
+.message-panel, .message-panel h1, .message-panel p{
+    background-color: white;
+    color: #ae4444;
+}
+
+
+.panel-custom button{
+    width:100%;
+}
+
+.panel.panel-default.sticky{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    margin-top: 0;
+    z-index: 10000;
+   
+}
+
+#counterContainer{
+    background-color:peachpuff;
+    color:black;
+    text-align: center;
+    font-size: large;
+}
+
+img{
+    max-width:100%;
+}
+
+#submitButton{
+    width:100%;
+}
+
+#emailResultLabel{
+    color: white;
+    font-weight: lighter;
+}
+
+.error-highlight{
+    border: solid 2px blue;
 }

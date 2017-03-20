@@ -19,6 +19,9 @@ public class Question {
     ArrayList<Answer> answers = new ArrayList<>();
     String question ="";
     String explanation ="";
+    int questionIndex = 0;//just to dipsplay question index in mustache. wtf! how to get iteraion index??
+
+    
     
    
     
@@ -27,6 +30,15 @@ public class Question {
         this.quiz_id = quiz_id;
         this.question = question;
         this.explanation = explanation;
+    }
+    
+    
+    public int getQuestionIndex() {
+        return questionIndex;
+    }
+
+    public void setQuestionIndex(int questionIndex) {
+        this.questionIndex = questionIndex;
     }
 
     public int getQuestionID(){

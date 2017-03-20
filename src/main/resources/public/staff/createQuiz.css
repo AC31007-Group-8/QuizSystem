@@ -31,7 +31,9 @@ body{
     width:100%;
 }
 
-
+.panel-body h2, .panel-body h3{
+    color:white;
+}
 
 #quiz-module, input[type=text], button{
     

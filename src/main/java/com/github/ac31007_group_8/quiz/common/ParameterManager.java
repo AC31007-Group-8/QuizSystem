@@ -38,15 +38,15 @@ public class ParameterManager {
         }
     }
 
-    public static String getBaseURL(Request req){
-        ServletContext sc = req.raw().getSession().getServletContext();
-        if (sc==null){//jetty
-            return "";
-        }
-        else{
-            return sc.getContextPath();//tomcat
-        }
-    }
+//    public static String getBaseURL(Request req){
+//        ServletContext sc = req.raw().getSession().getServletContext();
+//        if (sc==null){//jetty
+//            return "";
+//        }
+//        else{
+//            return sc.getContextPath();//tomcat
+//        }
+//    }
 
 
     public static void addSessionParameters(HashMap<String,Object> map, Request req){

@@ -58,7 +58,7 @@ public class StudentLoginModel {
             Result<Record> result = dbConnection.select().from(STUDENT).where(STUDENT.PASSWORD.equal(password).and(STUDENT.MATRIC_NUMBER.equal(username))).fetch();
 
             for(Record r : result){ //Iterates through the returned results - there should only be 1.
-                User user = new User(r.get(STUDENT.EMAIL), r.get(STUDENT.STUDENT_ID).toString());
+                User user = new User(r.get(STUDENT.EMAIL), r.get(STUDENT.STUDENT_ID));
                 user.setEmail(r.get(STUDENT.EMAIL));
                 return user;
             }

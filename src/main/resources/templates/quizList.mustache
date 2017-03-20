@@ -88,18 +88,9 @@ and open the template in the editor.
     </div>    
         
         
-<!--    <div class="panel panel-default panel-custom">
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
-                    <a class="btn btn-default" href="/staff/createQuiz">Create new quiz</a>
-                </div>
-            </div>
-        </div>
-    </div>-->
 
     <div id="contentHolder">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Published?</th>
@@ -109,7 +100,8 @@ and open the template in the editor.
                     <th>Time limit</th>
                     <th>Creator</th>
                     <th>View</th>
-                    <th>Edit</th>
+                    <th>View Results</th>
+                    <th>Preview Quiz</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,8 +121,9 @@ and open the template in the editor.
                     <td>{{title}}</td>
                     <td>{{time_limit}}</td>
                     <td>{{first_name}}  {{second_name}}</td>
-                    <td><a class="btn btn-primary btn-sm" href="/staff/viewQuiz?quizID={{quiz_id}}">View</a></td>
-                    <td><a class="btn btn-primary btn-sm" href="/staff/editQuiz?quizID={{quiz_id}}">Edit</a></td>
+                    <td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID={{quizId}}">View</a></td>
+                    <td><a class="btn btn-primary btn-sm" href="/staff/viewQuiz?quizID={{!quizId}}">View</a></td>
+                    <td><a class="btn btn-primary btn-sm" href="/staff/previewQuiz?quizID={{quizId}}">Preview</a></td>
                 </tr>
                 {{/quizList}}
 
