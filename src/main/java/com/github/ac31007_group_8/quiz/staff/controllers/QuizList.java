@@ -98,6 +98,7 @@ public class QuizList {
 
             ArrayList<QuizInfo> quizTitles = quizModel.getQuizzesFiltered(dslCont,moduleCode,isPublished,creator,sortBy);
             String json = new Gson().toJson(quizTitles);
+           
             res.status(200);
             return json;
           

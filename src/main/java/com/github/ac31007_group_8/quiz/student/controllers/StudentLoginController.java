@@ -70,7 +70,7 @@ public class StudentLoginController {
         
         map = ParameterManager.getAllParameters(req); //update after login
 
-        res.redirect(map.get("baseURL") + "/student/QuizList");
+        res.redirect(map.get("baseURL") + "/student/relevantQuizzes");
         return null;
         //return eng.render(eng.modelAndView(map, "studentLogin.mustache"));
     }

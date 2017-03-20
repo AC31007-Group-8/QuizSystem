@@ -18,15 +18,13 @@ public class QuizInfoStudent {
     String module_id = null;
     boolean isRelevant = false;
     boolean isTaken = false;
-    String first_name = null;
-    String second_name = null;
 
     
     public QuizInfoStudent(){
         
     }
     
-    public QuizInfoStudent(int quizId, Integer time, String title, String moduleName, String module_id, boolean isRelevant,boolean isTaken, String fName, String sName){
+    public QuizInfoStudent(int quizId, Integer time, String title, String moduleName, String module_id, boolean isRelevant,boolean isTaken){
         this.quizId = quizId;
         time_limit = time;
         this.title = title;
@@ -34,8 +32,7 @@ public class QuizInfoStudent {
         this.module_id = module_id;
         this.isRelevant = isRelevant;
         this.isTaken = isTaken;
-        first_name = fName;
-        second_name = sName;
+ 
     }
     
     public int getQuizId() {
@@ -94,21 +91,7 @@ public class QuizInfoStudent {
         this.isTaken = isTaken;
     }
 
-    public String getFirst_name() {
-        return first_name;
-    }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getSecond_name() {
-        return second_name;
-    }
-
-    public void setSecond_name(String second_name) {
-        this.second_name = second_name;
-    }
     
     
     

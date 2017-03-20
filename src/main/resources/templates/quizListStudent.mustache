@@ -1,29 +1,148 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <html>
     <head>
-        <title>Quiz system</title>
-        {{> headerResources}}
-    </head>
+        <title>View quizzes</title>
 
+       
+        {{> headerResources}}
+
+       
+        <link rel="stylesheet" href="{{baseURL}}/student/listQuizzes.css">
+        <script src="{{baseURL}}/student/listQuizzes.js"></script>
+    </head>
     <body>
 
-
-        {{> header}}
-
-        <link rel="stylesheet" href="/staff/createQuiz.css">
-
-        <!--====================Quiz Properties (template)=====================-->
-        {{#quizList}}
-        <div class="panel panel-default panel-custom">
-            <div class="panel-body">
+    {{> header}}
+        
+        
+    <div class="panel-default">
+        <div class="panel-heading">
+            <h3>Filter quizzes</h3>
+        </div>  
+        
+        <div class="panel-body">
+           
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6  col-xs-12" id="title-column">
-                        <label>Module ID: {{module_id}} Quiz Title:{{title}} <a class="btn btn-default" href="/student/takeQuiz?quizID={{quizId}}">Take Quiz</a></label>
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                        <label for="relevanrSelect">Relevant: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                        <select id="relevanrSelect" >
+                            <option value="any">--select--</option>
+                            <option value="isRelevant" selected>Relevant</option>
+                            <option value="notRelevant">Irrelevant</option>
+                        </select>
+                    </div>
+                    
+                    
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                         <label for="quizModule">Module code: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <select id="quizModule"  >
+                            <option value="-1">--select--</option>
+                            {{#allModules}}
+                                <option value="{{.}}">{{.}}</option>
+                            {{/allModules}}
+                        </select>
                     </div>
                 </div>
+        
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                         <label for="creatorNameSurname">Quiz taken: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+                        <select id="takenSelect" >
+                            <option value="any" selected>--select--</option>
+                            <option value="isTaken" >Taken</option>
+                            <option value="notTaken">Not taken</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                         <label for="sortBy">Sort by: </label>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                        <select id="sortBy"  >
+                            <option value="-1">--select--</option>
+                            <option value="byCode">Module code</option>
+                            <option value="byName">Module name</option>
+                            <option value="byTitle">Quiz title</option>
+                        </select>
+                    </div>
+                    
+ 
+                </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                    <button type="button" onclick="getFiltered('{{baseURL}}')" class="btn btn-primary  btn-sm">Filter</button>
+                </div>
+                
             </div>
-        </div>
-        {{/quizList}}
-        <!--====================Quiz Properties (template)=====================-->
+            
+            
+        </div>    
+    </div>    
+        
+        
+
+    <div id="contentHolder">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Relevant?</th>
+                    <th>Taken?</th>
+                    <th>Module code</th>
+                    <th>Module name</th>
+                    <th>Title</th>
+                    <th>Time limit</th>
+                    <th>Take</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+
+                {{#quizList}}
+                <tr>
+                    <td>{{#isRelevant}}
+                        <span class="glyphicon glyphicon-ok-circle" ></span>
+                        {{/isRelevant}}
+                        {{^isRelevant}}
+                        <span class="glyphicon glyphicon-remove" ></span>
+                        {{/isRelevant}}
+                    </td>
+                    <td>{{#isTaken}}
+                        <span class="glyphicon glyphicon-ok-circle" ></span>
+                        {{/isTaken}}
+                        {{^isTaken}}
+                        <span class="glyphicon glyphicon-remove" ></span>
+                        {{/isTaken}}
+                    </td>
+                    <td>{{module_id}}</td>
+                    <td>{{module_name}}</td>
+                    <td>{{title}}</td>
+                    <td>{{time_limit}}</td>
+                    
+                    <td><a class="btn btn-primary btn-sm" href="{{baseURL}}/student/takeQuiz?quizID={{quizId}}">Take</a></td>
+                    
+                </tr>
+                {{/quizList}}
+
+
+            </tbody>
+        </table>
+    </div>
+
+
 
     </body>
+
+
 </html>

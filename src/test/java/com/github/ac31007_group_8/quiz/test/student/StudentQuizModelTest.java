@@ -8,7 +8,8 @@ package com.github.ac31007_group_8.quiz.test.student;
 import com.github.ac31007_group_8.quiz.Database;
 import static com.github.ac31007_group_8.quiz.generated.Tables.MODULE;
 import static com.github.ac31007_group_8.quiz.generated.Tables.QUIZ;
-import static com.github.ac31007_group_8.quiz.generated.Tables.STAFF;
+import static com.github.ac31007_group_8.quiz.generated.Tables.RESULT;
+import static com.github.ac31007_group_8.quiz.generated.Tables.STUDENT;
 
 
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfoStudent;
@@ -16,7 +17,8 @@ import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.jooq.DSLContext;
-import org.jooq.Record7;
+import org.jooq.Record5;
+import org.jooq.Record6;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -49,14 +51,13 @@ class MySpecialProvider implements MockDataProvider {
      
         if (testCase == 1) {//maps StudentQuizInfo correctly
             
-            Result<Record7<String, String, String, Integer, Integer, String, String>> result = creator.newResult(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Result<Record5< String, Integer, Integer, String, String>> result = creator.newResult( MODULE.MODULE_NAME,
                     QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
 
-            Record7<String, String, String, Integer, Integer, String, String> r = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r = creator.newRecord( MODULE.MODULE_NAME,
                     QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
 
-            r.set(STAFF.FIRST_NAME, "Iain");
-            r.set(STAFF.SECOND_NAME, "Murray");
+          
             r.set(MODULE.MODULE_NAME, "Computers");
             r.set(QUIZ.QUIZ_ID, 2);
             r.set(QUIZ.TIME_LIMIT, 3);
@@ -69,10 +70,10 @@ class MySpecialProvider implements MockDataProvider {
             };
         }
         else if (testCase==2){//returns record
-            Result<Record7<String, String, String, Integer, Integer, String, String>> result = creator.newResult(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Result<Record5< String, Integer, Integer, String, String>> result = creator.newResult(MODULE.MODULE_NAME,
                      QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
 
-            Record7<String, String, String, Integer, Integer, String, String> r = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r = creator.newRecord( MODULE.MODULE_NAME,
                      QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
             result.add(r);
             return new MockResult[]{
@@ -80,19 +81,19 @@ class MySpecialProvider implements MockDataProvider {
             };
         }
         else if (testCase==3){//sorts
-            Result<Record7<String, String, String, Integer, Integer, String, String>> result = creator.newResult(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Result<Record5< String, Integer, Integer, String, String>> result = creator.newResult(MODULE.MODULE_NAME,
                     QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
 
-            Record7<String, String, String, Integer, Integer, String, String> r1 = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r1 = creator.newRecord( MODULE.MODULE_NAME,
                    QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
             r1.set(QUIZ.TITLE, "Aaa");
            
             
-            Record7<String, String, String, Integer, Integer, String, String> r2 = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r2 = creator.newRecord(MODULE.MODULE_NAME,
                     QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
             r2.set(QUIZ.TITLE, "Bbb");
           
-            Record7<String, String, String, Integer, Integer, String, String> r3 = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r3 = creator.newRecord( MODULE.MODULE_NAME,
                     QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
             r3.set(QUIZ.TITLE, "Ccc");
            
@@ -103,16 +104,16 @@ class MySpecialProvider implements MockDataProvider {
             return new MockResult[]{ new MockResult(1, result) };
         }
         else if (testCase==4){//filters 
-            Result<Record7<String, String, String, Integer, Integer, String, String>> result = creator.newResult(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Result<Record5< String, Integer, Integer, String, String>> result = creator.newResult( MODULE.MODULE_NAME,
                      QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
 
-            Record7<String, String, String, Integer, Integer, String, String> r1 = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r1 = creator.newRecord( MODULE.MODULE_NAME,
                     QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
             r1.set(QUIZ.MODULE_ID, "A123");
-            Record7<String, String, String, Integer, Integer, String, String> r2 = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r2 = creator.newRecord( MODULE.MODULE_NAME,
                    QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
             r2.set(QUIZ.MODULE_ID, "A1234");
-            Record7<String, String, String, Integer, Integer, String, String> r3 = creator.newRecord(STAFF.FIRST_NAME, STAFF.SECOND_NAME, MODULE.MODULE_NAME,
+            Record5< String, Integer, Integer, String, String> r3 = creator.newRecord( MODULE.MODULE_NAME,
                     QUIZ.QUIZ_ID, QUIZ.TIME_LIMIT, QUIZ.TITLE, QUIZ.MODULE_ID);
             r3.set(QUIZ.MODULE_ID, "A1234");
             
@@ -175,9 +176,7 @@ public class StudentQuizModelTest {
     public void getFilteredQuizInfoTest_QuizInfoMappedCorrectly() throws Exception {
         
         provider.testCase = 1;//test quizInfo assembled with correct values
-        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "AC12345", "Iain", "byTitle", "isTaken","isRelevant");
-        assertEquals(allQi.get(0).getFirst_name(),"Iain");
-        assertEquals(allQi.get(0).getSecond_name(),"Murray");
+        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "AC12345", "byTitle", "isTaken","isRelevant", 1);
         assertEquals(allQi.get(0).getModule_name(),"Computers");
         assertTrue(allQi.get(0).isRelevant());//this is not returned by query,but set by method depending on passed parameters!
         assertTrue(allQi.get(0).isTaken());// since passed isTaken and isRelevant expect true
@@ -192,7 +191,7 @@ public class StudentQuizModelTest {
     @Test
     public void getFilteredQuizInfoTest_recordAddedToList() throws Exception {
         provider.testCase = 2;//test record returned
-        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "", "", "", "", "byStatus");
+        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "", "", "", "byStatus",1);
         assertEquals(allQi.size(),1);
     }
     
@@ -204,7 +203,7 @@ public class StudentQuizModelTest {
     @Test
     public void getFilteredQuizInfoTest_sortsResults() throws Exception {
         provider.testCase = 3;//sorts
-        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "", "", "", "", "byTitle");
+        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "", "", "", "byTitle",1);
         for (int i=0;i<allQi.size()-1;i++){
             assertTrue(allQi.get(i).getTitle().compareTo(allQi.get(i+1).getTitle())<=0);
         }
@@ -217,16 +216,16 @@ public class StudentQuizModelTest {
     public void getFilteredQuizInfoTest_filtersByModuleCode() throws Exception {
         provider.testCase = 4;//filters by module_id
         
-        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "doesNotExist","", "", "", "");
+        ArrayList<QuizInfoStudent> allQi = qm.getFilteredQuizInfo(dslCont, "doesNotExist", "", "", "",1);
         assertTrue(allQi.isEmpty());
         
-        allQi = qm.getFilteredQuizInfo(dslCont, "A123","", "", "", "");
+        allQi = qm.getFilteredQuizInfo(dslCont, "A123", "", "", "",1);
         assertTrue(allQi.size()==1);
         
-        allQi = qm.getFilteredQuizInfo(dslCont, "A1234", "","", "", "");
+        allQi = qm.getFilteredQuizInfo(dslCont, "A1234","", "", "",1);
         assertTrue(allQi.size()==2);
         
-        allQi = qm.getFilteredQuizInfo(dslCont, "-1", "","", "", "");
+        allQi = qm.getFilteredQuizInfo(dslCont, "-1","", "", "",1);
         assertTrue(allQi.size()==3);
 
     }

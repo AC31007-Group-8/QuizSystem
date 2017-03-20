@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static com.github.ac31007_group_8.quiz.generated.Tables.*;
+import com.github.ac31007_group_8.quiz.staff.store.QuizInfo;
 
 import com.github.ac31007_group_8.quiz.staff.store.QuizInfoStudent;
 import java.sql.Connection;
@@ -20,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.jooq.exception.DataAccessException;
+import static org.jooq.impl.DSL.val;
 
 
 ///**
@@ -231,15 +233,49 @@ public class StudentQuizModel {
         
         while (rs.next()){
             
+            
                 QuizInfoStudent next = new QuizInfoStudent();
+                next.setIsRelevant(true);
                 next.setQuizId(rs.getInt(1));
                 next.setTime_limit(rs.getInt(2)); 
                 next.setTitle(rs.getString(3)); 
                 next.setModule_name(rs.getString(4)); 
                 next.setModule_id(rs.getString(5));
-                        
+                
                 allRelevantQuizInfo.add(next);       
         }
+        
+        //a special personal query to just get if quiz was taken by a student!
+        //can't join quiz and result as result not necessarily for that student
+        //can't join student and result as result not nec. for that quiz
+        //circular join (o_O) would miss quizzes that were not taken
+        //where would do other random stuff
+        
+        
+        stmt = conn.prepareStatement("SELECT quiz.quiz_id" +
+                                        " FROM student" +
+                                        " INNER JOIN result" +
+                                        " ON student.student_id = result.student_id" +
+                                        " INNER JOIN quiz" +
+                                        " ON result.quiz_id = quiz.quiz_id " +
+                                        " WHERE publish_status=1 AND student.student_id=?"+
+                                        " GROUP BY quiz.quiz_id;");
+        stmt.setInt(1,studentId);
+        
+        
+        rs = stmt.executeQuery();   
+        ArrayList<QuizInfoStudent> allTakenQuizzes = new ArrayList<>();
+        while (rs.next()){
+
+            for (QuizInfoStudent qis:allRelevantQuizInfo){
+                if (qis.getQuizId()==rs.getInt(1)){
+                    qis.setIsTaken(true);
+                    break;
+                }
+            }
+        }
+
+        
         
         return allRelevantQuizInfo;
     }
@@ -247,14 +283,151 @@ public class StudentQuizModel {
     
     
     
-    
-     public ArrayList<QuizInfoStudent> getFilteredQuizInfo(DSLContext create, String moduleCode, String creator, String sortBy, String taken, String relevant) throws DataAccessException    {      
-         
+    //this is pain :(
+     public ArrayList<QuizInfoStudent> getFilteredQuizInfo(DSLContext dslCont, String moduleCode, String sortBy, String taken, String relevant, int studentId) throws DataAccessException    {      
+      
+        List<Condition> conditions = new ArrayList<>();
+        conditions.add(QUIZ.PUBLISH_STATUS.equal((byte)1));
+        
+        if (!moduleCode.equals("-1")){
+            conditions.add(QUIZ.MODULE_ID.equal(val(moduleCode)));
+        }
+        
+        SortField sortTarget =null;
+        
+        if (sortBy.equals("byName")){
+            sortTarget= MODULE.MODULE_NAME.asc();
+        }
+        else if (sortBy.equals("byTitle")){
+            sortTarget= QUIZ.TITLE.asc();
+        }
+        else if (sortBy.equals("byCode")){
+            sortTarget= QUIZ.MODULE_ID.asc();
+        }
+          
+        
+        //ALL QUIZ INFO FOR SPECIFIC MODULE   
+
+        Result<Record5<String, Integer, Integer, String, String>> result1 = dslCont.select(MODULE.MODULE_NAME,
+                                    QUIZ.QUIZ_ID,QUIZ.TIME_LIMIT,QUIZ.TITLE,QUIZ.MODULE_ID )
+                        .from(QUIZ)
+                        .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
+                        .join(STUDENT_TO_MODULE).on(STUDENT_TO_MODULE.MODULE_ID.equal(MODULE.MODULE_ID))
+                        .join(STUDENT).on(STUDENT.STUDENT_ID.equal(STUDENT_TO_MODULE.STUDENT_ID))
+                        .where(conditions)
+                        .orderBy(sortTarget)
+                        .fetch();
+        
+        
         ArrayList<QuizInfoStudent> allQuizInfo = new ArrayList();
+        for(Record r : result1){
+            allQuizInfo.add(r.into(QuizInfoStudent.class)); 
+        }
+        
+        
+         List conditions2 = new ArrayList(conditions);
+         conditions2.add(STUDENT.STUDENT_ID.equal(studentId));
+        //ALL QUIZ INFO RELEVANT FOR STUDENT and module
+        
+         Result<Record> result2 = dslCont.select(QUIZ.QUIZ_ID )
+                        .from(QUIZ)
+                        .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
+                        .join(STUDENT_TO_MODULE).on(STUDENT_TO_MODULE.MODULE_ID.equal(MODULE.MODULE_ID))
+                        .join(STUDENT).on(STUDENT.STUDENT_ID.equal(STUDENT_TO_MODULE.STUDENT_ID))
+                        .where(conditions2)
+                        .fetch();
+     
 
-
-
+        for(Record r : result2){
+            for (QuizInfoStudent qis:allQuizInfo){
+            
+                
+                if (qis.getQuizId()== r.get(QUIZ.QUIZ_ID)){
+                    qis.setIsRelevant(true);
+                    break;
+                }
+            } 
+        }
+        
+        //ALL QUIZZES TAKEN BY STUDENT and module
+        
+        Result<Record1<Integer>> result3 = dslCont.select(QUIZ.QUIZ_ID )
+                        .from(STUDENT)
+                        .join(RESULT).on(STUDENT.STUDENT_ID.equal(RESULT.STUDENT_ID))
+                        .join(QUIZ).on(RESULT.QUIZ_ID.equal(QUIZ.QUIZ_ID))
+                        
+                        .where(conditions2)
+                        .fetch();
+        
+        for(Record r : result3){
+            for (QuizInfoStudent qis:allQuizInfo){
+                if (qis.getQuizId()== r.get(QUIZ.QUIZ_ID)){
+                    qis.setIsTaken(true);
+                    break;
+                }
+            } 
+        }
+        
+        
+        //FILTER BASED ON FIELDS
+        
+        //on relevance
+        ArrayList<QuizInfoStudent> filteredQuizInfo = new ArrayList<>();
+        if ( relevant.equals("isRelevant")){
+            for (QuizInfoStudent qis:allQuizInfo){
+                if (qis.isRelevant()){
+                    filteredQuizInfo.add(qis);
+                }
+            }
+        }
+        else if ( relevant.equals("notRelevant")){
+             for (QuizInfoStudent qis:allQuizInfo){
+                if (!qis.isRelevant()){
+                    filteredQuizInfo.add(qis);
+                }
+            }
+        }
+        else{
+            filteredQuizInfo = allQuizInfo;
+        }
+        
+        allQuizInfo = filteredQuizInfo;
+        
+        
+        
+        //on if taken
+        
+        filteredQuizInfo = new ArrayList<>();
+        if ( taken.equals("isTaken")){
+            for (QuizInfoStudent qis:allQuizInfo){
+                if (qis.isTaken()){
+                    filteredQuizInfo.add(qis);
+                }
+            }
+        }
+        else if (taken.equals("notTaken")){
+             for (QuizInfoStudent qis:allQuizInfo){
+                if (!qis.isTaken()){
+                    filteredQuizInfo.add(qis);
+                }
+            }
+        }
+        else{
+            filteredQuizInfo = allQuizInfo;
+        }
+        
+        allQuizInfo = filteredQuizInfo;
+         
+       
         return allQuizInfo;
+         
+         
+         
+         
+        
+
+
+      
        
     }
     

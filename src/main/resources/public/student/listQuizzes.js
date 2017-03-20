@@ -9,15 +9,15 @@ function getFiltered(contextPath){
     
     
     var choices = {
-        published : $("#publishStatusSelect").val(),
+        relevant : $("#relevanrSelect").val(),
         moduleCode: $("#quizModule").val(),
-        creator: $("#creatorNameSurname").val(),
+        taken : $("#takenSelect").val(),
         sortBy: $("#sortBy").val()
  
     };
     
     $.ajax({
-        url: contextPath+"/staff/quizList/filter",
+        url: contextPath+"/student/quizList/filter",
         type: "GET",
         data: choices,
         contentType:  "application/json;",
@@ -43,32 +43,36 @@ function getFiltered(contextPath){
             $("#contentHolder").append('<table class="table">' +
                     '<thead>' +
                     '<tr>' +
-                    '<th>Published?</th>' +
+                    '<th>Relevant?</th>' +
+                    '<th>Taken?</th>' +
                     '<th>Module code</th>' +
                     '<th>Module name</th>' +
                     '<th>Title</th>' +
                     '<th>Time limit</th>' +
-                    '<th>Creator</th>' +
-                    '<th>Edit</th>' +
-                    '<th>View</th>' +
+                    '<th>Take</th>' +
                     '</tr>' +
                     '</thead>' +
                     '<tbody>' +
                     '</tbody>' +
                     '</table>');
 
+
+
             data.forEach(function (nextQuizInfo, index) {
 
+              
+
                 var timeL = (typeof nextQuizInfo.time_limit === 'undefined')?"":nextQuizInfo.time_limit;
+
                 $("tbody").append('<tr>' +
-                        '<td>' + (nextQuizInfo.publish_status === true ? '<span class="glyphicon glyphicon-ok-circle" ></span>' : '<span class="glyphicon glyphicon-remove" ></span>') + '</td>' +
+                        '<td>' + (nextQuizInfo.isRelevant === true ? '<span class="glyphicon glyphicon-ok-circle" ></span>' : '<span class="glyphicon glyphicon-remove" ></span>') + '</td>' +
+                        '<td>' + (nextQuizInfo.isTaken === true ? '<span class="glyphicon glyphicon-ok-circle" ></span>' : '<span class="glyphicon glyphicon-remove" ></span>') + '</td>' +
                         '<td>' + nextQuizInfo.module_id + '</td>' +
                         '<td>' + nextQuizInfo.module_name + '</td>' +
                         '<td>' + nextQuizInfo.title + '</td>' +
                         '<td>' + timeL + '</td>' +
-                        '<td>' + nextQuizInfo.first_name + ' ' + nextQuizInfo.second_name + '</td>' +
-                        '<td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID=' + nextQuizInfo.quizId + '">View</a></td>' +
-                        '<td><a class="btn btn-primary btn-sm" href="/staff/EDITQUIZ?quizID=' + nextQuizInfo.quizId + '">Edit</a></td>' +
+                        '<td><a class="btn btn-primary btn-sm" href="/staff/viewResults?quizID=' + nextQuizInfo.quizId + '">Take</a></td>' +
+                        
                         '</tr>'
                         );
             });
@@ -78,14 +82,13 @@ function getFiltered(contextPath){
             $("#contentHolder").append('<table class="table">' +
                     '<thead>' +
                     '<tr>' +
-                    '<th>Published?</th>' +
+                    '<th>Relevant?</th>' +
+                    '<th>Taken?</th>' +
                     '<th>Module code</th>' +
                     '<th>Module name</th>' +
                     '<th>Title</th>' +
                     '<th>Time limit</th>' +
-                    '<th>Creator</th>' +
-                    '<th>Edit</th>' +
-                    '<th>View</th>' +
+                    '<th>Take</th>' +
                     '</tr>' +
                     '</thead>' +
                     '<tbody>' +
