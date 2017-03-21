@@ -341,7 +341,7 @@ public class StudentQuizModel {
                         .from(QUIZ)
                         .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
                         .join(STUDENT_TO_MODULE).on(STUDENT_TO_MODULE.MODULE_ID.equal(MODULE.MODULE_ID))
-                        .join(STUDENT).on(STUDENT.STUDENT_ID.equal(STUDENT_TO_MODULE.STUDENT_ID))
+                        .join(STUDENT).on(STUDENT.STUDENT_ID.equal(STUDENT_TO_MODULE.SUTDENT_ID))
                         .where(conditions)
                         .orderBy(sortTarget)
                         .fetch();
@@ -361,7 +361,7 @@ public class StudentQuizModel {
                         .from(QUIZ)
                         .join(MODULE).on(QUIZ.MODULE_ID.equal(MODULE.MODULE_ID))
                         .join(STUDENT_TO_MODULE).on(STUDENT_TO_MODULE.MODULE_ID.equal(MODULE.MODULE_ID))
-                        .join(STUDENT).on(STUDENT.STUDENT_ID.equal(STUDENT_TO_MODULE.STUDENT_ID))
+                        .join(STUDENT).on(STUDENT.STUDENT_ID.equal(STUDENT_TO_MODULE.SUTDENT_ID))
                         .where(conditions2)
                         .fetch();
      
