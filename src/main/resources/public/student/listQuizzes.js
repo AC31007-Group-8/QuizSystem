@@ -40,7 +40,7 @@ function getFiltered(contextPath){
         
         
         if (data.length > 0) {
-            $("#contentHolder").append('<table class="table">' +
+            $("#contentHolder").append('<table class="table table-striped">' +
                     '<thead>' +
                     '<tr>' +
                     '<th>Relevant?</th>' +
@@ -79,7 +79,7 @@ function getFiltered(contextPath){
         }
         else{
             
-            $("#contentHolder").append('<table class="table">' +
+            $("#contentHolder").append('<table class="table table-striped">' +
                     '<thead>' +
                     '<tr>' +
                     '<th>Relevant?</th>' +

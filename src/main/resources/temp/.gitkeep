@@ -1,0 +1,45 @@
+*.class
+*~
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Gradle
+.gradle/
+/build/
+!/gradle/wrapper/*
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IDEA
+*.iml
+*.ipr
+*.iws
+/.idea/
+!/libs/*
+
+# Netbeans
+/.nb-gradle/
+/.nb-gradle-properties
+/customs.json
+/QuizSystemApp/nbproject/private/
+
+# General test run stuff
+/run/
+/out/
+/config.properties
+/gradle.properties
+
+
+
+
+
+
+
+
+

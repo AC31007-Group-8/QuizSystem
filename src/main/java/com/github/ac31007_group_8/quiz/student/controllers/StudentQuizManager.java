@@ -1,6 +1,5 @@
 package com.github.ac31007_group_8.quiz.student.controllers;
 
-import com.github.ac31007_group_8.quiz.Database;
 import com.github.ac31007_group_8.quiz.common.ParameterManager;
 import com.github.ac31007_group_8.quiz.student.models.StudentQuizModel;
 import com.github.ac31007_group_8.quiz.util.Init;
@@ -15,7 +14,6 @@ import java.util.logging.Logger;
 import com.github.ac31007_group_8.quiz.staff.store.*;
 
 import com.github.ac31007_group_8.quiz.util.GoogleMail;
-import com.google.gson.Gson;
 
 import static spark.Spark.*;
 
@@ -23,8 +21,7 @@ import io.github.gitbucket.markedj.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.mail.MessagingException;
@@ -190,6 +187,17 @@ public class StudentQuizManager {
             catch(MessagingException me){
                 LOGGER.error("MessagingException", me);
                 mailResult = "Failed to send email.";
+            }
+            catch (Exception me){
+                LOGGER.error("Other exception", me);
+                
+                
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                me.printStackTrace(pw);
+                mailResult = "Failed to send email! "+me.toString()+" --- " +sw.toString();;
+                
+                
             }
         }
         
