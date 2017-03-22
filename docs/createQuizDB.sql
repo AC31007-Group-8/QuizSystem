@@ -176,12 +176,12 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `quizsystem`.`Student_to_Module` ;
 
 CREATE TABLE IF NOT EXISTS `quizsystem`.`Student_to_Module` (
-  `sutdent_id` INT NOT NULL,
+  `student_id` INT NOT NULL,
   `module_id` VARCHAR(10) NOT NULL,
-  PRIMARY KEY (`sutdent_id`, `module_id`),
+  PRIMARY KEY (`student_id`, `module_id`),
   INDEX `link_to_module_idx` (`module_id` ASC),
   CONSTRAINT `link_module_to_student`
-    FOREIGN KEY (`sutdent_id`)
+    FOREIGN KEY (`student_id`)
     REFERENCES `quizsystem`.`Student` (`student_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
